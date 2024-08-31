@@ -19,6 +19,7 @@ import { LLMID } from "@/types"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { ReactNode, useContext, useEffect, useState } from "react"
 import Loading from "../loading"
+import { EnrichedSession } from "@/auth"
 
 interface WorkspaceLayoutProps {
   children: ReactNode
@@ -54,7 +55,8 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     setChatImages,
     setNewMessageFiles,
     setNewMessageImages,
-    setShowFilesDisplay
+    setShowFilesDisplay,
+    setOauthProviders
   } = useContext(ChatbotUIContext)
 
   const [loading, setLoading] = useState(true)
@@ -67,9 +69,22 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
         return router.push("/login")
       } else {
         await fetchWorkspaceData(workspaceId)
+        await fetchOAuthProviders()
       }
     })()
   }, [])
+
+  const fetchOAuthProviders = async () => {
+    try {
+      const response = await fetch("/api/auth/session")
+      const session = (await response.json()) as EnrichedSession | null
+      if (session && session.providers) {
+        setOauthProviders(session.providers)
+      }
+    } catch (error) {
+      console.error("Error fetching OAuth providers:", error)
+    }
+  }
 
   useEffect(() => {
     ;(async () => await fetchWorkspaceData(workspaceId))()

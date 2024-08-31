@@ -1,3 +1,4 @@
+import { EnrichedSession } from "@/auth"
 import { Tables } from "@/supabase/types"
 import {
   ChatFile,
@@ -9,10 +10,22 @@ import {
   WorkspaceImage
 } from "@/types"
 import { AssistantImage } from "@/types/images/assistant-image"
+import { OauthProvider } from "@/types/oauthProviders"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { Dispatch, SetStateAction, createContext } from "react"
 
+interface Integration {
+  id: string
+  name: string
+  description: string
+  isInstalled: boolean
+}
+
 interface ChatbotUIContext {
+  oauthProviders: Record<string, EnrichedSession["providers"][string]>
+  setOauthProviders: Dispatch<
+    SetStateAction<Record<string, EnrichedSession["providers"][string]>>
+  >
   // PROFILE STORE
   profile: Tables<"profiles"> | null
   setProfile: Dispatch<SetStateAction<Tables<"profiles"> | null>>
@@ -136,9 +149,14 @@ interface ChatbotUIContext {
   setSelectedTools: Dispatch<SetStateAction<Tables<"tools">[]>>
   toolInUse: string
   setToolInUse: Dispatch<SetStateAction<string>>
+
+  integrations: Tables<"integrations">[]
+  setIntegrations: Dispatch<SetStateAction<Tables<"integrations">[]>>
 }
 
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
+  oauthProviders: {},
+  setOauthProviders: () => {},
   // PROFILE STORE
   profile: null,
   setProfile: () => {},
@@ -261,5 +279,8 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   selectedTools: [],
   setSelectedTools: () => {},
   toolInUse: "none",
-  setToolInUse: () => {}
+  setToolInUse: () => {},
+
+  integrations: [],
+  setIntegrations: () => {}
 })

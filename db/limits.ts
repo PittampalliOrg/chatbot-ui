@@ -41,3 +41,7 @@ export const TOOL_DESCRIPTION_MAX = 500
 // Models
 export const MODEL_NAME_MAX = 100
 export const MODEL_DESCRIPTION_MAX = 500
+
+// In db/limits.ts
+export const INTEGRATION_NAME_MAX = 100 // or whatever limit you want to set
+export const INTEGRATION_DESCRIPTION_MAX = 500 // or whatever limit you want to set

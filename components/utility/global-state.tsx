@@ -2,6 +2,7 @@
 
 "use client"
 
+import { auth, EnrichedSession } from "@/auth"
 import { ChatbotUIContext } from "@/context/context"
 import { getProfileByUserId } from "@/db/profile"
 import { getWorkspaceImageFromStorage } from "@/db/storage/workspace-images"
@@ -24,6 +25,7 @@ import {
   WorkspaceImage
 } from "@/types"
 import { AssistantImage } from "@/types/images/assistant-image"
+import { OauthProvider } from "@/types/oauthProviders"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
@@ -34,6 +36,10 @@ interface GlobalStateProps {
 
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const router = useRouter()
+
+  const [oauthProviders, setOauthProviders] = useState<
+    Record<string, EnrichedSession["providers"][string]>
+  >({})
 
   // PROFILE STORE
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null)
@@ -124,6 +130,21 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [toolInUse, setToolInUse] = useState<string>("none")
 
   useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/api/auth/session")
+        const session = (await response.json()) as EnrichedSession | null
+        if (session && session.providers) {
+          setOauthProviders(session.providers)
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error)
+      }
+    }
+    fetchSession()
+  }, [])
+
+  useEffect(() => {
     ;(async () => {
       const profile = await fetchStartingData()
 
@@ -196,6 +217,37 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
       return profile
     }
   }
+
+  const [integrations, setIntegrations] = useState<Tables<"integrations">[]>([
+    {
+      id: "1",
+      name: "Google",
+      description:
+        "Integrate with Google for email, profile, and calendar access",
+      type: "Authentication",
+      version: "1.0.0",
+      is_installed: false,
+      documentation_url:
+        "https://developers.google.com/identity/protocols/oauth2",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      user_id: ""
+    },
+    {
+      id: "2",
+      name: "Microsoft Entra ID",
+      description:
+        "Connect with Microsoft Entra ID for user authentication and calendar access",
+      type: "Authentication",
+      version: "1.0.0",
+      is_installed: false,
+      documentation_url:
+        "https://docs.microsoft.com/en-us/azure/active-directory/develop/",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      user_id: ""
+    }
+  ])
 
   return (
     <ChatbotUIContext.Provider
@@ -322,7 +374,13 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
         selectedTools,
         setSelectedTools,
         toolInUse,
-        setToolInUse
+        setToolInUse,
+
+        oauthProviders,
+        setOauthProviders,
+
+        integrations,
+        setIntegrations
       }}
     >
       {children}
