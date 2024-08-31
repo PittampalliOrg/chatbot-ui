@@ -42,6 +42,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { TextareaAutosize } from "../ui/textarea-autosize"
 import { WithTooltip } from "../ui/with-tooltip"
 import { ThemeSwitcher } from "./theme-switcher"
+import OAuthIntegrations from "./oauth-integrations"
 
 interface ProfileSettingsProps {}
 
@@ -723,6 +724,9 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   </>
                 )}
               </div>
+            </TabsContent>
+            <TabsContent className="mt-4 space-y-4" value="integrations">
+              <OAuthIntegrations />
             </TabsContent>
           </Tabs>
         </div>
