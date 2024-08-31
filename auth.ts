@@ -3,15 +3,18 @@ import Google from 'next-auth/providers/google';
 import AzureAd from "next-auth/providers/azure-ad";
 import type { NextAuthConfig } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
+import { Session } from 'next-auth';
 
-export interface EnrichedSession extends DefaultSession {
+export interface ProviderData {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: number;
+  accessTokenIssuedAt: number;
+}
+
+export interface EnrichedSession extends Session {
   providers: {
-    [provider: string]: {
-      accessToken: string;
-      refreshToken: string;
-      accessTokenExpiresAt: number;
-      accessTokenIssuedAt: number;
-    };
+    [provider: string]: ProviderData;
   };
 }
 
@@ -45,7 +48,7 @@ export const config = {
     })
   ],
   callbacks: {
-    async jwt({ token, account, profile }: { token: EnrichedJWT; account: any; profile?: any }): Promise<EnrichedJWT> {
+    async jwt({ token, account }: { token: EnrichedJWT; account: any }): Promise<EnrichedJWT> {
       if (account) {
         token.providers = token.providers || {};
         token.providers[account.provider] = {
@@ -57,11 +60,11 @@ export const config = {
       }
       return token;
     },
-    async session({ session, token }: { session: EnrichedSession; token: EnrichedJWT }): Promise<EnrichedSession> {
+    async session({ session, token }: { session: Session; token: EnrichedJWT }): Promise<EnrichedSession> {
       return {
         ...session,
         providers: token.providers || {},
-      };
+      } as EnrichedSession;
     },
   },
 } satisfies NextAuthConfig;
