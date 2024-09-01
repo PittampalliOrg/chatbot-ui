@@ -95,6 +95,12 @@ export const CreateCollection: FC<CreateCollectionProps> = ({
           </div>
         </>
       )}
+      onNewItem={function (): void {
+        throw new Error("Function not implemented.")
+      }}
+      onClearItems={function (): void {
+        throw new Error("Function not implemented.")
+      }}
     />
   )
 }

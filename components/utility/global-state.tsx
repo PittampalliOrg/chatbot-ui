@@ -224,11 +224,11 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
       name: "Google",
       description:
         "Integrate with Google for email, profile, and calendar access",
-      type: "Authentication",
-      version: "1.0.0",
-      is_installed: false,
-      documentation_url:
-        "https://developers.google.com/identity/protocols/oauth2",
+      provider: "google",
+      config: {}, // Add an empty object for the config field
+      is_enabled: false, // Changed from is_installed to is_enabled
+      sharing: "private", // Add a sharing field
+      folder_id: null, // Add a folder_id field
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       user_id: ""
@@ -238,11 +238,11 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
       name: "Microsoft Entra ID",
       description:
         "Connect with Microsoft Entra ID for user authentication and calendar access",
-      type: "Authentication",
-      version: "1.0.0",
-      is_installed: false,
-      documentation_url:
-        "https://docs.microsoft.com/en-us/azure/active-directory/develop/",
+      provider: "microsoft",
+      config: {}, // Add an empty object for the config field
+      is_enabled: false, // Changed from is_installed to is_enabled
+      sharing: "private", // Add a sharing field
+      folder_id: null, // Add a folder_id field
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       user_id: ""

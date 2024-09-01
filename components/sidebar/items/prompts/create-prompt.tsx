@@ -67,6 +67,12 @@ export const CreatePrompt: FC<CreatePromptProps> = ({
           </div>
         </>
       )}
+      onNewItem={function (): void {
+        throw new Error("Function not implemented.")
+      }}
+      onClearItems={function (): void {
+        throw new Error("Function not implemented.")
+      }}
     />
   )
 }

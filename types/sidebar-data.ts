@@ -1,4 +1,5 @@
 import { Tables } from "@/supabase/types"
+import { Table } from "lucide-react"
 
 export type DataListType =
   | Tables<"collections">[]
@@ -9,6 +10,7 @@ export type DataListType =
   | Tables<"assistants">[]
   | Tables<"tools">[]
   | Tables<"models">[]
+  | Tables<"integrations">[]
 
 export type DataItemType =
   | Tables<"collections">
@@ -19,3 +21,4 @@ export type DataItemType =
   | Tables<"assistants">
   | Tables<"tools">
   | Tables<"models">
+  | Tables<"integrations">
