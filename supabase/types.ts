@@ -770,68 +770,6 @@ export type Database = {
           },
         ]
       }
-      integrations: {
-        Row: {
-          client_id: string | null
-          client_secret: string | null
-          created_at: string | null
-          description: string | null
-          documentation_url: string | null
-          id: string
-          is_installed: boolean | null
-          name: string
-          provider: string
-          scopes: string[] | null
-          tenant_id: string | null
-          type: string
-          updated_at: string | null
-          user_id: string | null
-          version: string
-        }
-        Insert: {
-          client_id?: string | null
-          client_secret?: string | null
-          created_at?: string | null
-          description?: string | null
-          documentation_url?: string | null
-          id?: string
-          is_installed?: boolean | null
-          name: string
-          provider: string
-          scopes?: string[] | null
-          tenant_id?: string | null
-          type: string
-          updated_at?: string | null
-          user_id?: string | null
-          version: string
-        }
-        Update: {
-          client_id?: string | null
-          client_secret?: string | null
-          created_at?: string | null
-          description?: string | null
-          documentation_url?: string | null
-          id?: string
-          is_installed?: boolean | null
-          name?: string
-          provider?: string
-          scopes?: string[] | null
-          tenant_id?: string | null
-          type?: string
-          updated_at?: string | null
-          user_id?: string | null
-          version?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       message_file_items: {
         Row: {
           created_at: string
