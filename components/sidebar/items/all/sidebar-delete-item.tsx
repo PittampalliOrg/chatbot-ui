@@ -1,122 +1,144 @@
-import { FC, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog"
+import { ChatbotUIContext } from "@/context/context"
+import { deleteAssistant } from "@/db/assistants"
+import { deleteChat } from "@/db/chats"
+import { deleteCollection } from "@/db/collections"
+import { deleteFile } from "@/db/files"
+import { deleteModel } from "@/db/models"
+import { deletePreset } from "@/db/presets"
+import { deletePrompt } from "@/db/prompts"
+import { deleteFileFromStorage } from "@/db/storage/files"
+import { deleteTool } from "@/db/tools"
+import { Tables } from "@/supabase/types"
+import { ContentType, DataItemType } from "@/types"
+import { FC, useContext, useRef, useState } from "react"
 
-import { SidebarButton } from "@/components/ui/sidebar-button"
-import { IconTrash } from "@tabler/icons-react"
-
-import { ContentType } from "@/types/content-type"
-
-interface Props {
+interface SidebarDeleteItemProps {
+  item: DataItemType
   contentType: ContentType
-  item: any
-  onDelete: () => void
 }
 
-export const SidebarDeleteItem: FC<Props> = ({
-  contentType,
+export const SidebarDeleteItem: FC<SidebarDeleteItemProps> = ({
   item,
-  onDelete
+  contentType
 }) => {
-  const { t } = useTranslation("sidebar")
-  const [isDeleting, setIsDeleting] = useState(false)
+  const {
+    setChats,
+    setPresets,
+    setPrompts,
+    setFiles,
+    setCollections,
+    setAssistants,
+    setTools,
+    setModels,
+    setIntegrations
+  } = useContext(ChatbotUIContext)
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const [showDialog, setShowDialog] = useState(false)
+
+  const deleteFunctions = {
+    chats: async (chat: Tables<"chats">) => {
+      await deleteChat(chat.id)
+    },
+    presets: async (preset: Tables<"presets">) => {
+      await deletePreset(preset.id)
+    },
+    prompts: async (prompt: Tables<"prompts">) => {
+      await deletePrompt(prompt.id)
+    },
+    files: async (file: Tables<"files">) => {
+      await deleteFileFromStorage(file.file_path)
+      await deleteFile(file.id)
+    },
+    collections: async (collection: Tables<"collections">) => {
+      await deleteCollection(collection.id)
+    },
+    assistants: async (assistant: Tables<"assistants">) => {
+      await deleteAssistant(assistant.id)
+      setChats(prevState =>
+        prevState.filter(chat => chat.assistant_id !== assistant.id)
+      )
+    },
+    tools: async (tool: Tables<"tools">) => {
+      await deleteTool(tool.id)
+    },
+    models: async (model: Tables<"models">) => {
+      await deleteModel(model.id)
+    }
+  }
+
+  const stateUpdateFunctions = {
+    chats: setChats,
+    presets: setPresets,
+    prompts: setPrompts,
+    files: setFiles,
+    collections: setCollections,
+    assistants: setAssistants,
+    tools: setTools,
+    models: setModels,
+    integrations: setIntegrations
+  }
 
   const handleDelete = async () => {
-    setIsDeleting(true)
-    await deleteItem(contentType, item)
-    onDelete()
-    setIsDeleting(false)
+    const deleteFunction = deleteFunctions[contentType]
+    const setStateFunction = stateUpdateFunctions[contentType]
+
+    if (!deleteFunction || !setStateFunction) return
+
+    await deleteFunction(item as any)
+
+    setStateFunction((prevItems: any) =>
+      prevItems.filter((prevItem: any) => prevItem.id !== item.id)
+    )
+
+    setShowDialog(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.stopPropagation()
+      buttonRef.current?.click()
+    }
   }
 
   return (
-    <SidebarButton
-      text={isDeleting ? t("Deleting...") : t("Delete")}
-      icon={<IconTrash size={18} />}
-      onClick={handleDelete}
-      disabled={isDeleting}
-    />
-  )
-}
+    <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <DialogTrigger asChild>
+        <Button className="text-red-500" variant="ghost">
+          Delete
+        </Button>
+      </DialogTrigger>
 
-// Helper functions for deleting items
-const deleteItem = async (contentType: ContentType, item: any) => {
-  switch (contentType) {
-    case "chats":
-      return deleteChat(item)
-    case "prompts":
-      return deletePrompt(item)
-    case "collections":
-      return deleteCollection(item)
-    case "presets":
-      return deletePreset(item)
-    case "files":
-      return deleteFile(item)
-    case "models":
-      return deleteModel(item)
-    case "integrations":
-      return deleteIntegration(item)
-    default:
-      throw new Error(`Unknown content type: ${contentType}`)
-  }
-}
+      <DialogContent onKeyDown={handleKeyDown}>
+        <DialogHeader>
+          <DialogTitle>Delete {contentType.slice(0, -1)}</DialogTitle>
 
-const deleteChat = async (chat: any) => {
-  // Implement chat deletion logic
-  console.log("Deleting chat:", chat)
-}
+          <DialogDescription>
+            Are you sure you want to delete {item.name}?
+          </DialogDescription>
+        </DialogHeader>
 
-const deletePrompt = async (prompt: any) => {
-  // Implement prompt deletion logic
-  console.log("Deleting prompt:", prompt)
-}
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setShowDialog(false)}>
+            Cancel
+          </Button>
 
-const deleteCollection = async (collection: any) => {
-  // Implement collection deletion logic
-  console.log("Deleting collection:", collection)
-}
-
-const deletePreset = async (preset: any) => {
-  // Implement preset deletion logic
-  console.log("Deleting preset:", preset)
-}
-
-const deleteFile = async (file: any) => {
-  // Implement file deletion logic
-  console.log("Deleting file:", file)
-}
-
-const deleteModel = async (model: any) => {
-  // Implement model deletion logic
-  console.log("Deleting model:", model)
-}
-
-const deleteIntegration = async (integration: any) => {
-  // Implement integration deletion logic
-  console.log("Deleting integration:", integration)
-}
-
-// Example usage
-export const SidebarDeleteItemWrapper: FC = () => {
-  const [items, setItems] = useState<any[]>([
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 3, name: "Item 3" }
-  ])
-  const contentType: ContentType = "chats" // This should be dynamically set based on your app's state
-
-  const handleDelete = (itemToDelete: any) => {
-    setItems(items.filter(item => item.id !== itemToDelete.id))
-  }
-
-  return (
-    <div>
-      {items.map(item => (
-        <SidebarDeleteItem
-          key={item.id}
-          contentType={contentType}
-          item={item}
-          onDelete={() => handleDelete(item)}
-        />
-      ))}
-    </div>
+          <Button ref={buttonRef} variant="destructive" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

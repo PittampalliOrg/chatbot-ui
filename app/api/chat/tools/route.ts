@@ -5,8 +5,18 @@ import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
+import { auth } from "@/auth"
+import { EnrichedSession } from "@/auth"
 
 export async function POST(request: Request) {
+
+  const session = (await auth()) as EnrichedSession | null
+
+  const headers: string = `{
+    "Content-Type": "application/json",
+    "Authorization": "Bearer ${session?.providers["azure-ad"].accessToken}"
+  }`;
+
   const json = await request.json()
   const { chatSettings, messages, selectedTools } = json as {
     chatSettings: ChatSettings
@@ -50,7 +60,8 @@ export async function POST(request: Request) {
           title: convertedSchema.info.title,
           description: convertedSchema.info.description,
           url: convertedSchema.info.server,
-          headers: selectedTool.custom_headers,
+//          headers: selectedTool.custom_headers,
+          headers: headers,
           routeMap,
           requestInBody: convertedSchema.routes[0].requestInBody
         })
@@ -174,7 +185,6 @@ export async function POST(request: Request) {
           if (customHeaders && typeof customHeaders === "string") {
             headers = JSON.parse(customHeaders)
           }
-
           const response = await fetch(fullUrl, {
             method: "GET",
             headers: headers

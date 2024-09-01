@@ -167,12 +167,6 @@ export const CreateTool: FC<CreateToolProps> = ({ isOpen, onOpenChange }) => {
         </>
       )}
       onOpenChange={onOpenChange}
-      onNewItem={function (): void {
-        throw new Error("Function not implemented.")
-      }}
-      onClearItems={function (): void {
-        throw new Error("Function not implemented.")
-      }}
     />
   )
 }

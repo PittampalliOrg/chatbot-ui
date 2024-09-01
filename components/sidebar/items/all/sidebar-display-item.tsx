@@ -6,8 +6,6 @@ import { ContentType, DataItemType } from "@/types"
 import { useRouter } from "next/navigation"
 import { FC, useContext, useRef, useState } from "react"
 import { SidebarUpdateItem } from "./sidebar-update-item"
-import { IconSquarePlus } from "@tabler/icons-react"
-import { WithTooltip } from "@/components/ui/with-tooltip"
 
 interface SidebarItemProps {
   item: DataItemType
@@ -20,11 +18,11 @@ interface SidebarItemProps {
 
 export const SidebarItem: FC<SidebarItemProps> = ({
   item,
-  isTyping,
   contentType,
-  icon,
   updateState,
-  renderInputs
+  renderInputs,
+  icon,
+  isTyping
 }) => {
   const { selectedWorkspace, setChats, setSelectedAssistant } =
     useContext(ChatbotUIContext)
@@ -76,15 +74,15 @@ export const SidebarItem: FC<SidebarItemProps> = ({
     }
   }
 
-  const handleClickAction = async (
-    e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
-    e.stopPropagation()
+  // const handleClickAction = async (
+  //   e: React.MouseEvent<SVGSVGElement, MouseEvent>
+  // ) => {
+  //   e.stopPropagation()
 
-    const action = actionMap[contentType]
+  //   const action = actionMap[contentType]
 
-    await action(item as any)
-  }
+  //   await action(item as any)
+  // }
 
   return (
     <SidebarUpdateItem
@@ -93,7 +91,6 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       contentType={contentType}
       updateState={updateState}
       renderInputs={renderInputs}
-      onUpdate={updatedItem => console.log("Item updated:", updatedItem)}
     >
       <div
         ref={itemRef}
@@ -111,7 +108,8 @@ export const SidebarItem: FC<SidebarItemProps> = ({
           {item.name}
         </div>
 
-        {isHovering && (
+        {/* TODO */}
+        {/* {isHovering && (
           <WithTooltip
             delayDuration={1000}
             display={<div>Start chat with {contentType.slice(0, -1)}</div>}
@@ -123,7 +121,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({
               />
             }
           />
-        )}
+        )} */}
       </div>
     </SidebarUpdateItem>
   )
