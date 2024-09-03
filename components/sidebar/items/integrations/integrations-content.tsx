@@ -1,8 +1,9 @@
 import { useSession } from "next-auth/react"
-import { useEffect, useState } from "react"
-import { IntegrationItem, GoogleIcon, MicrosoftIcon } from "./integration-item"
+import { useContext, useEffect, useState } from "react"
+import { IntegrationItem } from "./integration-item"
 import { signIn } from "next-auth/react"
 import { EnrichedSession } from "@/auth"
+import { ChatbotUIContext } from "@/context/context"
 
 interface Integration {
   id: string
@@ -14,37 +15,18 @@ interface Integration {
 
 export const IntegrationsContent = () => {
   const { data: session } = useSession()
-  const [integrations, setIntegrations] = useState<Integration[]>([])
+  const { integrations, setIntegrations } = useContext(ChatbotUIContext)
 
   useEffect(() => {
-    const availableIntegrations: Integration[] = [
-      {
-        id: "azure-ad",
-        name: "Microsoft Azure",
-        description:
-          "Microsoft Azure Active Directory OAuth provider for enterprise applications.",
-        isInstalled: false,
-        icon: <MicrosoftIcon />
-      },
-      {
-        id: "google",
-        name: "Google",
-        description:
-          "Google OAuth provider for accessing Google services and user data.",
-        isInstalled: false,
-        icon: <GoogleIcon />
-      }
-    ]
-
     if ((session as EnrichedSession)?.providers) {
       setIntegrations(
-        availableIntegrations.map(integration => ({
+        integrations.map(integration => ({
           ...integration,
           isInstalled: !!(session as EnrichedSession).providers[integration.id]
         }))
       )
     } else {
-      setIntegrations(availableIntegrations)
+      setIntegrations(integrations)
     }
   }, [session])
 

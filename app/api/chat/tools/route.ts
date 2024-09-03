@@ -9,13 +9,12 @@ import { auth } from "@/auth"
 import { EnrichedSession } from "@/auth"
 
 export async function POST(request: Request) {
-
   const session = (await auth()) as EnrichedSession | null
 
   const headers: string = `{
     "Content-Type": "application/json",
     "Authorization": "Bearer ${session?.providers["azure-ad"].accessToken}"
-  }`;
+  }`
 
   const json = await request.json()
   const { chatSettings, messages, selectedTools } = json as {
@@ -60,7 +59,7 @@ export async function POST(request: Request) {
           title: convertedSchema.info.title,
           description: convertedSchema.info.description,
           url: convertedSchema.info.server,
-//          headers: selectedTool.custom_headers,
+          //          headers: selectedTool.custom_headers,
           headers: headers,
           routeMap,
           requestInBody: convertedSchema.routes[0].requestInBody

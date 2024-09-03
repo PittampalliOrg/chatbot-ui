@@ -112,12 +112,6 @@ export const CreateModel: FC<CreateModelProps> = ({ isOpen, onOpenChange }) => {
           </div>
         </>
       )}
-      onNewItem={function (): void {
-        throw new Error("Function not implemented.")
-      }}
-      onClearItems={function (): void {
-        throw new Error("Function not implemented.")
-      }}
     />
   )
 }

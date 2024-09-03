@@ -770,108 +770,35 @@ export type Database = {
           },
         ]
       }
-      integration_workspaces: {
-        Row: {
-          created_at: string
-          integration_id: string
-          updated_at: string | null
-          user_id: string
-          workspace_id: string
-        }
-        Insert: {
-          created_at?: string
-          integration_id: string
-          updated_at?: string | null
-          user_id: string
-          workspace_id: string
-        }
-        Update: {
-          created_at?: string
-          integration_id?: string
-          updated_at?: string | null
-          user_id?: string
-          workspace_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "integration_workspaces_integration_id_fkey"
-            columns: ["integration_id"]
-            isOneToOne: false
-            referencedRelation: "integrations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "integration_workspaces_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "integration_workspaces_workspace_id_fkey"
-            columns: ["workspace_id"]
-            isOneToOne: false
-            referencedRelation: "workspaces"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       integrations: {
         Row: {
-          config: Json
-          created_at: string
+          active: boolean
+          created_at: string | null
           description: string
           folder_id: string | null
+          icon: string
           id: string
-          is_enabled: boolean
           name: string
-          provider: string
-          sharing: string
-          updated_at: string | null
-          user_id: string
         }
         Insert: {
-          config: Json
-          created_at?: string
+          active?: boolean
+          created_at?: string | null
           description: string
           folder_id?: string | null
+          icon: string
           id?: string
-          is_enabled?: boolean
           name: string
-          provider: string
-          sharing?: string
-          updated_at?: string | null
-          user_id: string
         }
         Update: {
-          config?: Json
-          created_at?: string
+          active?: boolean
+          created_at?: string | null
           description?: string
           folder_id?: string | null
+          icon?: string
           id?: string
-          is_enabled?: boolean
           name?: string
-          provider?: string
-          sharing?: string
-          updated_at?: string | null
-          user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "integrations_folder_id_fkey"
-            columns: ["folder_id"]
-            isOneToOne: false
-            referencedRelation: "folders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "integrations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       message_file_items: {
         Row: {

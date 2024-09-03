@@ -1,4 +1,3 @@
-import { EnrichedSession } from "@/auth"
 import { Tables } from "@/supabase/types"
 import {
   ChatFile,
@@ -10,22 +9,10 @@ import {
   WorkspaceImage
 } from "@/types"
 import { AssistantImage } from "@/types/images/assistant-image"
-import { OauthProvider } from "@/types/oauthProviders"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
-import { Dispatch, SetStateAction, createContext } from "react"
-
-interface Integration {
-  id: string
-  name: string
-  description: string
-  isInstalled: boolean
-}
+import { Dispatch, SetStateAction, createContext, useState } from "react"
 
 interface ChatbotUIContext {
-  oauthProviders: Record<string, EnrichedSession["providers"][string]>
-  setOauthProviders: Dispatch<
-    SetStateAction<Record<string, EnrichedSession["providers"][string]>>
-  >
   // PROFILE STORE
   profile: Tables<"profiles"> | null
   setProfile: Dispatch<SetStateAction<Tables<"profiles"> | null>>
@@ -150,13 +137,12 @@ interface ChatbotUIContext {
   toolInUse: string
   setToolInUse: Dispatch<SetStateAction<string>>
 
+  // INTEGRATIONS STORE
   integrations: Tables<"integrations">[]
   setIntegrations: Dispatch<SetStateAction<Tables<"integrations">[]>>
 }
 
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
-  oauthProviders: {},
-  setOauthProviders: () => {},
   // PROFILE STORE
   profile: null,
   setProfile: () => {},
@@ -281,6 +267,159 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   toolInUse: "none",
   setToolInUse: () => {},
 
+  // INTEGRATIONS STORE
   integrations: [],
   setIntegrations: () => {}
 })
+
+// Type for the provider component props
+interface ChatbotUIProviderProps {
+  children: React.ReactNode
+}
+
+export const ChatbotUIProvider: React.FC<ChatbotUIProviderProps> = ({
+  children
+}) => {
+  // Implement all state variables and their setters here
+  const [profile, setProfile] = useState<Tables<"profiles"> | null>(null)
+  // ... (implement all other state variables)
+
+  // INTEGRATIONS STORE
+  const [integrations, setIntegrations] = useState<Tables<"integrations">[]>([])
+
+  return (
+    <ChatbotUIContext.Provider
+      value={{
+        // PROFILE STORE
+        profile: null,
+        setProfile: () => {},
+
+        // ITEMS STORE
+        assistants: [],
+        setAssistants: () => {},
+        collections: [],
+        setCollections: () => {},
+        chats: [],
+        setChats: () => {},
+        files: [],
+        setFiles: () => {},
+        folders: [],
+        setFolders: () => {},
+        models: [],
+        setModels: () => {},
+        presets: [],
+        setPresets: () => {},
+        prompts: [],
+        setPrompts: () => {},
+        tools: [],
+        setTools: () => {},
+        workspaces: [],
+        setWorkspaces: () => {},
+
+        // MODELS STORE
+        envKeyMap: {},
+        setEnvKeyMap: () => {},
+        availableHostedModels: [],
+        setAvailableHostedModels: () => {},
+        availableLocalModels: [],
+        setAvailableLocalModels: () => {},
+        availableOpenRouterModels: [],
+        setAvailableOpenRouterModels: () => {},
+
+        // WORKSPACE STORE
+        selectedWorkspace: null,
+        setSelectedWorkspace: () => {},
+        workspaceImages: [],
+        setWorkspaceImages: () => {},
+
+        // PRESET STORE
+        selectedPreset: null,
+        setSelectedPreset: () => {},
+
+        // ASSISTANT STORE
+        selectedAssistant: null,
+        setSelectedAssistant: () => {},
+        assistantImages: [],
+        setAssistantImages: () => {},
+        openaiAssistants: [],
+        setOpenaiAssistants: () => {},
+
+        // PASSIVE CHAT STORE
+        userInput: "",
+        setUserInput: () => {},
+        selectedChat: null,
+        setSelectedChat: () => {},
+        chatMessages: [],
+        setChatMessages: () => {},
+        chatSettings: null,
+        setChatSettings: () => {},
+        chatFileItems: [],
+        setChatFileItems: () => {},
+
+        // ACTIVE CHAT STORE
+        isGenerating: false,
+        setIsGenerating: () => {},
+        firstTokenReceived: false,
+        setFirstTokenReceived: () => {},
+        abortController: null,
+        setAbortController: () => {},
+
+        // CHAT INPUT COMMAND STORE
+        isPromptPickerOpen: false,
+        setIsPromptPickerOpen: () => {},
+        slashCommand: "",
+        setSlashCommand: () => {},
+        isFilePickerOpen: false,
+        setIsFilePickerOpen: () => {},
+        hashtagCommand: "",
+        setHashtagCommand: () => {},
+        isToolPickerOpen: false,
+        setIsToolPickerOpen: () => {},
+        toolCommand: "",
+        setToolCommand: () => {},
+        focusPrompt: false,
+        setFocusPrompt: () => {},
+        focusFile: false,
+        setFocusFile: () => {},
+        focusTool: false,
+        setFocusTool: () => {},
+        focusAssistant: false,
+        setFocusAssistant: () => {},
+        atCommand: "",
+        setAtCommand: () => {},
+        isAssistantPickerOpen: false,
+        setIsAssistantPickerOpen: () => {},
+
+        // ATTACHMENTS STORE
+        chatFiles: [],
+        setChatFiles: () => {},
+        chatImages: [],
+        setChatImages: () => {},
+        newMessageFiles: [],
+        setNewMessageFiles: () => {},
+        newMessageImages: [],
+        setNewMessageImages: () => {},
+        showFilesDisplay: false,
+        setShowFilesDisplay: () => {},
+
+        // RETRIEVAL STORE
+        useRetrieval: false,
+        setUseRetrieval: () => {},
+        sourceCount: 4,
+        setSourceCount: () => {},
+
+        // TOOL STORE
+        selectedTools: [],
+        setSelectedTools: () => {},
+        toolInUse: "none",
+        setToolInUse: () => {},
+
+        // INTEGRATIONS STORE
+        integrations: [],
+        setIntegrations: () => {}
+      }}
+    >
+      {children}
+    </ChatbotUIContext.Provider>
+  )
+}

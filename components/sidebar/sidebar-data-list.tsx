@@ -7,7 +7,7 @@ import { updateModel } from "@/db/models"
 import { updatePreset } from "@/db/presets"
 import { updatePrompt } from "@/db/prompts"
 import { updateTool } from "@/db/tools"
-import { updateIntegration } from "@/db/integrations"
+import { updateIntegrationActive } from "@/db/integrations"
 import { cn } from "@/lib/utils"
 import { Tables } from "@/supabase/types"
 import { ContentType, DataItemType, DataListType } from "@/types"
@@ -22,11 +22,9 @@ import { ModelItem } from "./items/models/model-item"
 import { PresetItem } from "./items/presets/preset-item"
 import { PromptItem } from "./items/prompts/prompt-item"
 import { ToolItem } from "./items/tools/tool-item"
-import {
-  IntegrationItem,
-  GoogleIcon,
-  MicrosoftIcon
-} from "./items/integrations/integration-item"
+import { IntegrationItem } from "./items/integrations/integration-item"
+import { OauthProvider } from "@/types/oauthProviders"
+import { set } from "date-fns"
 
 interface SidebarDataListProps {
   contentType: ContentType
@@ -96,24 +94,16 @@ export const SidebarDataList: FC<SidebarDataListProps> = ({
         return <ModelItem key={item.id} model={item as Tables<"models">} />
 
       case "integrations":
-        const integrationItem = item as Tables<"integrations">
         return (
           <IntegrationItem
-            key={integrationItem.id}
-            integration={{
-              id: integrationItem.id,
-              name: integrationItem.name,
-              description: integrationItem.description,
-              isInstalled: integrationItem.is_enabled,
-              icon:
-                integrationItem.provider === "google" ? (
-                  <GoogleIcon />
-                ) : (
-                  <MicrosoftIcon />
-                )
+            key={item.id}
+            integration={item as Tables<"integrations">}
+            onInstall={function (): void {
+              throw new Error("Function not implemented.")
             }}
-            onInstall={() => handleInstallIntegration(integrationItem.id)}
-            onUninstall={() => handleUninstallIntegration(integrationItem.id)}
+            onUninstall={function (): void {
+              throw new Error("Function not implemented.")
+            }}
           />
         )
 
@@ -170,7 +160,7 @@ export const SidebarDataList: FC<SidebarDataListProps> = ({
     assistants: updateAssistant,
     tools: updateTool,
     models: updateModel,
-    integrations: updateIntegration
+    integrations: updateIntegrationActive
   }
 
   const stateUpdateFunctions = {
@@ -204,35 +194,6 @@ export const SidebarDataList: FC<SidebarDataListProps> = ({
         item.id === updatedItem.id ? updatedItem : item
       )
     )
-  }
-  const handleInstallIntegration = async (integrationId: string) => {
-    try {
-      const updatedIntegration = await updateIntegration(integrationId, {
-        is_enabled: true
-      })
-      setIntegrations(prevIntegrations =>
-        prevIntegrations.map(integration =>
-          integration.id === integrationId ? updatedIntegration : integration
-        )
-      )
-    } catch (error) {
-      console.error("Failed to install integration:", error)
-    }
-  }
-
-  const handleUninstallIntegration = async (integrationId: string) => {
-    try {
-      const updatedIntegration = await updateIntegration(integrationId, {
-        is_enabled: false
-      })
-      setIntegrations(prevIntegrations =>
-        prevIntegrations.map(integration =>
-          integration.id === integrationId ? updatedIntegration : integration
-        )
-      )
-    } catch (error) {
-      console.error("Failed to uninstall integration:", error)
-    }
   }
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {

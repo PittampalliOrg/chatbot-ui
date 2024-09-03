@@ -206,12 +206,6 @@ export const CreateAssistant: FC<CreateAssistantProps> = ({
         </>
       )}
       onOpenChange={onOpenChange}
-      onNewItem={function (): void {
-        throw new Error("Function not implemented.")
-      }}
-      onClearItems={function (): void {
-        throw new Error("Function not implemented.")
-      }}
     />
   )
 }

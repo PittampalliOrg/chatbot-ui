@@ -171,7 +171,10 @@ export const SidebarCreateItem: FC<SidebarCreateItemProps> = ({
       return updatedAssistant
     },
     tools: createTool,
-    models: createModel
+    models: createModel,
+    integrations: async () => {
+      throw new Error("Creating integrations is not supported.")
+    }
   }
 
   const stateUpdateFunctions = {

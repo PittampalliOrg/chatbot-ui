@@ -20,6 +20,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { ReactNode, useContext, useEffect, useState } from "react"
 import Loading from "../loading"
 import { EnrichedSession } from "@/auth"
+import { getIntegrations } from "@/db/integrations"
 
 interface WorkspaceLayoutProps {
   children: ReactNode
@@ -56,7 +57,7 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     setNewMessageFiles,
     setNewMessageImages,
     setShowFilesDisplay,
-    setOauthProviders
+    setIntegrations
   } = useContext(ChatbotUIContext)
 
   const [loading, setLoading] = useState(true)
@@ -78,8 +79,14 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     try {
       const response = await fetch("/api/auth/session")
       const session = (await response.json()) as EnrichedSession | null
-      if (session && session.providers) {
-        setOauthProviders(session.providers)
+      if (session?.providers) {
+        setIntegrations(prevIntegrations =>
+          prevIntegrations.map(integration => ({
+            ...integration,
+            active:
+              !!session.providers[integration.name as "google" | "azure-ad"]
+          }))
+        )
       }
     } catch (error) {
       console.error("Error fetching OAuth providers:", error)
@@ -170,6 +177,9 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
 
     const modelData = await getModelWorkspacesByWorkspaceId(workspaceId)
     setModels(modelData.models)
+
+    const fetchedIntegrations = await getIntegrations()
+    setIntegrations(fetchedIntegrations)
 
     setChatSettings({
       model: (searchParams.get("model") ||
