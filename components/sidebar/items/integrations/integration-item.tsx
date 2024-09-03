@@ -1,28 +1,75 @@
+import { signIn, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
+import { ChatbotUIContext } from "@/context/context"
+import { updateIntegrationActive } from "@/db/integrations"
+import { Tables } from "@/supabase/types"
+import { FC, useContext, useState } from "react"
 
 interface IntegrationItemProps {
-  integration: {
-    id: string
-    name: string
-    description: string
-    isInstalled: boolean
-    icon: React.ReactNode
-  }
+  integration: Tables<"integrations">
   onInstall: () => void
   onUninstall: () => void
 }
 
-export const IntegrationItem = ({
-  integration,
-  onInstall,
-  onUninstall
-}: IntegrationItemProps) => {
+export const IntegrationItem: FC<IntegrationItemProps> = ({ integration }) => {
+  const [isInstalling, setIsInstalling] = useState(false)
+  const { integrations, setIntegrations } = useContext(ChatbotUIContext)
+
+  const handleInstall = async () => {
+    setIsInstalling(true)
+    try {
+      const result = await signIn(integration.name)
+      if (result?.error) {
+        console.error("Error installing provider:", result.error)
+      } else {
+        // Fetch the updated session after successful sign-in
+        const response = await fetch("/api/auth/session")
+        const session = await response.json()
+        if (session?.providers) {
+          await updateIntegrationActive(integration.id)
+          // Update the local state
+          setIntegrations(prevIntegrations =>
+            prevIntegrations.map(i =>
+              i.id === integration.id ? { ...i, active: true } : i
+            )
+          )
+        }
+      }
+    } catch (error) {
+      console.error("Error installing provider:", error)
+    } finally {
+      setIsInstalling(false)
+    }
+  }
+
+  const handleUninstall = async () => {
+    try {
+      await signOut()
+      await updateIntegrationActive(integration.id)
+      // Update the local state
+      setIntegrations(prevIntegrations =>
+        prevIntegrations.map(i =>
+          i.id === integration.id ? { ...i, active: false } : i
+        )
+      )
+    } catch (error) {
+      console.error("Error uninstalling provider:", error)
+    }
+  }
+
+  const handleApiCall = async () => {
+    // Implement API call functionality here
+    console.log("Making API call for", integration.name)
+  }
+
   return (
     <div className="bg-secondary/50 border-secondary flex flex-col rounded-lg border p-3">
       <div className="mb-2 flex items-center">
-        <div className="mr-2 size-6 shrink-0">{integration.icon}</div>
+        <div className="mr-2 size-6 shrink-0">
+          {/* Add icon here if needed */}
+        </div>
         <h3 className="grow text-sm font-medium">{integration.name}</h3>
-        {integration.isInstalled && (
+        {integration.active && (
           <span className="rounded-full bg-green-500/20 px-1.5 py-0.5 text-xs text-green-500">
             Installed
           </span>
@@ -33,14 +80,14 @@ export const IntegrationItem = ({
       </p>
       <div className="flex flex-col space-y-2">
         <Button
-          onClick={integration.isInstalled ? onUninstall : onInstall}
-          variant={integration.isInstalled ? "secondary" : "default"}
+          onClick={integration.active ? handleInstall : handleUninstall}
+          variant={integration.active ? "secondary" : "default"}
           size="sm"
           className="h-7 w-full py-1 text-xs"
         >
-          {integration.isInstalled ? "Installed" : "Install"}
+          {integration.active ? "Installed" : "Install"}
         </Button>
-        {integration.isInstalled && (
+        {integration.active && (
           <Button
             variant="outline"
             size="sm"
@@ -53,33 +100,3 @@ export const IntegrationItem = ({
     </div>
   )
 }
-
-export const GoogleIcon = () => (
-  <svg viewBox="0 0 24 24" className="size-full">
-    <path
-      fill="#4285F4"
-      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-    />
-    <path
-      fill="#34A853"
-      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-    />
-    <path
-      fill="#FBBC05"
-      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-    />
-    <path
-      fill="#EA4335"
-      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-    />
-  </svg>
-)
-
-export const MicrosoftIcon = () => (
-  <svg viewBox="0 0 23 23" className="size-full">
-    <path fill="#f35325" d="M1 1h10v10H1z" />
-    <path fill="#81bc06" d="M12 1h10v10H12z" />
-    <path fill="#05a6f0" d="M1 12h10v10H1z" />
-    <path fill="#ffba08" d="M12 12h10v10H12z" />
-  </svg>
-)

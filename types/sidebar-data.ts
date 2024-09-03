@@ -1,5 +1,4 @@
 import { Tables } from "@/supabase/types"
-import { Table } from "lucide-react"
 
 export type DataListType =
   | Tables<"collections">[]

@@ -27,7 +27,7 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
     assistants,
     tools,
     models,
-    integrations // Add this line
+    integrations
   } = useContext(ChatbotUIContext)
 
   const chatFolders = folders.filter(folder => folder.type === "chats")
@@ -42,6 +42,9 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
   )
   const toolFolders = folders.filter(folder => folder.type === "tools")
   const modelFolders = folders.filter(folder => folder.type === "models")
+  const integrationFolders = folders.filter(
+    folder => folder.type === "integrations"
+  )
 
   const renderSidebarContent = (
     contentType: ContentType,

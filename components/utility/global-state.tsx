@@ -43,10 +43,6 @@ interface GlobalStateProps {
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const router = useRouter()
 
-  const [oauthProviders, setOauthProviders] = useState<
-    Record<string, EnrichedSession["providers"][string]>
-  >({})
-
   // PROFILE STORE
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null)
 
@@ -135,20 +131,28 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [selectedTools, setSelectedTools] = useState<Tables<"tools">[]>([])
   const [toolInUse, setToolInUse] = useState<string>("none")
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const response = await fetch("/api/auth/session")
-        const session = (await response.json()) as EnrichedSession | null
-        if (session && session.providers) {
-          setOauthProviders(session.providers)
-        }
-      } catch (error) {
-        console.error("Error fetching session:", error)
-      }
-    }
-    fetchSession()
-  }, [])
+  const [integrations, setIntegrations] = useState<Tables<"integrations">[]>([])
+
+  // useEffect(() => {
+  //   const fetchSession = async () => {
+  //     try {
+  //       const response = await fetch("/api/auth/session")
+  //       const session = await response.json() as EnrichedSession | null
+  //       console.log(session);
+  //       if (session) {
+  //         const updatedProviders = oauthProviders?.map((provider: OauthProvider) => ({
+  //           ...provider,
+  //           active: !!session.providers[provider.name]
+  //         }))
+  //         setOauthProviders(updatedProviders)
+
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching session:", error)
+  //     }
+  //   }
+  //   fetchSession()
+  // }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -223,37 +227,6 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
       return profile
     }
   }
-
-  const [integrations, setIntegrations] = useState<Tables<"integrations">[]>([
-    {
-      id: "1",
-      name: "Google",
-      description:
-        "Integrate with Google for email, profile, and calendar access",
-      provider: "google",
-      config: {}, // Add an empty object for the config field
-      is_enabled: false, // Changed from is_installed to is_enabled
-      sharing: "private", // Add a sharing field
-      folder_id: null, // Add a folder_id field
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      user_id: ""
-    },
-    {
-      id: "2",
-      name: "Microsoft Entra ID",
-      description:
-        "Connect with Microsoft Entra ID for user authentication and calendar access",
-      provider: "microsoft",
-      config: {}, // Add an empty object for the config field
-      is_enabled: false, // Changed from is_installed to is_enabled
-      sharing: "private", // Add a sharing field
-      folder_id: null, // Add a folder_id field
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      user_id: ""
-    }
-  ])
 
   return (
     <MsalProvider instance={msalInstance}>
