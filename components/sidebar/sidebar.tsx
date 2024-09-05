@@ -8,6 +8,8 @@ import { WorkspaceSwitcher } from "../utility/workspace-switcher"
 import { WorkspaceSettings } from "../workspace/workspace-settings"
 import { SidebarContent } from "./sidebar-content"
 import { IntegrationsContent } from "../sidebar/items/integrations/integrations-content" // Add this import
+import AuthComponent from "@/app/api/protected/AuthComponent"
+import RestAPIComponent from "@/app/api/protected/RestApiComponent"
 
 interface SidebarProps {
   contentType: ContentType
@@ -94,7 +96,13 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
             case "models":
               return renderSidebarContent("models", models, modelFolders)
             case "integrations":
-              return <IntegrationsContent />
+              return (
+                <>
+                  <AuthComponent />
+                  <RestAPIComponent />
+                </>
+              )
+
             default:
               return null
           }
