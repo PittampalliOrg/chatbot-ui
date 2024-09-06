@@ -14,6 +14,8 @@ import { Providers } from "@microsoft/mgt-element"
 
 import { Providers as MGT } from "@microsoft/mgt-element"
 import { Msal2Provider } from "@microsoft/mgt-msal2-provider"
+import { prepScopes } from "@microsoft/mgt-element"
+import { sendMailAction } from "@/app/api/protected/actions"
 
 MGT.globalProvider = new Msal2Provider({
   clientId: "7e15b39d-44e0-4397-877e-4c88fe0f9ab1",
@@ -143,7 +145,7 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
                       }
                     }}
                   >
-                    <button type="submit">Invoke REST API</button>
+                    <button type="submit">Send Mail</button>
                   </form>
                 </>
               )
