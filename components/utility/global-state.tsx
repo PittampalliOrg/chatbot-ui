@@ -2,6 +2,7 @@
 
 "use client"
 
+import { auth, EnrichedSession } from "@/auth"
 import { ChatbotUIContext } from "@/context/context"
 import { getProfileByUserId } from "@/db/profile"
 import { getWorkspaceImageFromStorage } from "@/db/storage/workspace-images"
@@ -27,6 +28,24 @@ import { AssistantImage } from "@/types/images/assistant-image"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
+import { PublicClientApplication } from "@azure/msal-browser"
+import { Providers } from "@microsoft/mgt-element"
+import {
+  Msal2Provider,
+  Msal2Config,
+  Msal2PublicClientApplicationConfig
+} from "@microsoft/mgt-msal2-provider"
+
+const config: Msal2Config = {
+  clientId: "7e15b39d-44e0-4397-877e-4c88fe0f9ab1",
+  authority:
+    "https://login.microsoftonline.com/0c4da9c5-40ea-4e7d-9c7a-e7308d4f8e38",
+  redirectUri: "http://localhost:3000/help",
+  scopes: ["api://68865588-d66d-4db6-8680-0ad4369fdf5b/access_as_user"]
+}
+
+// initialize the auth provider globally
+Providers.globalProvider = new Msal2Provider(config)
 
 interface GlobalStateProps {
   children: React.ReactNode
@@ -123,6 +142,27 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [selectedTools, setSelectedTools] = useState<Tables<"tools">[]>([])
   const [toolInUse, setToolInUse] = useState<string>("none")
 
+  // useEffect(() => {
+  //   const fetchSession = async () => {
+  //     try {
+  //       const response = await fetch("/api/auth/session")
+  //       const session = await response.json() as EnrichedSession | null
+  //       console.log(session);
+  //       if (session) {
+  //         const updatedProviders = oauthProviders?.map((provider: OauthProvider) => ({
+  //           ...provider,
+  //           active: !!session.providers[provider.name]
+  //         }))
+  //         setOauthProviders(updatedProviders)
+
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching session:", error)
+  //     }
+  //   }
+  //   fetchSession()
+  // }, [])
+
   useEffect(() => {
     ;(async () => {
       const profile = await fetchStartingData()
@@ -198,6 +238,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   }
 
   return (
+    //   <MsalProvider instance={msalInstance}>
     <ChatbotUIContext.Provider
       value={{
         // PROFILE STORE
@@ -327,5 +368,6 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
     >
       {children}
     </ChatbotUIContext.Provider>
+    //    </MsalProvider>
   )
 }
