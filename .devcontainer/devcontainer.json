@@ -25,7 +25,8 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:latest": {}, // Install Docker CLI
-    "ghcr.io/devcontainers-contrib/features/deno:latest": {} // Install Deno
+    "ghcr.io/devcontainers-contrib/features/deno:latest": {}, // Install Deno
+    "ghcr.io/itsmechlark/features/redis-server:1": {}
   },
   "forwardPorts": [3000]
 } 
