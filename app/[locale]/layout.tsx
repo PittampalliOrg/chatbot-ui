@@ -10,7 +10,6 @@ import { Inter } from "next/font/google"
 import { cookies } from "next/headers"
 import { ReactNode } from "react"
 import "./globals.css"
-import { auth, EnrichedSession } from "@/auth"
 import { SessionProviders } from "@/app/[locale]/apps/providers"
 
 const inter = Inter({ subsets: ["latin"] })

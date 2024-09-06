@@ -1,23 +1,9 @@
-import { auth, EnrichedSession } from "@/auth"
+"use client"
 
-export default async function ProtectedComponent() {
-  const session = (await auth()) as EnrichedSession | null
+import { Login } from "@microsoft/mgt-react"
 
-  if (session) {
-    const googleToken = session.providers?.google?.accessToken
-    const azureToken = session.providers?.["azure-ad"]?.accessToken
+//assuming a provider has already been initialized
 
-    // Use these tokens to make API calls
-    // ...
-
-    return (
-      <>
-        <div style={{ width: "100%", whiteSpace: "pre-wrap" }}>
-          <pre>{JSON.stringify(session, null, 2)}</pre>
-        </div>
-      </>
-    )
-  }
-
-  return <div>Please sign in</div>
+export default function LoginPage() {
+  return <Login />
 }

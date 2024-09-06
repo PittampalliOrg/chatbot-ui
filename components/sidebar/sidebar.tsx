@@ -7,9 +7,21 @@ import { TabsContent } from "../ui/tabs"
 import { WorkspaceSwitcher } from "../utility/workspace-switcher"
 import { WorkspaceSettings } from "../workspace/workspace-settings"
 import { SidebarContent } from "./sidebar-content"
-import { IntegrationsContent } from "../sidebar/items/integrations/integrations-content" // Add this import
 import AuthComponent from "@/app/api/protected/AuthComponent"
 import RestAPIComponent from "@/app/api/protected/RestApiComponent"
+import { Login } from "@microsoft/mgt-react"
+import { Providers } from "@microsoft/mgt-element"
+
+import { Providers as MGT } from "@microsoft/mgt-element"
+import { Msal2Provider } from "@microsoft/mgt-msal2-provider"
+
+MGT.globalProvider = new Msal2Provider({
+  clientId: "7e15b39d-44e0-4397-877e-4c88fe0f9ab1",
+  authority:
+    "https://login.microsoftonline.com/0c4da9c5-40ea-4e7d-9c7a-e7308d4f8e38",
+  redirectUri: "http://localhost:3000",
+  scopes: ["Mail.Send"]
+})
 
 interface SidebarProps {
   contentType: ContentType
@@ -101,8 +113,38 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
             case "integrations":
               return (
                 <>
+                  <Login />
                   <AuthComponent />
-                  <RestAPIComponent />
+                  <form
+                    action={async () => {
+                      const token =
+                        await Providers.globalProvider.getAccessToken({
+                          scopes: [
+                            "api://68865588-d66d-4db6-8680-0ad4369fdf5b/access_as_user"
+                          ]
+                        })
+                      const headers = new Headers()
+                      headers.append("Authorization", `Bearer ${token}`)
+
+                      const options = {
+                        method: "GET",
+                        headers: headers
+                      }
+
+                      try {
+                        const response = await fetch(
+                          "http://localhost:3000/api/protected",
+                          options
+                        )
+                        return await response.json()
+                      } catch (error) {
+                        console.error("API call failed: ", error)
+                        throw error
+                      }
+                    }}
+                  >
+                    <button type="submit">Invoke REST API</button>
+                  </form>
                 </>
               )
 

@@ -30,11 +30,23 @@ import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
 import { PublicClientApplication } from "@azure/msal-browser"
-import { MsalProvider } from "@azure/msal-react"
-import { msalConfig } from "../../app/api/protected/consumerAuthConfig"
+import { Providers } from "@microsoft/mgt-element"
+import {
+  Msal2Provider,
+  Msal2Config,
+  Msal2PublicClientApplicationConfig
+} from "@microsoft/mgt-msal2-provider"
 
-const msalInstance = new PublicClientApplication(msalConfig)
-msalInstance.initialize()
+const config: Msal2Config = {
+  clientId: "7e15b39d-44e0-4397-877e-4c88fe0f9ab1",
+  authority:
+    "https://login.microsoftonline.com/0c4da9c5-40ea-4e7d-9c7a-e7308d4f8e38",
+  redirectUri: "http://localhost:3000/help",
+  scopes: ["api://68865588-d66d-4db6-8680-0ad4369fdf5b/access_as_user"]
+}
+
+// initialize the auth provider globally
+Providers.globalProvider = new Msal2Provider(config)
 
 interface GlobalStateProps {
   children: React.ReactNode
@@ -229,142 +241,139 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   }
 
   return (
-    <MsalProvider instance={msalInstance}>
-      <ChatbotUIContext.Provider
-        value={{
-          // PROFILE STORE
-          profile,
-          setProfile,
+    //   <MsalProvider instance={msalInstance}>
+    <ChatbotUIContext.Provider
+      value={{
+        // PROFILE STORE
+        profile,
+        setProfile,
 
-          // ITEMS STORE
-          assistants,
-          setAssistants,
-          collections,
-          setCollections,
-          chats,
-          setChats,
-          files,
-          setFiles,
-          folders,
-          setFolders,
-          models,
-          setModels,
-          presets,
-          setPresets,
-          prompts,
-          setPrompts,
-          tools,
-          setTools,
-          workspaces,
-          setWorkspaces,
+        // ITEMS STORE
+        assistants,
+        setAssistants,
+        collections,
+        setCollections,
+        chats,
+        setChats,
+        files,
+        setFiles,
+        folders,
+        setFolders,
+        models,
+        setModels,
+        presets,
+        setPresets,
+        prompts,
+        setPrompts,
+        tools,
+        setTools,
+        workspaces,
+        setWorkspaces,
 
-          // MODELS STORE
-          envKeyMap,
-          setEnvKeyMap,
-          availableHostedModels,
-          setAvailableHostedModels,
-          availableLocalModels,
-          setAvailableLocalModels,
-          availableOpenRouterModels,
-          setAvailableOpenRouterModels,
+        // MODELS STORE
+        envKeyMap,
+        setEnvKeyMap,
+        availableHostedModels,
+        setAvailableHostedModels,
+        availableLocalModels,
+        setAvailableLocalModels,
+        availableOpenRouterModels,
+        setAvailableOpenRouterModels,
 
-          // WORKSPACE STORE
-          selectedWorkspace,
-          setSelectedWorkspace,
-          workspaceImages,
-          setWorkspaceImages,
+        // WORKSPACE STORE
+        selectedWorkspace,
+        setSelectedWorkspace,
+        workspaceImages,
+        setWorkspaceImages,
 
-          // PRESET STORE
-          selectedPreset,
-          setSelectedPreset,
+        // PRESET STORE
+        selectedPreset,
+        setSelectedPreset,
 
-          // ASSISTANT STORE
-          selectedAssistant,
-          setSelectedAssistant,
-          assistantImages,
-          setAssistantImages,
-          openaiAssistants,
-          setOpenaiAssistants,
+        // ASSISTANT STORE
+        selectedAssistant,
+        setSelectedAssistant,
+        assistantImages,
+        setAssistantImages,
+        openaiAssistants,
+        setOpenaiAssistants,
 
-          // PASSIVE CHAT STORE
-          userInput,
-          setUserInput,
-          chatMessages,
-          setChatMessages,
-          chatSettings,
-          setChatSettings,
-          selectedChat,
-          setSelectedChat,
-          chatFileItems,
-          setChatFileItems,
+        // PASSIVE CHAT STORE
+        userInput,
+        setUserInput,
+        chatMessages,
+        setChatMessages,
+        chatSettings,
+        setChatSettings,
+        selectedChat,
+        setSelectedChat,
+        chatFileItems,
+        setChatFileItems,
 
-          // ACTIVE CHAT STORE
-          isGenerating,
-          setIsGenerating,
-          firstTokenReceived,
-          setFirstTokenReceived,
-          abortController,
-          setAbortController,
+        // ACTIVE CHAT STORE
+        isGenerating,
+        setIsGenerating,
+        firstTokenReceived,
+        setFirstTokenReceived,
+        abortController,
+        setAbortController,
 
-          // CHAT INPUT COMMAND STORE
-          isPromptPickerOpen,
-          setIsPromptPickerOpen,
-          slashCommand,
-          setSlashCommand,
-          isFilePickerOpen,
-          setIsFilePickerOpen,
-          hashtagCommand,
-          setHashtagCommand,
-          isToolPickerOpen,
-          setIsToolPickerOpen,
-          toolCommand,
-          setToolCommand,
-          focusPrompt,
-          setFocusPrompt,
-          focusFile,
-          setFocusFile,
-          focusTool,
-          setFocusTool,
-          focusAssistant,
-          setFocusAssistant,
-          atCommand,
-          setAtCommand,
-          isAssistantPickerOpen,
-          setIsAssistantPickerOpen,
+        // CHAT INPUT COMMAND STORE
+        isPromptPickerOpen,
+        setIsPromptPickerOpen,
+        slashCommand,
+        setSlashCommand,
+        isFilePickerOpen,
+        setIsFilePickerOpen,
+        hashtagCommand,
+        setHashtagCommand,
+        isToolPickerOpen,
+        setIsToolPickerOpen,
+        toolCommand,
+        setToolCommand,
+        focusPrompt,
+        setFocusPrompt,
+        focusFile,
+        setFocusFile,
+        focusTool,
+        setFocusTool,
+        focusAssistant,
+        setFocusAssistant,
+        atCommand,
+        setAtCommand,
+        isAssistantPickerOpen,
+        setIsAssistantPickerOpen,
 
-          // ATTACHMENT STORE
-          chatFiles,
-          setChatFiles,
-          chatImages,
-          setChatImages,
-          newMessageFiles,
-          setNewMessageFiles,
-          newMessageImages,
-          setNewMessageImages,
-          showFilesDisplay,
-          setShowFilesDisplay,
+        // ATTACHMENT STORE
+        chatFiles,
+        setChatFiles,
+        chatImages,
+        setChatImages,
+        newMessageFiles,
+        setNewMessageFiles,
+        newMessageImages,
+        setNewMessageImages,
+        showFilesDisplay,
+        setShowFilesDisplay,
 
-          // RETRIEVAL STORE
-          useRetrieval,
-          setUseRetrieval,
-          sourceCount,
-          setSourceCount,
+        // RETRIEVAL STORE
+        useRetrieval,
+        setUseRetrieval,
+        sourceCount,
+        setSourceCount,
 
-          // TOOL STORE
-          selectedTools,
-          setSelectedTools,
-          toolInUse,
-          setToolInUse,
+        // TOOL STORE
+        selectedTools,
+        setSelectedTools,
+        toolInUse,
+        setToolInUse,
 
-          oauthProviders,
-          setOauthProviders,
-
-          integrations,
-          setIntegrations
-        }}
-      >
-        {children}
-      </ChatbotUIContext.Provider>
-    </MsalProvider>
+        integrations,
+        setIntegrations
+      }}
+    >
+      {children}
+    </ChatbotUIContext.Provider>
+    //    </MsalProvider>
   )
 }
