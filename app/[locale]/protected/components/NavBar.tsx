@@ -11,7 +11,8 @@ export default function NavBar() {
     { name: "Profile", path: "/protected/profile" },
     { name: "Graph Request", path: "/protected/graph-request" },
     { name: "Events", path: "/protected/event" },
-    { name: "Tasks", path: "/protected/tasks" }
+    { name: "Tasks", path: "/protected/tasks" },
+    { name: "Token Information", path: "/protected/token-info" }
   ]
 
   return (
