@@ -3,22 +3,34 @@
 import { AuthorizationUrlRequest } from "@azure/msal-node"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { calendarRequest, loginRequest } from "../serverConfig"
+import { calendarRequest, loginRequest, tasksRequest } from "../serverConfig"
 import { authProvider } from "../services/auth"
 import { getCurrentUrl } from "../utils/url"
 
 async function acquireToken(
-  request: Omit<AuthorizationUrlRequest, "redirectUri">
+  request: Omit<AuthorizationUrlRequest, "redirectUri">,
+  redirectPath: string
 ) {
-  redirect(await authProvider.getAuthCodeUrl(request, getCurrentUrl()))
+  const currentUrl = new URL(getCurrentUrl())
+  currentUrl.pathname = redirectPath
+  const redirectUrl = currentUrl.toString()
+
+  console.log("request", request)
+  console.log("redirectUrl", redirectUrl)
+  redirect(await authProvider.getAuthCodeUrl(request, redirectUrl))
 }
 
 export async function acquireCalendarTokenInteractive() {
-  await acquireToken(calendarRequest)
+  await acquireToken(calendarRequest, "/protected/event")
+}
+
+export async function acquireTasksTokenInteractive() {
+  await acquireToken(tasksRequest, "/protected/tasks")
 }
 
 export async function login() {
-  await acquireToken(loginRequest)
+  await acquireToken(loginRequest, "/protected")
+  console.log("loginRequest", loginRequest)
 }
 
 export async function logout() {
@@ -29,4 +41,5 @@ export async function logout() {
   }
 
   cookies().delete("__session")
+  redirect("/")
 }

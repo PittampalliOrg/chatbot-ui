@@ -7,8 +7,9 @@ import { Tabs } from "@/components/ui/tabs"
 import useHotkey from "@/lib/hooks/use-hotkey"
 import { cn } from "@/lib/utils"
 import { ContentType } from "@/types"
-import { IconChevronCompactRight } from "@tabler/icons-react"
+import { IconChevronCompactRight, IconLock } from "@tabler/icons-react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { FC, useState } from "react"
 import { useSelectFileHandler } from "../chat/chat-hooks/use-select-file-handler"
 import { CommandK } from "../utility/command-k"
@@ -39,12 +40,9 @@ export const Dashboard: FC<DashboardProps> = ({ children }) => {
 
   const onFileDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
-
     const files = event.dataTransfer.files
     const file = files[0]
-
     handleSelectDeviceFile(file)
-
     setIsDragging(false)
   }
 
@@ -67,34 +65,46 @@ export const Dashboard: FC<DashboardProps> = ({ children }) => {
     localStorage.setItem("showSidebar", String(!showSidebar))
   }
 
+  // Extract locale from pathname
+  const locale = pathname.split("/")[1]
+
   return (
     <div className="flex size-full">
       <CommandK />
 
       <div
         className={cn(
-          "duration-200 dark:border-none " + (showSidebar ? "border-r-2" : "")
+          "duration-200 dark:border-none",
+          showSidebar ? "border-r-2" : ""
         )}
         style={{
-          // Sidebar
           minWidth: showSidebar ? `${SIDEBAR_WIDTH}px` : "0px",
           maxWidth: showSidebar ? `${SIDEBAR_WIDTH}px` : "0px",
           width: showSidebar ? `${SIDEBAR_WIDTH}px` : "0px"
         }}
       >
         {showSidebar && (
-          <Tabs
-            className="flex h-full"
-            value={contentType}
-            onValueChange={tabValue => {
-              setContentType(tabValue as ContentType)
-              router.replace(`${pathname}?tab=${tabValue}`)
-            }}
-          >
-            <SidebarSwitcher onContentTypeChange={setContentType} />
-
-            <Sidebar contentType={contentType} showSidebar={showSidebar} />
-          </Tabs>
+          <div className="flex h-full flex-col">
+            <Tabs
+              className="flex h-full grow"
+              value={contentType}
+              onValueChange={tabValue => {
+                setContentType(tabValue as ContentType)
+                router.replace(`${pathname}?tab=${tabValue}`)
+              }}
+            >
+              <SidebarSwitcher onContentTypeChange={setContentType} />
+              <Sidebar contentType={contentType} showSidebar={showSidebar} />
+            </Tabs>
+            <div className="p-4">
+              <Button asChild variant="outline" size="sm" className="w-full">
+                <Link href={`/${locale}/protected`}>
+                  <IconLock className="mr-2 size-4" />
+                  Protected Area
+                </Link>
+              </Button>
+            </div>
+          </div>
         )}
       </div>
 
@@ -114,11 +124,8 @@ export const Dashboard: FC<DashboardProps> = ({ children }) => {
         )}
 
         <Button
-          className={cn(
-            "absolute left-[4px] top-[50%] z-10 size-[32px] cursor-pointer"
-          )}
+          className={cn("absolute left-1 top-1/2 z-10 size-8 cursor-pointer")}
           style={{
-            // marginLeft: showSidebar ? `${SIDEBAR_WIDTH}px` : "0px",
             transform: showSidebar ? "rotate(180deg)" : "rotate(0deg)"
           }}
           variant="ghost"

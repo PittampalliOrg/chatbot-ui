@@ -20,7 +20,10 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "baseUrl": ".",
+    "types": ["node", "jest", "react", "react-dom"],
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "next-env.d.ts",
@@ -29,6 +32,13 @@
     ".next/types/**/*.ts",
     "./.next/types/**/*.ts",
     "i18nConfig.js"
-, "app/[locale]/oauth/context/AuthContext.tsx"  ],
-  "exclude": ["node_modules"]
+  ],
+  "exclude": ["node_modules"],    
+  "types": [
+    "node",
+    "react",
+    "react-dom",
+    "jest"
+    // Add other necessary types here
+  ]
 }

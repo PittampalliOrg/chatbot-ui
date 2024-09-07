@@ -6,7 +6,8 @@ import "server-only"
 export const graphConfig = {
   meEndpoint: "https://graph.microsoft.com/v1.0/me",
   eventEndpoint: "https://graph.microsoft.com/v1.0/me/calendar/events?$top=1",
-  profilePhotoEndpoint: "https://graph.microsoft.com/v1.0/me/photo/$value"
+  profilePhotoEndpoint: "https://graph.microsoft.com/v1.0/me/photo/$value",
+  mailEndpoint: "https://graph.microsoft.com/v1.0/me/messages?$top=5"
 }
 
 export const msalConfig: Configuration = {
@@ -52,8 +53,12 @@ export const calendarRequest = {
   scopes: ["Calendars.Read"]
 }
 
+export const tasksRequest = {
+  scopes: ["Tasks.Read"]
+}
+
 export const authCallbackUri =
-  process.env.AUTH_CALLBACK_URI ?? "http://localhost:3000/auth/callback"
+  process.env.AUTH_CALLBACK_URI ?? "http://localhost:3000/protected"
 
 export const sessionSecret = process.env.SESSION_SECRET!
 

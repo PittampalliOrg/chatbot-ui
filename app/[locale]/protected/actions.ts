@@ -7,7 +7,7 @@ export async function sendMailAction() {
   if (provider) {
     let graphClient = provider.graph.client
     await graphClient
-      .api("https://localhost:3000/api/protected")
+      .api("https://localhost:3000/api/protected/callback")
       .middlewareOptions(
         prepScopes([
           "api://68865588-d66d-4db6-8680-0ad4369fdf5b/access_as_user"

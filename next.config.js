@@ -2,12 +2,23 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true"
 })
 
-const withPWA = require("next-pwa")({
-  dest: "public"
-})
+const withPWA = require("next-pwa")
 
-module.exports = withBundleAnalyzer(
-  withPWA({
+const withPlugins = require('next-compose-plugins')
+
+const prod = process.env.NODE_ENV === 'production'
+
+module.exports = withPlugins(
+  [
+    [withBundleAnalyzer],
+    [withPWA, {
+      pwa: {
+        disable: !prod,
+        dest: 'public'
+      }
+    }]
+  ],
+  {
     reactStrictMode: true,
     images: {
       remotePatterns: [
@@ -28,5 +39,5 @@ module.exports = withBundleAnalyzer(
     experimental: {
       serverComponentsExternalPackages: ["sharp", "onnxruntime-node"]
     }
-  })
+  }
 )

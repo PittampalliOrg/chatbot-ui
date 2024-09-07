@@ -10,7 +10,6 @@ import { Inter } from "next/font/google"
 import { cookies } from "next/headers"
 import { ReactNode } from "react"
 import "./globals.css"
-import { AuthProvider } from "@/app/[locale]/protected/AuthContext"
 
 const inter = Inter({ subsets: ["latin"] })
 const APP_NAME = "Chatbot UI"
@@ -90,20 +89,18 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
-          <Providers attribute="class" defaultTheme="dark">
-            <TranslationsProvider
-              namespaces={i18nNamespaces}
-              locale={locale}
-              resources={resources}
-            >
-              <Toaster richColors position="top-center" duration={3000} />
-              <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
-                {session ? <GlobalState>{children}</GlobalState> : children}
-              </div>
-            </TranslationsProvider>
-          </Providers>
-        </AuthProvider>
+        <Providers attribute="class" defaultTheme="dark">
+          <TranslationsProvider
+            namespaces={i18nNamespaces}
+            locale={locale}
+            resources={resources}
+          >
+            <Toaster richColors position="top-center" duration={3000} />
+            <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
+              {session ? <GlobalState>{children}</GlobalState> : children}
+            </div>
+          </TranslationsProvider>
+        </Providers>
       </body>
     </html>
   )
