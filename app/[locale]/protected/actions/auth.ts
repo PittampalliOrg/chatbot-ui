@@ -41,5 +41,5 @@ export async function logout() {
   }
 
   cookies().delete("__session")
-  redirect("/")
+  redirect("/protected")
 }

@@ -10,7 +10,12 @@
         "${workspaceFolder}/**",
         "!**/node_modules/**",
         "!**/.next/**"
-      ]
+      ],
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**",
+        "${workspaceFolder}/.next/**"
+      ],
     },
     {
       "name": "Next.js: debug client-side",
@@ -21,6 +26,11 @@
         "${workspaceFolder}/**",
         "!**/node_modules/**",
         "!**/.next/**"
+      ],
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**",
+        "${workspaceFolder}/.next/**"
       ],
     },
     {
@@ -33,8 +43,8 @@
       ],
       "skipFiles": [
         "<node_internals>/**",
-        "**/node_modules/**",
-        "**/.next/**"
+        "${workspaceFolder}/node_modules/**",
+        "${workspaceFolder}/.next/**"
       ],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",

@@ -98,7 +98,7 @@ export const Dashboard: FC<DashboardProps> = ({ children }) => {
             </Tabs>
             <div className="p-4">
               <Button asChild variant="outline" size="sm" className="w-full">
-                <Link href={`/${locale}/protected`}>
+                <Link href={`/protected`}>
                   <IconLock className="mr-2 size-4" />
                   Protected Area
                 </Link>
