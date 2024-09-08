@@ -118,6 +118,26 @@ function createClaimsTable(claims: Record<string, any>): TokenClaim[] {
   return claimsArray
 }
 
+function formatTimeAgo(timestamp: number): string {
+  const now = Date.now()
+  const secondsAgo = Math.floor((now - timestamp * 1000) / 1000)
+
+  if (secondsAgo < 60) return `${secondsAgo} seconds ago`
+  if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} minutes ago`
+  if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} hours ago`
+  return `${Math.floor(secondsAgo / 86400)} days ago`
+}
+
+function formatTimeUntil(timestamp: number): string {
+  const now = Date.now()
+  const secondsUntil = Math.floor((timestamp * 1000 - now) / 1000)
+
+  if (secondsUntil < 60) return `in ${secondsUntil} seconds`
+  if (secondsUntil < 3600) return `in ${Math.floor(secondsUntil / 60)} minutes`
+  if (secondsUntil < 86400) return `in ${Math.floor(secondsUntil / 3600)} hours`
+  return `in ${Math.floor(secondsUntil / 86400)} days`
+}
+
 async function getTokenInfo() {
   const { account, instance } = await authProvider.authenticate()
 
@@ -134,7 +154,8 @@ async function getTokenInfo() {
 
   return {
     tokenClaims,
-    graphToken
+    graphToken,
+    issuedAt: account.idTokenClaims?.iat as number
   }
 }
 
@@ -149,10 +170,49 @@ export default async function TokenInfoPage() {
     ? new Date(tokenInfo.graphToken.expiresOn).toLocaleString()
     : "Not available"
 
+  const expiresInFormatted = tokenInfo.graphToken.expiresOn
+    ? formatTimeUntil(Math.floor(Number(tokenInfo.graphToken.expiresOn) / 1000))
+    : "Unknown"
+
+  const issuedAtFormatted = tokenInfo.issuedAt
+    ? new Date(tokenInfo.issuedAt * 1000).toLocaleString()
+    : "Not available"
+
+  const timeAgo = tokenInfo.issuedAt
+    ? formatTimeAgo(tokenInfo.issuedAt)
+    : "Unknown"
+
   return (
     <div className="container mx-auto space-y-6 p-4">
-      <h1 className="text-2xl font-bold">Token Information</h1>
-
+      <Card>
+        <CardHeader>
+          <CardTitle>Microsoft Graph API Token</CardTitle>
+          <CardDescription>
+            Information about the acquired access token for Microsoft Graph API
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <p>
+              <strong>Scopes:</strong>{" "}
+              {tokenInfo.graphToken.scopes.map(scope => (
+                <Badge key={scope} variant="secondary" className="mr-1">
+                  {scope}
+                </Badge>
+              ))}
+            </p>
+            <p>
+              <strong>Token Type:</strong> {tokenInfo.graphToken.tokenType}
+            </p>
+            <p>
+              <strong>Issued At:</strong> {issuedAtFormatted} ({timeAgo})
+            </p>
+            <p>
+              <strong>Expires:</strong> {expiresOn} ({expiresInFormatted})
+            </p>
+          </div>
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>ID Token Claims</CardTitle>
@@ -167,7 +227,7 @@ export default async function TokenInfoPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[400px] w-full rounded-md border">
+          <ScrollArea className="h-[800px] w-full rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -192,33 +252,6 @@ export default async function TokenInfoPage() {
               </TableBody>
             </Table>
           </ScrollArea>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Microsoft Graph API Token</CardTitle>
-          <CardDescription>
-            Information about the acquired access token for Microsoft Graph API
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <p>
-              <strong>Scopes:</strong>{" "}
-              {tokenInfo.graphToken.scopes.map(scope => (
-                <Badge key={scope} variant="secondary" className="mr-1">
-                  {scope}
-                </Badge>
-              ))}
-            </p>
-            <p>
-              <strong>Expires:</strong> {expiresOn}
-            </p>
-            <p>
-              <strong>Token Type:</strong> {tokenInfo.graphToken.tokenType}
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>

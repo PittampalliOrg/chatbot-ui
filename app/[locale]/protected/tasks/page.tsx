@@ -1,31 +1,13 @@
 import { InteractionRequiredAuthError } from "@azure/msal-node"
+import { CalendarEvent, GraphCalendarEvent } from "../components/CalendarEvent"
 import { graphConfig } from "../serverConfig"
 import { authProvider } from "../services/auth"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { acquireTasksTokenInteractive } from "../actions/auth"
-import { redirect } from "next/navigation"
-import Error from "./error"
 
-interface TaskList {
-  id: string
-  displayName: string
-  isOwner: boolean
-  isShared: boolean
-}
-
-async function getTaskLists(): Promise<TaskList[] | null> {
+async function getTaskLists() {
   const { account, instance } = await authProvider.authenticate()
 
   if (!account) {
-    return null
+    throw new Error("No Account logged in")
   }
 
   try {
@@ -35,78 +17,30 @@ async function getTaskLists(): Promise<TaskList[] | null> {
     })
 
     if (!token) {
-      throw new InteractionRequiredAuthError()
+      throw new Error("Token null")
     }
 
-    const response = await fetch(`${graphConfig.meEndpoint}/todo/lists`, {
+    const response = await fetch(graphConfig.meEndpoint + "/todo/lists", {
       headers: {
         Authorization: `Bearer ${token.accessToken}`
       }
     })
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
+    const data: { value: GraphCalendarEvent[] } = await response.json()
 
-    const data: { value: TaskList[] } = await response.json()
-    return data.value
-  } catch (error) {
+    return data.value[0]
+  } catch (error: unknown) {
+    // rethrow with a message that can be serialized and read by a client component
+    // https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-server-errors
     if (error instanceof InteractionRequiredAuthError) {
-      await acquireTasksTokenInteractive()
+      throw new Error("InteractionRequiredAuthError")
     }
     throw error
   }
 }
 
 export default async function TasksPage() {
-  try {
-    const taskLists = await getTaskLists()
+  const tasks = await getTaskLists()
 
-    if (taskLists === null) {
-      return redirect("/")
-    }
-
-    return (
-      <div className="container mx-auto p-4">
-        <h1 className="mb-4 text-2xl font-bold">My Task Lists</h1>
-        <Card>
-          <CardHeader>
-            <CardTitle>Task Lists</CardTitle>
-            <CardDescription>Your Microsoft To-Do task lists</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-              {taskLists.map((list, index) => (
-                <div key={list.id}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-sm font-medium leading-none">
-                        {list.displayName}
-                      </h3>
-                      <p className="text-muted-foreground text-sm">
-                        {list.isOwner ? "Owner" : "Shared with you"}
-                      </p>
-                    </div>
-                    {list.isShared && (
-                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                        Shared
-                      </span>
-                    )}
-                  </div>
-                  {index < taskLists.length - 1 && (
-                    <Separator className="my-2" />
-                  )}
-                </div>
-              ))}
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  } catch (error) {
-    if (error instanceof Error) {
-      return <Error error={error} />
-    }
-    return <Error error={new Error(String(error))} />
-  }
+  return JSON.stringify(tasks)
 }
