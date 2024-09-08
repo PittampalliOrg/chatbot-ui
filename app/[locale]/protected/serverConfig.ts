@@ -64,4 +64,4 @@ export const sessionSecret = process.env.SESSION_SECRET!
 
 // redis[s]://[[username][:password]@][host][:port][/db-number]
 // if undefined it will connect to a local redis server
-export const redisUrl = process.env.REDIS_URL
+export const redisUrl = process.env.REDIS_REDIS_URL
