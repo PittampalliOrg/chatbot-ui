@@ -6,10 +6,10 @@ export default function LogoutButton() {
   }
 
   return (
-    <form action={() => handleLogout}>
-      <button color="primary" type="submit">
-        Logout
-      </button>
-    </form>
+    //    <form action={() => handleLogout}>
+    <button color="primary" type="submit">
+      Logout
+    </button>
+    //    </form>
   )
 }

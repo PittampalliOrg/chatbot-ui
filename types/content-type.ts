@@ -7,4 +7,3 @@ export type ContentType =
   | "assistants"
   | "tools"
   | "models"
-  | "integrations"

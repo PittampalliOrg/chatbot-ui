@@ -7,8 +7,7 @@ import {
   IconMessage,
   IconPencil,
   IconRobotFace,
-  IconSparkles,
-  IconPlugConnected
+  IconSparkles
 } from "@tabler/icons-react"
 import { FC } from "react"
 import { TabsList } from "../ui/tabs"
@@ -68,12 +67,6 @@ export const SidebarSwitcher: FC<SidebarSwitcherProps> = ({
         <SidebarSwitchItem
           icon={<IconBolt size={SIDEBAR_ICON_SIZE} />}
           contentType="tools"
-          onContentTypeChange={onContentTypeChange}
-        />
-        {/* New Integrations Switch Item */}
-        <SidebarSwitchItem
-          icon={<IconPlugConnected size={SIDEBAR_ICON_SIZE} />}
-          contentType="integrations"
           onContentTypeChange={onContentTypeChange}
         />
       </TabsList>
