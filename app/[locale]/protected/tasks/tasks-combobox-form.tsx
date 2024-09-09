@@ -32,7 +32,7 @@ export function TaskComboboxForm({ lists }: TaskComboboxFormProps) {
 
   const onListSelect = (listId: string) => {
     setValue(listId) // Set the selected list ID
-    router.push(`/tasks/${listId}`)
+    router.push(`/protected/tasks/${listId}`)
   }
 
   if (!lists || lists.length === 0) {

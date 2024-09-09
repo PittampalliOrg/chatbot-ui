@@ -27,16 +27,24 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
+import { addTasks, deleteTasks } from "../actions"
+import { OptimisticTask } from "../types"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+interface DataTableProps {
+  columns: ColumnDef<OptimisticTask>[]
+  data: OptimisticTask[]
+  initialTasks: OptimisticTask[]
+  listId?: string
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable({
   columns,
-  data
-}: DataTableProps<TData, TValue>) {
+  data,
+  initialTasks,
+  listId
+}: DataTableProps) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -45,8 +53,17 @@ export function DataTable<TData, TValue>({
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
 
+  const [tasks, setTasks] = React.useState(initialTasks)
+  const [isPending, startTransition] = React.useTransition()
+  const [newTaskTitle, setNewTaskTitle] = React.useState("")
+
+  const [optimisticTasks, addOptimisticTask] = React.useOptimistic(
+    tasks,
+    (state: OptimisticTask[], newTask: OptimisticTask) => [...state, newTask]
+  )
+
   const table = useReactTable({
-    data,
+    data: optimisticTasks,
     columns,
     state: {
       sorting,
@@ -67,9 +84,60 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues()
   })
 
+  async function handleAddTask(taskTitle: string) {
+    if (!taskTitle.trim()) return
+
+    const newTask: OptimisticTask = {
+      id: Date.now().toString(),
+      title: taskTitle,
+      status: "notStarted",
+      sending: true
+    }
+
+    addOptimisticTask(newTask)
+
+    startTransition(async () => {
+      try {
+        const addedTask = await addTasks(listId, [taskTitle])
+        setTasks(currentTasks => [
+          ...currentTasks,
+          { ...newTask, id: addedTask[0].id, sending: false }
+        ])
+      } catch (error) {
+        console.error("Failed to add task:", error)
+        setTasks(currentTasks =>
+          currentTasks.filter(task => task.id !== newTask.id)
+        )
+      }
+    })
+  }
+
+  async function handleDeleteTasks() {
+    const selectedRows = table.getFilteredSelectedRowModel().rows
+    const tasksToDelete = selectedRows
+      .map(row => row.original.id)
+      .filter((id): id is string => id !== undefined)
+
+    setTasks(currentTasks =>
+      currentTasks.filter(task => task.id && !tasksToDelete.includes(task.id))
+    )
+
+    try {
+      await deleteTasks(listId, tasksToDelete)
+      table.toggleAllRowsSelected(false)
+    } catch (error) {
+      console.error("Failed to delete tasks:", error)
+      setTasks(initialTasks)
+    }
+  }
+
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        onAddTask={handleAddTask}
+        onDeleteTasks={handleDeleteTasks}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

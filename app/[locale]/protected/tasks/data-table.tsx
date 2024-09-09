@@ -28,7 +28,7 @@ import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
 import { addTasks, deleteTasks } from "./actions" // Adjust the import path as needed
 import { useOptimistic } from "react"
-import { OptimisticTask } from "../../types"
+import { OptimisticTask } from "./types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -41,8 +41,8 @@ interface DataTableProps {
 
 export function DataTable({
   columns,
-  data,
-  initialTasks,
+  data = [],
+  initialTasks = [],
   listId
 }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -63,7 +63,7 @@ export function DataTable({
   )
 
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

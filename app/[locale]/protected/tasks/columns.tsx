@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { TodoTask } from "@microsoft/microsoft-graph-types"
 import { DataTableColumnHeader } from "./components/data-table-column-header"
 import { DataTableRowActions } from "./components/data-table-row-actions"
-import { OptimisticTask } from "@/types"
+import { OptimisticTask } from "./types"
 
 const statusIcons = {
   notStarted: () => <span className="text-gray-500">●</span>,
