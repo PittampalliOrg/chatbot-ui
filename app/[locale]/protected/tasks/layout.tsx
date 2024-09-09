@@ -5,12 +5,18 @@ import { columns } from "./columns"
 import { getTasks, getLists } from "./actions" // Adjust the import path as needed
 import { TodoTask, TodoTaskList } from "@microsoft/microsoft-graph-types"
 
-export default async function TasksPage() {
-  const tasks: TodoTask[] = await getTasks()
+export default async function TasksPage({
+  children
+}: {
+  children: React.ReactNode
+}) {
+  const lists: TodoTaskList[] = await getLists()
 
   return (
-    <div className="mt-6">
-      <DataTable columns={columns} data={tasks} initialTasks={tasks} />
+    <div className="container mx-auto py-10">
+      <h1 className="mb-5 text-2xl font-bold">Tasks</h1>
+      <TaskComboboxForm lists={lists} />
+      {children}
     </div>
   )
 }
