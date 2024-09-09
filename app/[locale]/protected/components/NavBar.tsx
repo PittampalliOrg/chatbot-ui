@@ -3,10 +3,14 @@ import { Button } from "@/components/ui/button"
 import WelcomeName from "./WelcomeName"
 import ProfilePicture from "./ProfilePicture"
 import { logout } from "../actions/auth"
+import { login } from "../actions/auth" // Make sure to import the login action
 import HomeButton from "./HomeButton"
 import { LayoutDashboard } from "lucide-react"
+import { authProvider } from "../services/auth"
 
-export default function NavBar() {
+export default async function NavBar() {
+  const account = await authProvider.getAccount()
+
   const navLinks = [
     { name: "Profile", path: "/protected/profile" },
     { name: "Graph Request", path: "/protected/graph-request" },
@@ -24,12 +28,7 @@ export default function NavBar() {
           </div>
           <div className="flex items-center space-x-1">
             {navLinks.map(link => (
-              <Button
-                key={link.path}
-                asChild
-                variant="ghost"
-                size="sm"
-              >
+              <Button key={link.path} asChild variant="ghost" size="sm">
                 <Link href={link.path}>{link.name}</Link>
               </Button>
             ))}
@@ -37,13 +36,9 @@ export default function NavBar() {
           <div className="flex items-center space-x-4">
             <WelcomeName />
             <ProfilePicture />
-            <form action={logout}>
-              <Button
-                type="submit"
-                variant="outline"
-                size="sm"
-              >
-                Logout
+            <form action={account ? logout : login}>
+              <Button type="submit" variant="outline" size="sm">
+                {account ? "Logout" : "Login"}
               </Button>
             </form>
           </div>

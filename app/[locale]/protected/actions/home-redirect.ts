@@ -8,7 +8,9 @@ export async function redirectToHome(): Promise<string> {
   const supabase = createClient(cookieStore)
 
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session }
+    } = await supabase.auth.getSession()
 
     if (session) {
       const { data: homeWorkspace, error } = await supabase

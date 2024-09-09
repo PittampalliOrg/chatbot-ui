@@ -1,5 +1,3 @@
-// TODO: Separate into multiple contexts, keeping simple for now
-
 "use client"
 
 import { ChatbotUIContext } from "@/context/context"
@@ -123,27 +121,6 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [selectedTools, setSelectedTools] = useState<Tables<"tools">[]>([])
   const [toolInUse, setToolInUse] = useState<string>("none")
 
-  // useEffect(() => {
-  //   const fetchSession = async () => {
-  //     try {
-  //       const response = await fetch("/api/auth/session")
-  //       const session = await response.json() as EnrichedSession | null
-  //       console.log(session);
-  //       if (session) {
-  //         const updatedProviders = oauthProviders?.map((provider: OauthProvider) => ({
-  //           ...provider,
-  //           active: !!session.providers[provider.name]
-  //         }))
-  //         setOauthProviders(updatedProviders)
-
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching session:", error)
-  //     }
-  //   }
-  //   fetchSession()
-  // }, [])
-
   useEffect(() => {
     ;(async () => {
       const profile = await fetchStartingData()
@@ -219,7 +196,6 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   }
 
   return (
-    //   <MsalProvider instance={msalInstance}>
     <ChatbotUIContext.Provider
       value={{
         // PROFILE STORE
@@ -349,6 +325,5 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
     >
       {children}
     </ChatbotUIContext.Provider>
-    //    </MsalProvider>
   )
 }

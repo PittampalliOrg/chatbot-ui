@@ -7,7 +7,10 @@ export function getCurrentUrl() {
 
   // read the custom x-url header
   const url = headersList.get("x-url")
-  
+
   // If x-url is not set, fall back to a default URL
-  return url || `${headersList.get("x-forwarded-proto") || "http"}://${headersList.get("host")}`
+  return (
+    url ||
+    `${headersList.get("x-forwarded-proto") || "http"}://${headersList.get("host")}`
+  )
 }

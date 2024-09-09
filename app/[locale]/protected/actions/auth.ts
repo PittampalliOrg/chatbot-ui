@@ -6,13 +6,13 @@ import { redirect } from "next/navigation"
 import { calendarRequest, loginRequest, tasksRequest } from "../serverConfig"
 import { authProvider } from "../services/auth"
 import { getCurrentUrl } from "../utils/url"
+import { createClient } from "@/lib/supabase/server"
 
 async function acquireToken(
   request: Omit<AuthorizationUrlRequest, "redirectUri">,
   redirectPath: string
 ) {
   const currentUrl = new URL(getCurrentUrl())
-  currentUrl.pathname = redirectPath
   const redirectUrl = currentUrl.toString()
 
   console.log("request", request)
@@ -28,9 +28,43 @@ export async function acquireTasksTokenInteractive() {
   await acquireToken(tasksRequest, "/protected/tasks")
 }
 
+async function redirectToHome(): Promise<string> {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  try {
+    const {
+      data: { session }
+    } = await supabase.auth.getSession()
+
+    if (session) {
+      const { data: homeWorkspace, error } = await supabase
+        .from("workspaces")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .eq("is_home", true)
+        .single()
+
+      if (error) throw error
+
+      if (homeWorkspace) {
+        return `/${homeWorkspace.id}/chat`
+      }
+    }
+
+    // If no session or no home workspace, return default chat page
+    return "/chat"
+  } catch (error) {
+    console.error("Error in home redirect:", error)
+    return "/chat" // Fallback to default chat page on error
+  }
+}
+
 export async function login() {
   await acquireToken(loginRequest, "/protected")
   console.log("loginRequest", loginRequest)
+  const redirectPath = await redirectToHome()
+  redirect(redirectPath)
 }
 
 export async function logout() {
@@ -41,5 +75,6 @@ export async function logout() {
   }
 
   cookies().delete("__session")
-  redirect("/protected")
+  const redirectPath = await redirectToHome()
+  redirect(redirectPath)
 }
