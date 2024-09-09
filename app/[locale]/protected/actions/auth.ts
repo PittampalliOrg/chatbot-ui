@@ -13,6 +13,8 @@ async function acquireToken(
   redirectPath: string
 ) {
   const currentUrl = new URL(getCurrentUrl())
+  currentUrl.pathname = redirectPath.split("?")[0]
+  currentUrl.search = redirectPath.split("?")[1] || ""
   const redirectUrl = currentUrl.toString()
 
   console.log("request", request)
@@ -60,14 +62,15 @@ async function redirectToHome(): Promise<string> {
   }
 }
 
-export async function login() {
-  await acquireToken(loginRequest, "/protected")
+export async function login(prevState: any, formData: FormData) {
+  const origin = formData.get("origin") as string
+  await acquireToken(loginRequest, origin)
   console.log("loginRequest", loginRequest)
-  const redirectPath = await redirectToHome()
-  redirect(redirectPath)
+  redirect(origin)
 }
 
-export async function logout() {
+export async function logout(prevState: any, formData: FormData) {
+  const origin = formData.get("origin") as string
   const { instance, account } = await authProvider.authenticate()
 
   if (account) {
@@ -75,6 +78,5 @@ export async function logout() {
   }
 
   cookies().delete("__session")
-  const redirectPath = await redirectToHome()
-  redirect(redirectPath)
+  redirect(origin)
 }

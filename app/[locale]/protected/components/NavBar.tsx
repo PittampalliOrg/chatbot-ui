@@ -36,7 +36,7 @@ export default async function NavBar() {
           <div className="flex items-center space-x-4">
             <WelcomeName />
             <ProfilePicture />
-            <form action={account ? logout : login}>
+            <form action={account ? "logout" : "login"}>
               <Button type="submit" variant="outline" size="sm">
                 {account ? "Logout" : "Login"}
               </Button>
