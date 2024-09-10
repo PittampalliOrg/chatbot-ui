@@ -19,12 +19,15 @@ import {
 } from "@/components/ui/popover"
 import { TodoTaskList } from "@microsoft/microsoft-graph-types"
 import { useRouter, useParams } from "next/navigation"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 interface TaskComboboxFormProps {
   lists: TodoTaskList[]
+  error: string | null
 }
 
-export function TaskComboboxForm({ lists }: TaskComboboxFormProps) {
+export function TaskComboboxForm({ lists, error }: TaskComboboxFormProps) {
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
   const params = useParams()
@@ -37,6 +40,16 @@ export function TaskComboboxForm({ lists }: TaskComboboxFormProps) {
       setOpen(false)
       router.push(`/protected/tasks/${listId}`)
     }
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="size-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    )
   }
 
   if (!lists || lists.length === 0) {

@@ -23,7 +23,12 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
-import { addTasks, deleteTasksAndGetUpdated, bulkUpdateTasks } from "./actions"
+import {
+  addTasks,
+  deleteTasksAndGetUpdated,
+  bulkUpdateTasks,
+  getTasks
+} from "./actions"
 import { useOptimistic, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { OptimisticTask } from "./types"
@@ -31,6 +36,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { TodoTask, TaskStatus } from "@microsoft/microsoft-graph-types"
+import { toast } from "@/components/ui/use-toast"
 
 interface DataTableProps {
   columns: ColumnDef<OptimisticTask>[]
@@ -106,13 +112,21 @@ export function DataTable({
                 : task
             )
           )
-          router.refresh()
+          toast({
+            title: "Task added",
+            description: "New task has been successfully added."
+          })
         }
       } catch (error) {
         console.error("Failed to add task:", error)
         setOptimisticTasks(
           optimisticTasks.filter(task => task.id !== newTask.id)
         )
+        toast({
+          title: "Error",
+          description: "Failed to add new task. Please try again.",
+          variant: "destructive"
+        })
       }
     })
   }
@@ -126,9 +140,7 @@ export function DataTable({
       .filter((id): id is string => typeof id === "string")
 
     setOptimisticTasks(prevTasks =>
-      prevTasks.filter(
-        task => typeof task.id === "string" && !tasksToDelete.includes(task.id)
-      )
+      prevTasks.filter(task => task.id && !tasksToDelete.includes(task.id))
     )
 
     startTransition(async () => {
@@ -139,10 +151,19 @@ export function DataTable({
         )
         setOptimisticTasks(updatedTasks as OptimisticTask[])
         setRowSelection({})
-        router.refresh()
+        toast({
+          title: "Tasks deleted",
+          description: `Successfully deleted ${tasksToDelete.length} task(s).`
+        })
       } catch (error) {
         console.error("Failed to delete tasks:", error)
-        setOptimisticTasks(initialTasks)
+        const tasks = await getTasks(listId)
+        setOptimisticTasks(tasks as OptimisticTask[])
+        toast({
+          title: "Error",
+          description: "Failed to delete tasks. Please try again.",
+          variant: "destructive"
+        })
       }
     })
   }
@@ -173,10 +194,21 @@ export function DataTable({
       try {
         await bulkUpdateTasks(listId, tasksToUpdate)
         setRowSelection({})
-        router.refresh()
+        const updatedTasks = await getTasks(listId)
+        setOptimisticTasks(updatedTasks as OptimisticTask[])
+        toast({
+          title: "Tasks updated",
+          description: `Successfully updated ${tasksToUpdate.length} task(s).`
+        })
       } catch (error) {
         console.error("Failed to update tasks:", error)
-        setOptimisticTasks(initialTasks)
+        const tasks = await getTasks(listId)
+        setOptimisticTasks(tasks as OptimisticTask[])
+        toast({
+          title: "Error",
+          description: "Failed to update tasks. Please try again.",
+          variant: "destructive"
+        })
       }
     })
   }

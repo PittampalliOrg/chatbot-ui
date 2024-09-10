@@ -1,18 +1,39 @@
-import React from "react"
-import { getLists } from "./actions"
+import { getTaskLists } from "./actions"
 import { TodoTaskList } from "@microsoft/microsoft-graph-types"
+import { TasksLayoutWrapper } from "./tasks-layout-wrapper"
+import { SerializedTaskList } from "./tasks-context"
 
-export default async function TasksLayout({
-  children
-}: {
+interface TasksLayoutProps {
   children: React.ReactNode
-}) {
-  const lists: TodoTaskList[] = await getLists()
+}
+
+export default async function TasksLayout({ children }: TasksLayoutProps) {
+  let lists: TodoTaskList[] = []
+  let error: string | null = null
+
+  try {
+    lists = await getTaskLists()
+  } catch (e) {
+    console.error("Error fetching lists:", e)
+    error =
+      e instanceof Error
+        ? e.message
+        : "An unknown error occurred while fetching lists"
+  }
+
+  const serializedLists: SerializedTaskList[] = lists
+    .filter(
+      (list): list is TodoTaskList & { id: string; displayName: string } =>
+        typeof list.id === "string" && typeof list.displayName === "string"
+    )
+    .map(list => ({
+      id: list.id,
+      displayName: list.displayName
+    }))
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="mb-5 text-2xl font-bold">Tasks</h1>
+    <TasksLayoutWrapper lists={serializedLists} error={error}>
       {children}
-    </div>
+    </TasksLayoutWrapper>
   )
 }
