@@ -30,6 +30,7 @@ export interface DataTableFilterOption<TData> {
 
 export interface OptimisticTask extends TodoTask {
   sending?: boolean
+  listId?: string
 }
 
 export interface Mail {

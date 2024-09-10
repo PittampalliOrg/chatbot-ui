@@ -64,6 +64,27 @@ async function getGraphClient() {
           }
           return response.json()
         },
+        patch: async (body: any) => {
+          const response = await fetch(
+            `${graphConfig.graphEndpoint}${endpoint}`,
+            {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${token.accessToken}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(body)
+            }
+          )
+          if (!response.ok) {
+            const errorText = await response.text()
+            console.error(`API Error Response: ${errorText}`)
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            )
+          }
+          return response.json()
+        },
         delete: async () => {
           const response = await fetch(
             `${graphConfig.graphEndpoint}${endpoint}`,
@@ -177,7 +198,7 @@ export async function addTasks(
       .map((res: any) => res.body)
   }
 
-  revalidatePath("/tasks")
+  revalidatePath(`/protected/tasks/${listId}`)
   return addedTasks
 }
 
@@ -211,6 +232,101 @@ export async function deleteTasks(
 
     await client.api("/$batch").post(batchRequestBody)
   }
+  // Revalidate the entire tasks page
+  revalidatePath("/protected/tasks/[listId]")
+}
 
-  revalidatePath("/tasks")
+export async function deleteTasksAndGetUpdated(
+  listId: string,
+  taskIds: string[]
+): Promise<TodoTask[]> {
+  if (!listId || !isValidListId(listId)) {
+    throw new Error("Invalid list ID")
+  }
+
+  if (taskIds.length === 0) {
+    return []
+  }
+
+  const client = await getGraphClient()
+
+  // First, delete the tasks
+  const deleteBatchRequestBody = {
+    requests: taskIds.map((taskId, index) => ({
+      id: `delete${index}`,
+      method: "DELETE",
+      url: `/me/todo/lists/${listId}/tasks/${taskId}`
+    }))
+  }
+
+  try {
+    await client.api("/$batch").post(deleteBatchRequestBody)
+
+    // Then, get the updated tasks
+    const response = await client.api(`/me/todo/lists/${listId}/tasks`).get()
+
+    revalidatePath(`/protected/tasks/${listId}`)
+    return response.value
+  } catch (error) {
+    console.error("Error in deleteTasksAndGetUpdated:", error)
+    throw error
+  }
+}
+
+export async function updateTask(
+  listId: string,
+  taskId: string,
+  updates: Partial<TodoTask>
+): Promise<TodoTask> {
+  if (!listId || !isValidListId(listId) || !taskId) {
+    throw new Error("Invalid list ID or task ID")
+  }
+
+  const client = await getGraphClient()
+
+  try {
+    const updatedTask = await client
+      .api(`/me/todo/lists/${listId}/tasks/${taskId}`)
+      .patch(updates)
+    revalidatePath(`/protected/tasks/${listId}`)
+    return updatedTask
+  } catch (error) {
+    console.error("Error updating task:", error)
+    if (error instanceof Error) {
+      throw new Error(`Failed to update task: ${error.message}`)
+    } else {
+      throw new Error("An unknown error occurred while updating task")
+    }
+  }
+}
+
+export async function bulkUpdateTasks(
+  listId: string,
+  updates: { id: string; updates: Partial<TodoTask> }[]
+): Promise<void> {
+  if (!listId || !isValidListId(listId)) {
+    throw new Error("Invalid list ID")
+  }
+
+  if (updates.length === 0) {
+    return
+  }
+
+  const client = await getGraphClient()
+
+  const batchRequestBody = {
+    requests: updates.map((update, index) => ({
+      id: index.toString(),
+      method: "PATCH",
+      url: `/me/todo/lists/${listId}/tasks/${update.id}`,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: update.updates
+    }))
+  }
+
+  await client.api("/$batch").post(batchRequestBody)
+
+  revalidatePath(`/protected/tasks/${listId}`)
 }
