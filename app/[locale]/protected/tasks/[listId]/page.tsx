@@ -1,13 +1,17 @@
 import React from "react"
-import { TaskComboboxForm } from "./tasks-combobox-form"
-import { DataTable } from "./data-table"
-import { columns } from "./columns"
-import { getTasks, getLists } from "./actions"
+import { TaskComboboxForm } from "../tasks-combobox-form"
+import { DataTable } from "../data-table"
+import { columns } from "../columns"
+import { getTasks, getLists } from "../actions"
 import { TodoTask, TodoTaskList } from "@microsoft/microsoft-graph-types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 
-export default async function TasksPage() {
+export default async function TasksListPage({
+  params
+}: {
+  params: { listId: string }
+}) {
   let lists: TodoTaskList[] = []
   let tasks: TodoTask[] = []
   let error: Error | null = null
@@ -22,28 +26,22 @@ export default async function TasksPage() {
         : new Error("Unknown error occurred while fetching lists")
   }
 
-  if (!error && lists.length > 0) {
-    const defaultListId = lists[0].id
-    if (defaultListId) {
-      try {
-        tasks = await getTasks(defaultListId)
-      } catch (e) {
-        console.error("Error fetching tasks:", e)
-        error =
-          e instanceof Error
-            ? e
-            : new Error("Unknown error occurred while fetching tasks")
-      }
-    } else {
-      error = new Error("Default list ID is undefined")
+  if (!error && params.listId) {
+    try {
+      tasks = await getTasks(params.listId)
+    } catch (e) {
+      console.error("Error fetching tasks:", e)
+      error =
+        e instanceof Error
+          ? e
+          : new Error("Unknown error occurred while fetching tasks")
     }
-  } else if (!error) {
-    error = new Error("No lists available")
+  } else if (!params.listId) {
+    error = new Error("No list ID provided")
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="mb-5 text-2xl font-bold">Tasks</h1>
+    <div>
       <TaskComboboxForm lists={lists} />
       <div className="mt-6">
         {error ? (
@@ -65,7 +63,7 @@ export default async function TasksPage() {
             columns={columns}
             data={tasks}
             initialTasks={tasks}
-            listId={lists[0]?.id}
+            listId={params.listId}
           />
         )}
       </div>

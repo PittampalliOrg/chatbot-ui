@@ -4,6 +4,7 @@ import { Configuration, LogLevel } from "@azure/msal-node"
 import "server-only"
 
 export const graphConfig = {
+  graphEndpoint: "https://graph.microsoft.com/v1.0",
   meEndpoint: "https://graph.microsoft.com/v1.0/me",
   eventEndpoint: "https://graph.microsoft.com/v1.0/me/calendar/events?$top=1",
   profilePhotoEndpoint: "https://graph.microsoft.com/v1.0/me/photo/$value",
