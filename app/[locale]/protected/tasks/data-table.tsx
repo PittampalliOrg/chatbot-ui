@@ -26,14 +26,14 @@ import {
 
 import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
-import { addTasks, deleteTasks } from "./actions" // Adjust the import path as needed
+import { addTasks, deleteTasks } from "./actions"
 import { useOptimistic } from "react"
 import { OptimisticTask } from "./types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface DataTableProps {
-  columns: ColumnDef<TodoTask>[]
+  columns: ColumnDef<OptimisticTask>[]
   data: OptimisticTask[]
   initialTasks: OptimisticTask[]
   listId?: string
@@ -55,7 +55,6 @@ export function DataTable({
 
   const [tasks, setTasks] = React.useState(initialTasks)
   const [isPending, startTransition] = React.useTransition()
-  const [newTaskTitle, setNewTaskTitle] = React.useState("")
 
   const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
@@ -63,7 +62,7 @@ export function DataTable({
   )
 
   const table = useReactTable({
-    data: data || [],
+    data: optimisticTasks,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -83,7 +82,7 @@ export function DataTable({
 
   async function formAction(formData: FormData) {
     const newTaskTitle = formData.get("item") as string
-    if (!newTaskTitle.trim()) return // Don't add empty tasks
+    if (!newTaskTitle.trim() || !listId) return
 
     const newTask: OptimisticTask = {
       id: Date.now().toString(),
@@ -96,15 +95,13 @@ export function DataTable({
 
     startTransition(async () => {
       try {
-        const addedTask = await addTasks(listId, [newTaskTitle])
+        const addedTasks = await addTasks(listId, [newTaskTitle])
         setTasks(currentTasks => [
           ...currentTasks,
-          { ...newTask, id: addedTask[0].id, sending: false }
+          { ...newTask, id: addedTasks[0].id, sending: false }
         ])
-        setNewTaskTitle("") // Clear the input after adding
       } catch (error) {
         console.error("Failed to add task:", error)
-        // Remove the optimistic task if it failed to add
         setTasks(currentTasks =>
           currentTasks.filter(task => task.id !== newTask.id)
         )
@@ -113,24 +110,22 @@ export function DataTable({
   }
 
   async function handleDeleteTasks() {
+    if (!listId) return
+
     const selectedRows = table.getFilteredSelectedRowModel().rows
     const tasksToDelete = selectedRows
       .map(row => row.original.id)
-      .filter(id => id !== undefined)
+      .filter((id): id is string => typeof id === "string")
 
-    // Optimistically remove the tasks
     setTasks(currentTasks =>
       currentTasks.filter(task => task.id && !tasksToDelete.includes(task.id))
     )
 
     try {
       await deleteTasks(listId, tasksToDelete)
-      // Clear selection after successful delete
       table.toggleAllRowsSelected(false)
     } catch (error) {
       console.error("Failed to delete tasks:", error)
-      // Revert the optimistic delete if it failed
-      // Note: This is a simplified approach. In a real app, you might want to handle this more gracefully.
       setTasks(initialTasks)
     }
   }
@@ -156,15 +151,17 @@ export function DataTable({
                 className="w-full"
               />
             </div>
-            <Button type="submit" size="sm" disabled={isPending}>
+            <Button type="submit" size="sm" disabled={isPending || !listId}>
               Add Task
             </Button>
           </form>
-          <form action={handleDeleteTasks} className="flex items-center gap-2">
-            <Button type="submit" size="sm" disabled={isPending}>
-              Delete
-            </Button>
-          </form>
+          <Button
+            onClick={handleDeleteTasks}
+            size="sm"
+            disabled={isPending || !listId}
+          >
+            Delete
+          </Button>
         </div>
         <DataTableViewOptions table={table} />
       </div>
