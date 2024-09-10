@@ -31,17 +31,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface DataTableProps {
-  columns: ColumnDef<TodoTask>[]
+  columns: ColumnDef<OptimisticTask>[]
   data: OptimisticTask[]
   initialTasks: OptimisticTask[]
   listId?: string
+  tableLayout?: "auto" | "fixed" // Added this line
 }
 
 export function DataTable({
   columns,
   data = [],
   initialTasks = [],
-  listId
+  listId,
+  tableLayout = "fixed" // Default to "auto"
 }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -165,7 +167,7 @@ export function DataTable({
       </div>
 
       <div className="rounded-md border">
-        <Table>
+        <Table tableLayout={tableLayout}>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>

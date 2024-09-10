@@ -42,7 +42,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
       />
     ),
     enableSorting: false,
-    enableHiding: false
+    enableHiding: false,
+    size: 40 // Fixed width for checkbox column
   },
   {
     accessorKey: "status",
@@ -60,7 +61,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
           <span className="ml-2 capitalize">{status || "Not Started"}</span>
         </div>
       )
-    }
+    },
+    size: 120 // Fixed width for status column
   },
   {
     accessorKey: "title",
@@ -75,7 +77,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
           </span>
         </div>
       )
-    }
+    },
+    size: 300 // Fixed width for title column
   },
   {
     accessorKey: "importance",
@@ -93,7 +96,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
           <span className="ml-2 capitalize">{importance || "Normal"}</span>
         </div>
       )
-    }
+    },
+    size: 120 // Fixed width for importance column
   },
   {
     accessorKey: "createdDateTime",
@@ -111,10 +115,12 @@ export const columns: ColumnDef<OptimisticTask>[] = [
             : "N/A"}
         </span>
       )
-    }
+    },
+    size: 100 // Fixed width for created date column
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+    size: 40 // Fixed width for actions column
   }
 ]

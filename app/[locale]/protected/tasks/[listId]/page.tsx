@@ -64,6 +64,7 @@ export default async function TasksListPage({
             data={tasks}
             initialTasks={tasks}
             listId={params.listId}
+            tableLayout="fixed" // Set to "fixed" to maintain consistent column widths
           />
         )}
       </div>

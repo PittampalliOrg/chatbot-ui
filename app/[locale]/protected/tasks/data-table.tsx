@@ -37,13 +37,15 @@ interface DataTableProps {
   data: OptimisticTask[]
   initialTasks: OptimisticTask[]
   listId?: string
+  tableLayout?: "auto" | "fixed" // Added this line
 }
 
 export function DataTable({
   columns,
   data = [],
   initialTasks = [],
-  listId
+  listId,
+  tableLayout = "auto" // Default to "auto"
 }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
