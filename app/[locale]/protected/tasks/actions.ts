@@ -34,6 +34,13 @@ async function getGraphClient() {
               }
             }
           )
+          if (!response.ok) {
+            const errorText = await response.text()
+            console.error(`API Error Response: ${errorText}`)
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            )
+          }
           return response.json()
         },
         post: async (body: any) => {
@@ -48,15 +55,32 @@ async function getGraphClient() {
               body: JSON.stringify(body)
             }
           )
+          if (!response.ok) {
+            const errorText = await response.text()
+            console.error(`API Error Response: ${errorText}`)
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            )
+          }
           return response.json()
         },
         delete: async () => {
-          await fetch(`${graphConfig.graphEndpoint}${endpoint}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`
+          const response = await fetch(
+            `${graphConfig.graphEndpoint}${endpoint}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token.accessToken}`
+              }
             }
-          })
+          )
+          if (!response.ok) {
+            const errorText = await response.text()
+            console.error(`API Error Response: ${errorText}`)
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            )
+          }
         }
       })
     }
@@ -68,28 +92,67 @@ async function getGraphClient() {
   }
 }
 
-export async function getTasks(
-  listId: string = "AAMkADhmYjY3M2VlLTc3YmYtNDJhMy04MjljLTg4NDI0NzQzNjJkMAAuAAAAAAAqiN_iXOf5QJoancmiEuQzAQAVAdL-uyq-SKcP7nACBA3lAAAAO9QQAAA="
-): Promise<TodoTask[]> {
+function isValidListId(listId: string): boolean {
+  return typeof listId === "string" && listId.trim().length > 0
+}
+
+export async function getTasks(listId: string): Promise<TodoTask[]> {
+  if (!listId) {
+    throw new Error("List ID is required")
+  }
+
+  if (!isValidListId(listId)) {
+    throw new Error("Invalid list ID format")
+  }
+
   const client = await getGraphClient()
-  const response = await client.api(`/me/todo/lists/${listId}/tasks`).get()
-  return response.value
+  try {
+    console.log(`Fetching tasks for list ID: ${listId}`)
+    const response = await client.api(`/me/todo/lists/${listId}/tasks`).get()
+    console.log(`API Response for tasks:`, response)
+    return response.value
+  } catch (error) {
+    console.error("Error fetching tasks:", error)
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch tasks: ${error.message}`)
+    } else {
+      throw new Error("An unknown error occurred while fetching tasks")
+    }
+  }
 }
 
 export async function getLists(): Promise<TodoTaskList[]> {
   const client = await getGraphClient()
-  const response = await client.api(`/me/todo/lists`).get()
-  return response.value
+  try {
+    const response = await client.api(`/me/todo/lists`).get()
+    console.log(`API Response for lists:`, response)
+    return response.value
+  } catch (error) {
+    console.error("Error fetching lists:", error)
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch lists: ${error.message}`)
+    } else {
+      throw new Error("An unknown error occurred while fetching lists")
+    }
+  }
 }
 
 export async function addTasks(
-  listId: string = "AAMkADhmYjY3M2VlLTc3YmYtNDJhMy04MjljLTg4NDI0NzQzNjJkMAAuAAAAAAAqiN_iXOf5QJoancmiEuQzAQAVAdL-uyq-SKcP7nACBA3lAAAAO9QQAAA=",
+  listId: string,
   tasks: string[]
 ): Promise<TodoTask[]> {
+  if (!listId || !isValidListId(listId)) {
+    throw new Error("Invalid list ID")
+  }
+
   const client = await getGraphClient()
   let addedTasks: TodoTask[] = []
 
-  if (tasks.length < 2) {
+  if (tasks.length === 0) {
+    return addedTasks
+  }
+
+  if (tasks.length === 1) {
     const todoTask = { title: tasks[0] }
     const singleTaskResponse = await client
       .api(`/me/todo/lists/${listId}/tasks`)
@@ -119,12 +182,20 @@ export async function addTasks(
 }
 
 export async function deleteTasks(
-  listId: string = "AAMkADhmYjY3M2VlLTc3YmYtNDJhMy04MjljLTg4NDI0NzQzNjJkMAAuAAAAAAAqiN_iXOf5QJoancmiEuQzAQAVAdL-uyq-SKcP7nACBA3lAAAAO9QQAAA=",
+  listId: string,
   taskIds: string[]
-) {
+): Promise<void> {
+  if (!listId || !isValidListId(listId)) {
+    throw new Error("Invalid list ID")
+  }
+
+  if (taskIds.length === 0) {
+    return
+  }
+
   const client = await getGraphClient()
 
-  if (taskIds.length < 2) {
+  if (taskIds.length === 1) {
     await client.api(`/me/todo/lists/${listId}/tasks/${taskIds[0]}`).delete()
   } else {
     const batchRequestBody = {

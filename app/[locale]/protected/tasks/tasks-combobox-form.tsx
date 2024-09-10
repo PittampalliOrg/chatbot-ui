@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,7 +18,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { TodoTaskList } from "@microsoft/microsoft-graph-types"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 
 interface TaskComboboxFormProps {
   lists: TodoTaskList[]
@@ -27,12 +26,17 @@ interface TaskComboboxFormProps {
 
 export function TaskComboboxForm({ lists }: TaskComboboxFormProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
   const router = useRouter()
+  const params = useParams()
+  const currentListId = (params.listId as string) || lists[0]?.id || ""
+  const [value, setValue] = React.useState(currentListId)
 
   const onListSelect = (listId: string) => {
-    setValue(listId) // Set the selected list ID
-    router.push(`/protected/tasks/${listId}`)
+    if (listId) {
+      setValue(listId)
+      setOpen(false)
+      router.push(`/protected/tasks/${listId}`)
+    }
   }
 
   if (!lists || lists.length === 0) {
@@ -65,10 +69,10 @@ export function TaskComboboxForm({ lists }: TaskComboboxFormProps) {
                 <CommandItem
                   key={list.id}
                   value={list.id}
-                  onSelect={(currentValue: string) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                    onListSelect(currentValue)
+                  onSelect={(selectedValue: string) => {
+                    if (list.id) {
+                      onListSelect(list.id)
+                    }
                   }}
                 >
                   <Check

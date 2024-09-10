@@ -1,6 +1,4 @@
-"use client"
-
-import * as React from "react"
+import React from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -8,13 +6,12 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table"
+import { TodoTask } from "@microsoft/microsoft-graph-types"
 
 import {
   Table,
@@ -26,14 +23,15 @@ import {
 } from "@/components/ui/table"
 
 import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
+import { DataTableViewOptions } from "./data-table-view-options"
 import { addTasks, deleteTasks } from "../actions"
+import { useOptimistic } from "react"
 import { OptimisticTask } from "../types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface DataTableProps {
-  columns: ColumnDef<OptimisticTask>[]
+  columns: ColumnDef<TodoTask>[]
   data: OptimisticTask[]
   initialTasks: OptimisticTask[]
   listId?: string
@@ -41,55 +39,53 @@ interface DataTableProps {
 
 export function DataTable({
   columns,
-  data,
-  initialTasks,
+  data = [],
+  initialTasks = [],
   listId
 }: DataTableProps) {
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
 
   const [tasks, setTasks] = React.useState(initialTasks)
   const [isPending, startTransition] = React.useTransition()
   const [newTaskTitle, setNewTaskTitle] = React.useState("")
 
-  const [optimisticTasks, addOptimisticTask] = React.useOptimistic(
+  const [optimisticTasks, addOptimisticTask] = useOptimistic(
     tasks,
     (state: OptimisticTask[], newTask: OptimisticTask) => [...state, newTask]
   )
 
   const table = useReactTable({
-    data: optimisticTasks,
+    data: data || [],
     columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      columnFilters,
       columnVisibility,
-      rowSelection,
-      columnFilters
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues()
+      rowSelection
+    }
   })
 
-  async function handleAddTask(taskTitle: string) {
-    if (!taskTitle.trim()) return
+  async function formAction(formData: FormData) {
+    const newTaskTitle = formData.get("item") as string
+    if (!newTaskTitle.trim() || !listId) return
 
     const newTask: OptimisticTask = {
       id: Date.now().toString(),
-      title: taskTitle,
+      title: newTaskTitle,
       status: "notStarted",
       sending: true
     }
@@ -98,11 +94,12 @@ export function DataTable({
 
     startTransition(async () => {
       try {
-        const addedTask = await addTasks(listId, [taskTitle])
+        const addedTask = await addTasks(listId, [newTaskTitle])
         setTasks(currentTasks => [
           ...currentTasks,
           { ...newTask, id: addedTask[0].id, sending: false }
         ])
+        setNewTaskTitle("")
       } catch (error) {
         console.error("Failed to add task:", error)
         setTasks(currentTasks =>
@@ -113,6 +110,8 @@ export function DataTable({
   }
 
   async function handleDeleteTasks() {
+    if (!listId) return
+
     const selectedRows = table.getFilteredSelectedRowModel().rows
     const tasksToDelete = selectedRows
       .map(row => row.original.id)
@@ -133,28 +132,53 @@ export function DataTable({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        onAddTask={handleAddTask}
-        onDeleteTasks={handleDeleteTasks}
-      />
+      <div className="flex items-center justify-between">
+        <div className="flex flex-1 items-center space-x-2">
+          <Input
+            placeholder="Filter tasks..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={event =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+          <form action={formAction} className="flex items-center gap-2">
+            <div className="grow">
+              <Input
+                type="text"
+                name="item"
+                placeholder="Make a video ... "
+                className="w-full"
+              />
+            </div>
+            <Button type="submit" size="sm" disabled={isPending || !listId}>
+              Add Task
+            </Button>
+          </form>
+          <form action={handleDeleteTasks} className="flex items-center gap-2">
+            <Button type="submit" size="sm" disabled={isPending || !listId}>
+              Delete
+            </Button>
+          </form>
+        </div>
+        <DataTableViewOptions table={table} />
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+                {headerGroup.headers.map(header => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
