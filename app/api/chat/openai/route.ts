@@ -2,6 +2,7 @@ import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
 import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import { ServerRuntime } from "next"
+import { NextResponse } from "next/server"
 import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
 
@@ -28,17 +29,53 @@ export async function POST(request: Request) {
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
       messages: messages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
-      max_tokens:
-        chatSettings.model === "gpt-4-vision-preview" ||
-        chatSettings.model === "gpt-4o"
-          ? 4096
-          : null, // TODO: Fix
-      stream: true
+      max_tokens: chatSettings.model === "gpt-4-vision-preview" ? 4096 : null, // TODO: Fix
+      stream: true,
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "math_response",
+          schema: {
+            type: "object",
+            properties: {
+              steps: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    explanation: { type: "string" },
+                    output: { type: "string" }
+                  },
+                  required: ["explanation", "output"],
+                  additionalProperties: false
+                }
+              },
+              final_answer: { type: "string" }
+            },
+            required: ["steps", "final_answer"],
+            additionalProperties: false
+          },
+          strict: true
+        }
+      }
     })
 
-    const stream = OpenAIStream(response)
+    const stream = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of response) {
+          const content = chunk.choices[0]?.delta?.content || ""
+          controller.enqueue(new TextEncoder().encode(content))
+        }
+        controller.close()
+      }
+    })
 
-    return new StreamingTextResponse(stream)
+    return new NextResponse(stream, {
+      headers: {
+        "Content-Type": "text/plain",
+        "Transfer-Encoding": "chunked"
+      }
+    })
   } catch (error: any) {
     let errorMessage = error.message || "An unexpected error occurred"
     const errorCode = error.status || 500
