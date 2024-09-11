@@ -23,13 +23,14 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
+import { addTasks, deleteTask, updateTask, getTasks } from "./actions"
 import {
-  addTasks,
-  deleteTasksAndGetUpdated,
-  bulkUpdateTasks,
-  getTasks
-} from "./actions"
-import { useOptimistic, useTransition } from "react"
+  useOptimistic,
+  useTransition,
+  useCallback,
+  useState,
+  useEffect
+} from "react"
 import { useRouter } from "next/navigation"
 import { OptimisticTask } from "./types"
 import { Button } from "@/components/ui/button"
@@ -63,7 +64,12 @@ export function DataTable({
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const [optimisticTasks, setOptimisticTasks] = useOptimistic(initialTasks)
+  const [tasks, setTasks] = useState(initialTasks)
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks)
+
+  useEffect(() => {
+    setTasks(initialTasks)
+  }, [initialTasks])
 
   const table = useReactTable({
     data: optimisticTasks,
@@ -86,52 +92,52 @@ export function DataTable({
 
   const selectedRowsCount = Object.keys(rowSelection).length
 
-  async function formAction(formData: FormData) {
-    const newTaskTitle = formData.get("item") as string
-    if (!newTaskTitle.trim() || !listId) return
+  const formAction = useCallback(
+    async (formData: FormData) => {
+      const newTaskTitle = formData.get("item") as string
+      if (!newTaskTitle.trim() || !listId) return
 
-    const newTask: OptimisticTask = {
-      id: Date.now().toString(),
-      title: newTaskTitle,
-      status: "notStarted",
-      importance: "normal",
-      createdDateTime: new Date().toISOString(),
-      sending: true
-    }
+      const newTask: OptimisticTask = {
+        id: Date.now().toString(),
+        title: newTaskTitle,
+        status: "notStarted",
+        importance: "normal",
+        createdDateTime: new Date().toISOString(),
+        sending: true
+      }
 
-    setOptimisticTasks([...optimisticTasks, newTask])
+      setOptimisticTasks(prevTasks => [...prevTasks, newTask])
 
-    startTransition(async () => {
-      try {
-        if (listId) {
-          const addedTasks = await addTasks(listId, [newTaskTitle])
-          setOptimisticTasks(
-            optimisticTasks.map(task =>
-              task.id === newTask.id
-                ? { ...task, id: addedTasks[0].id, sending: false }
-                : task
-            )
+      startTransition(async () => {
+        try {
+          if (listId) {
+            const addedTasks = await addTasks(listId, [newTaskTitle])
+            setTasks(prevTasks => [
+              ...prevTasks,
+              { ...addedTasks[0], sending: false } as OptimisticTask
+            ])
+            toast({
+              title: "Task added",
+              description: "New task has been successfully added."
+            })
+          }
+        } catch (error) {
+          console.error("Failed to add task:", error)
+          setTasks(prevTasks =>
+            prevTasks.filter(task => task.id !== newTask.id)
           )
           toast({
-            title: "Task added",
-            description: "New task has been successfully added."
+            title: "Error",
+            description: "Failed to add new task. Please try again.",
+            variant: "destructive"
           })
         }
-      } catch (error) {
-        console.error("Failed to add task:", error)
-        setOptimisticTasks(
-          optimisticTasks.filter(task => task.id !== newTask.id)
-        )
-        toast({
-          title: "Error",
-          description: "Failed to add new task. Please try again.",
-          variant: "destructive"
-        })
-      }
-    })
-  }
+      })
+    },
+    [listId, setOptimisticTasks]
+  )
 
-  async function handleDeleteTasks() {
+  const handleDeleteTasks = useCallback(async () => {
     if (!listId) return
 
     const selectedRows = table.getFilteredSelectedRowModel().rows
@@ -145,11 +151,8 @@ export function DataTable({
 
     startTransition(async () => {
       try {
-        const updatedTasks = await deleteTasksAndGetUpdated(
-          listId,
-          tasksToDelete
-        )
-        setOptimisticTasks(updatedTasks as OptimisticTask[])
+        const updatedTasks = await deleteTasks(listId, tasksToDelete)
+        setTasks(updatedTasks as OptimisticTask[])
         setRowSelection({})
         toast({
           title: "Tasks deleted",
@@ -158,7 +161,7 @@ export function DataTable({
       } catch (error) {
         console.error("Failed to delete tasks:", error)
         const tasks = await getTasks(listId)
-        setOptimisticTasks(tasks as OptimisticTask[])
+        setTasks(tasks as OptimisticTask[])
         toast({
           title: "Error",
           description: "Failed to delete tasks. Please try again.",
@@ -166,52 +169,55 @@ export function DataTable({
         })
       }
     })
-  }
+  }, [listId, table, setOptimisticTasks, setRowSelection])
 
-  async function handleBulkUpdate(status: TaskStatus) {
-    if (!listId) return
+  const handleBulkUpdate = useCallback(
+    async (status: TaskStatus) => {
+      if (!listId) return
 
-    const selectedRows = table.getFilteredSelectedRowModel().rows
-    const tasksToUpdate = selectedRows
-      .map(row => ({
-        id: row.original.id,
-        updates: { status } as Partial<TodoTask>
-      }))
-      .filter(
-        (task): task is { id: string; updates: Partial<TodoTask> } =>
-          typeof task.id === "string"
+      const selectedRows = table.getFilteredSelectedRowModel().rows
+      const tasksToUpdate = selectedRows
+        .map(row => ({
+          id: row.original.id,
+          updates: { status } as Partial<TodoTask>
+        }))
+        .filter(
+          (task): task is { id: string; updates: Partial<TodoTask> } =>
+            typeof task.id === "string"
+        )
+
+      setOptimisticTasks(prevTasks =>
+        prevTasks.map(task =>
+          tasksToUpdate.some(update => update.id === task.id)
+            ? { ...task, status }
+            : task
+        )
       )
 
-    setOptimisticTasks(
-      optimisticTasks.map(task =>
-        tasksToUpdate.some(update => update.id === task.id)
-          ? { ...task, status }
-          : task
-      )
-    )
-
-    startTransition(async () => {
-      try {
-        await bulkUpdateTasks(listId, tasksToUpdate)
-        setRowSelection({})
-        const updatedTasks = await getTasks(listId)
-        setOptimisticTasks(updatedTasks as OptimisticTask[])
-        toast({
-          title: "Tasks updated",
-          description: `Successfully updated ${tasksToUpdate.length} task(s).`
-        })
-      } catch (error) {
-        console.error("Failed to update tasks:", error)
-        const tasks = await getTasks(listId)
-        setOptimisticTasks(tasks as OptimisticTask[])
-        toast({
-          title: "Error",
-          description: "Failed to update tasks. Please try again.",
-          variant: "destructive"
-        })
-      }
-    })
-  }
+      startTransition(async () => {
+        try {
+          await bulkUpdateTasks(listId, tasksToUpdate)
+          setRowSelection({})
+          const updatedTasks = await getTasks(listId)
+          setTasks(updatedTasks as OptimisticTask[])
+          toast({
+            title: "Tasks updated",
+            description: `Successfully updated ${tasksToUpdate.length} task(s).`
+          })
+        } catch (error) {
+          console.error("Failed to update tasks:", error)
+          const tasks = await getTasks(listId)
+          setTasks(tasks as OptimisticTask[])
+          toast({
+            title: "Error",
+            description: "Failed to update tasks. Please try again.",
+            variant: "destructive"
+          })
+        }
+      })
+    },
+    [listId, table, setOptimisticTasks, setRowSelection]
+  )
 
   return (
     <div className="space-y-4">

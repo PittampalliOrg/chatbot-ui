@@ -1,11 +1,12 @@
 "use client"
 
+import * as React from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "./components/data-table-column-header"
 import { DataTableRowActions } from "./components/data-table-row-actions"
 import { OptimisticTask } from "./types"
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { updateTask } from "./actions"
 
@@ -21,39 +22,39 @@ const importanceIcons = {
   high: () => <span className="text-red-500">▲</span>
 }
 
-const EditableCell = ({
-  value: initialValue,
-  row
-}: {
-  value: string
-  row: any
-}) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [value, setValue] = useState(initialValue)
+const EditableCell = React.memo(
+  ({ value: initialValue, row }: { value: string; row: any }) => {
+    const [isEditing, setIsEditing] = useState(false)
+    const [value, setValue] = useState(initialValue)
 
-  const handleBlur = async () => {
-    setIsEditing(false)
-    if (value !== initialValue) {
-      await updateTask(row.original.listId!, row.original.id!, { title: value })
-    }
+    const handleBlur = useCallback(async () => {
+      setIsEditing(false)
+      if (value !== initialValue) {
+        await updateTask(row.original.listId!, row.original.id!, {
+          title: value
+        })
+      }
+    }, [value, initialValue, row.original.listId, row.original.id])
+
+    return isEditing ? (
+      <Input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onBlur={handleBlur}
+        autoFocus
+      />
+    ) : (
+      <div
+        onDoubleClick={() => setIsEditing(true)}
+        className="max-w-[500px] truncate font-medium"
+      >
+        {value}
+      </div>
+    )
   }
+)
 
-  return isEditing ? (
-    <Input
-      value={value}
-      onChange={e => setValue(e.target.value)}
-      onBlur={handleBlur}
-      autoFocus
-    />
-  ) : (
-    <div
-      onDoubleClick={() => setIsEditing(true)}
-      className="max-w-[500px] truncate font-medium"
-    >
-      {value}
-    </div>
-  )
-}
+EditableCell.displayName = "EditableCell"
 
 export const columns: ColumnDef<OptimisticTask>[] = [
   {
