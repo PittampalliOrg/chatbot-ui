@@ -14,9 +14,16 @@
       "includeAdditionalData": true,
       "excludeBackwardCompatible": false,
       "disabledValidationRules": [],
-      "descriptionLocation": "https://raw.githubusercontent.com/sebastienlevert/jsonplaceholder-api/main/openapi.yaml",
+      "descriptionLocation": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml",
       "includePatterns": [
-        "/posts#GET"
+        "/me/todo#DELETE",
+        "/me/todo#GET",
+        "/me/todo#PATCH",
+        "/me/todo/lists#GET",
+        "/me/todo/lists#POST",
+        "/me/todo/lists/$count",
+        "/me/todo/lists/delta()",
+        "/me/todo/lists/{todoTaskList-id}"
       ],
       "excludePatterns": [],
       "outputPath": "./kiota"

@@ -2,16 +2,52 @@
   "applicationName": "application",
   "apiDependencies": {
     "ApiClient": {
-      "apiDescriptionUrl": "https://raw.githubusercontent.com/sebastienlevert/jsonplaceholder-api/main/openapi.yaml",
-      "apiDeploymentBaseUrl": "https://jsonplaceholder.typicode.com/",
+      "apiDescriptionUrl": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml",
+      "apiDeploymentBaseUrl": "https://graph.microsoft.com/v1.0/",
       "requests": [
         {
           "method": "GET",
-          "uriTemplate": "posts"
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists/delta()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/todo/lists"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/todo"
         }
       ],
       "extensions": {
-        "x-ms-kiota-hash": "FBA87E21A6C5FE3858D25F7FD40A2FF2DEE65F1D5954AE7573E722A6D55859DA"
+        "x-ms-kiota-hash": "A01820B262BADFC12E8927E3670D9D216D68D2DE1F55B303B53B2FC3993318AA"
       }
     }
   }
