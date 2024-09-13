@@ -1,31 +1,49 @@
-// app/page.tsx or app/[locale]/protected/kiota/page.tsx
-import { TodoTaskList } from "@/kiota/models/index" // Adjust the import path as needed
-import { getTaskLists } from "./actions" // Adjust the import path as needed
+import { getMessages } from "./actions"
+import { Message } from "@/Graph/models"
 
-export default async function TaskListsPage() {
-  let taskLists: TodoTaskList[] = []
-  let error: string | null = null
+type PartialMessage = Pick<
+  Message,
+  "toRecipients" | "from" | "subject" | "bodyPreview"
+>
+
+export default async function MessagesPage() {
+  let messages: PartialMessage[] = []
 
   try {
-    taskLists = await getTaskLists()
-  } catch (err) {
-    error = "Failed to fetch task lists"
-    console.error(error, err)
+    // Fetch the messages directly in the server component
+    messages = await getMessages()
+  } catch (error) {
+    console.error("Error fetching messages:", error)
+    return <div>Error: Failed to load messages.</div>
   }
 
   return (
     <div>
-      <h1>Task Lists</h1>
-      {error ? (
-        <div>Error: {error}</div>
-      ) : taskLists.length === 0 ? (
-        <p>No task lists found.</p>
+      <h1>Your Recent Messages</h1>
+      {messages.length === 0 ? (
+        <div>No messages found.</div>
       ) : (
         <ul>
-          {taskLists.map(list => (
-            <li key={list.id}>
-              <h2>{list.displayName}</h2>
-              {/* Add more details or actions here if needed */}
+          {messages.map((message, index) => (
+            <li key={index} className="message">
+              <div>
+                <strong>From:</strong>{" "}
+                {message.from?.emailAddress?.name || "Unknown"}
+              </div>
+              <div>
+                <strong>To:</strong>{" "}
+                {message.toRecipients
+                  ?.map(recipient => recipient.emailAddress?.name)
+                  .join(", ") || "Unknown"}
+              </div>
+              <div>
+                <strong>Subject:</strong> {message.subject || "No subject"}
+              </div>
+              <div>
+                <strong>Body Preview:</strong>{" "}
+                {message.bodyPreview || "No preview available"}
+              </div>
+              <hr />
             </li>
           ))}
         </ul>
