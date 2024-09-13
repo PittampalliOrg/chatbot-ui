@@ -5,11 +5,14 @@ import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
 import { NextResponse } from "next/server"
 
+// Define the types for the new parameter structure
 type Parameter = {
   name: string
   in: string
+  type: "string" | "number" | "boolean" | "integer" | "array" | "enum" | "anyOf"
   description: string
   required: boolean
+  enum?: string[] | null // Optional, but required if type is "enum"
 }
 
 type ToolCallDefinition = {
@@ -21,7 +24,11 @@ type ToolCallDefinition = {
       type: "object"
       properties: Record<
         string,
-        { type: string; description: string; enum?: string[] }
+        {
+          type: string
+          description: string
+          enum?: string[] | null
+        }
       >
       required: string[]
       additionalProperties: false
@@ -29,23 +36,31 @@ type ToolCallDefinition = {
   }
 }
 
+// Function to create a tool call definition
 function createToolCallDefinition(
   functionName: string,
   functionDescription: string,
   parameters: Parameter[]
 ): ToolCallDefinition {
-  const properties: Record<string, { type: string; description: string }> = {}
+  const properties: Record<
+    string,
+    { type: string; description: string; enum?: string[] | null }
+  > = {}
   const required: string[] = []
 
   parameters.forEach(param => {
-    properties[param.name] = {
-      type: "string", // Assuming all parameters are strings. Adjust if necessary.
-      description: param.description
+    const paramDefinition: {
+      type: string
+      description: string
+      enum?: string[] | null
+    } = {
+      type: param.type,
+      description: param.description,
+      enum: param.type === "enum" ? (param.enum ?? null) : null // Set enum to null if not relevant
     }
 
-    if (param.required) {
-      required.push(param.name)
-    }
+    properties[param.name] = paramDefinition
+    required.push(param.name)
   })
 
   return {
@@ -113,6 +128,19 @@ export async function POST(request: Request) {
                         "The location of the parameter, e.g., query, header, path",
                       enum: ["query", "header", "path", "cookie"]
                     },
+                    type: {
+                      type: "string",
+                      description: "The data type of the parameter",
+                      enum: [
+                        "string",
+                        "number",
+                        "boolean",
+                        "integer",
+                        "array",
+                        "enum",
+                        "anyOf"
+                      ]
+                    },
                     description: {
                       type: "string",
                       description: "A brief description of the parameter"
@@ -121,9 +149,24 @@ export async function POST(request: Request) {
                       type: "boolean",
                       description:
                         "Indicates whether this parameter is required"
+                    },
+                    enum: {
+                      type: ["array", "null"],
+                      items: {
+                        type: "string"
+                      },
+                      description:
+                        "An array of possible values if the type is 'enum', or null otherwise"
                     }
                   },
-                  required: ["name", "in", "description", "required"],
+                  required: [
+                    "name",
+                    "in",
+                    "type",
+                    "description",
+                    "required",
+                    "enum"
+                  ], // enum is required now
                   additionalProperties: false
                 },
                 description: "An array containing one or more parameter objects"

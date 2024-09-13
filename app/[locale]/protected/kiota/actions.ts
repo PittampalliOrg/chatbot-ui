@@ -50,7 +50,7 @@ export async function getMessages(): Promise<Partial<Message>[]> {
     // GET /me/messages?$top=5&$select=toRecipients,from,subject,bodyPreview&$orderby=receivedDateTime desc
     const messagesResponse = await client.me.messages.get({
       queryParameters: {
-        top: 5,
+        top: 10,
         select: ["toRecipients", "from", "subject", "bodyPreview"], // Select specific fields
         orderby: ["receivedDateTime desc"] // Order by the most recent
       }
@@ -70,4 +70,9 @@ export async function getMessages(): Promise<Partial<Message>[]> {
     console.error("Error fetching messages:", error)
     return []
   }
+}
+
+export function sendMail(message: Message): void {
+  // POST /me/sendMail
+  client.me.sendMail.post({ message, saveToSentItems: true })
 }
