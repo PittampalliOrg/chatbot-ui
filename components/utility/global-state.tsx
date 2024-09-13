@@ -23,7 +23,7 @@ import {
 } from "@/types"
 import { AssistantImage } from "@/types/images/assistant-image"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
-import { usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
 
 interface GlobalStateProps {
@@ -32,7 +32,6 @@ interface GlobalStateProps {
 
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const router = useRouter()
-  const pathname = usePathname()
 
   // PROFILE STORE
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null)
@@ -76,7 +75,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [userInput, setUserInput] = useState<string>("")
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
-    model: "gpt-4o-2024-08-06",
+    model: "gpt-4-turbo-preview",
     prompt: "You are a helpful AI assistant.",
     temperature: 0.5,
     contextLength: 4000,
@@ -114,7 +113,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [newMessageImages, setNewMessageImages] = useState<MessageImage[]>([])
   const [showFilesDisplay, setShowFilesDisplay] = useState<boolean>(false)
 
-  // RETRIEVAL STORE
+  // RETIEVAL STORE
   const [useRetrieval, setUseRetrieval] = useState<boolean>(true)
   const [sourceCount, setSourceCount] = useState<number>(4)
 
@@ -154,7 +153,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const fetchStartingData = async () => {
     const session = (await supabase.auth.getSession()).data.session
 
-    if (session && !pathname.startsWith("/login")) {
+    if (session) {
       const user = session.user
 
       const profile = await getProfileByUserId(user.id)

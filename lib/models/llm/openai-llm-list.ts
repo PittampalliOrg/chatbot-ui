@@ -2,44 +2,12 @@ import { LLM } from "@/types"
 
 const OPENAI_PLATORM_LINK = "https://platform.openai.com/docs/overview"
 
-// GPT-4o Mini (NEW)
-const GPT4oMini: LLM = {
-  modelId: "gpt-4o-mini-2024-07-18",
-  modelName: "GPT-4o Mini",
-  provider: "openai",
-  hostedId: "gpt-4o-mini-2024-07-18",
-  platformLink: OPENAI_PLATORM_LINK,
-  imageInput: true,
-  pricing: {
-    currency: "USD",
-    unit: "1M tokens",
-    inputCost: 3,
-    outputCost: 9
-  }
-}
-
-// GPT-4o 2024 (NEW)
-const GPT4o2024: LLM = {
-  modelId: "gpt-4o-2024-08-06",
-  modelName: "GPT-4o 2024",
-  provider: "openai",
-  hostedId: "gpt-4o-2024-08-06",
-  platformLink: OPENAI_PLATORM_LINK,
-  imageInput: true,
-  pricing: {
-    currency: "USD",
-    unit: "1M tokens",
-    inputCost: 6,
-    outputCost: 18
-  }
-}
-
 // OpenAI Models (UPDATED 1/25/24) -----------------------------
 const GPT4o: LLM = {
-  modelId: "gpt-4o",
+  modelId: "gpt-4o-2024-08-06",
   modelName: "GPT-4o",
   provider: "openai",
-  hostedId: "gpt-4o",
+  hostedId: "gpt-4o-2024-08-06",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: true,
   pricing: {
