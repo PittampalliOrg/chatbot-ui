@@ -1,0 +1,18 @@
+{
+  "applicationName": "application",
+  "apiDependencies": {
+    "ApiClient": {
+      "apiDescriptionUrl": "https://raw.githubusercontent.com/sebastienlevert/jsonplaceholder-api/main/openapi.yaml",
+      "apiDeploymentBaseUrl": "https://jsonplaceholder.typicode.com/",
+      "requests": [
+        {
+          "method": "GET",
+          "uriTemplate": "posts"
+        }
+      ],
+      "extensions": {
+        "x-ms-kiota-hash": "FBA87E21A6C5FE3858D25F7FD40A2FF2DEE65F1D5954AE7573E722A6D55859DA"
+      }
+    }
+  }
+}
