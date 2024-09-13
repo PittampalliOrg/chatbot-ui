@@ -1,72 +1,26 @@
-import React from "react"
-import { TaskComboboxForm } from "../tasks-combobox-form"
-import { DataTable } from "../data-table"
-import { columns } from "../columns"
-import { getTasks, getLists } from "../actions"
-import { TodoTask, TodoTaskList } from "@microsoft/microsoft-graph-types"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { Suspense } from "react"
+import { notFound } from "next/navigation"
+import TaskTable from "../components/task-table"
+import TaskTableSkeleton from "../components/task-table-skeleton" // Update the import statement to the correct file path
+import { getList } from "../actions"
 
-export default async function TasksListPage({
+export default async function TaskListPage({
   params
 }: {
   params: { listId: string }
 }) {
-  let lists: TodoTaskList[] = []
-  let tasks: TodoTask[] = []
-  let error: Error | null = null
+  const list = await getList(params.listId)
 
-  try {
-    lists = await getLists()
-  } catch (e) {
-    console.error("Error fetching lists:", e)
-    error =
-      e instanceof Error
-        ? e
-        : new Error("Unknown error occurred while fetching lists")
-  }
-
-  if (!error && params.listId) {
-    try {
-      tasks = await getTasks(params.listId)
-    } catch (e) {
-      console.error("Error fetching tasks:", e)
-      error =
-        e instanceof Error
-          ? e
-          : new Error("Unknown error occurred while fetching tasks")
-    }
-  } else if (!params.listId) {
-    error = new Error("No list ID provided")
+  if (!list) {
+    notFound()
   }
 
   return (
-    <div>
-      <TaskComboboxForm lists={lists} />
-      <div className="mt-6">
-        {error ? (
-          <Alert variant="destructive">
-            <AlertCircle className="size-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              {error.message}
-              {error.stack && (
-                <details>
-                  <summary>Error Details</summary>
-                  <pre>{error.stack}</pre>
-                </details>
-              )}
-            </AlertDescription>
-          </Alert>
-        ) : (
-          <DataTable
-            columns={columns}
-            data={tasks}
-            initialTasks={tasks}
-            listId={params.listId}
-          />
-        )}
-      </div>
+    <div className="space-y-8">
+      <h2 className="text-xl font-semibold">{list.displayName}</h2>
+      <Suspense fallback={<TaskTableSkeleton />}>
+        <TaskTable listId={params.listId} />
+      </Suspense>
     </div>
   )
 }

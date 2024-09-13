@@ -1,11 +1,14 @@
 "use client"
 
+import * as React from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { TodoTask } from "@microsoft/microsoft-graph-types"
 import { DataTableColumnHeader } from "./components/data-table-column-header"
 import { DataTableRowActions } from "./components/data-table-row-actions"
 import { OptimisticTask } from "./types"
+import { useState, useCallback } from "react"
+import { Input } from "@/components/ui/input"
+import { updateTask } from "./actions"
 
 const statusIcons = {
   notStarted: () => <span className="text-gray-500">●</span>,
@@ -18,6 +21,40 @@ const importanceIcons = {
   normal: () => <span className="text-blue-500">■</span>,
   high: () => <span className="text-red-500">▲</span>
 }
+
+const EditableCell = React.memo(
+  ({ value: initialValue, row }: { value: string; row: any }) => {
+    const [isEditing, setIsEditing] = useState(false)
+    const [value, setValue] = useState(initialValue)
+
+    const handleBlur = useCallback(async () => {
+      setIsEditing(false)
+      if (value !== initialValue) {
+        await updateTask(row.original.listId!, row.original.id!, {
+          title: value
+        })
+      }
+    }, [value, initialValue, row.original.listId, row.original.id])
+
+    return isEditing ? (
+      <Input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onBlur={handleBlur}
+        autoFocus
+      />
+    ) : (
+      <div
+        onDoubleClick={() => setIsEditing(true)}
+        className="max-w-[500px] truncate font-medium"
+      >
+        {value}
+      </div>
+    )
+  }
+)
+
+EditableCell.displayName = "EditableCell"
 
 export const columns: ColumnDef<OptimisticTask>[] = [
   {
@@ -42,7 +79,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
       />
     ),
     enableSorting: false,
-    enableHiding: false
+    enableHiding: false,
+    size: 40
   },
   {
     accessorKey: "status",
@@ -60,22 +98,16 @@ export const columns: ColumnDef<OptimisticTask>[] = [
           <span className="ml-2 capitalize">{status || "Not Started"}</span>
         </div>
       )
-    }
+    },
+    size: 120
   },
   {
     accessorKey: "title",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
-          </span>
-        </div>
-      )
-    }
+    cell: ({ row }) => <EditableCell value={row.getValue("title")} row={row} />,
+    size: 300
   },
   {
     accessorKey: "importance",
@@ -93,7 +125,8 @@ export const columns: ColumnDef<OptimisticTask>[] = [
           <span className="ml-2 capitalize">{importance || "Normal"}</span>
         </div>
       )
-    }
+    },
+    size: 120
   },
   {
     accessorKey: "createdDateTime",
@@ -111,10 +144,12 @@ export const columns: ColumnDef<OptimisticTask>[] = [
             : "N/A"}
         </span>
       )
-    }
+    },
+    size: 100
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+    size: 40
   }
 ]

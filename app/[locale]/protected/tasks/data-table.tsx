@@ -13,8 +13,6 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table"
-import { TodoTask } from "@microsoft/microsoft-graph-types"
-
 import {
   Table,
   TableBody,
@@ -23,27 +21,38 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-
 import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
-import { addTasks, deleteTasks } from "./actions"
-import { useOptimistic } from "react"
+import { addTasks, deleteTask, updateTask, getTasks } from "./actions"
+import {
+  useOptimistic,
+  useTransition,
+  useCallback,
+  useState,
+  useEffect
+} from "react"
+import { useRouter } from "next/navigation"
 import { OptimisticTask } from "./types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { TodoTask, TaskStatus } from "@microsoft/microsoft-graph-types"
+import { toast } from "@/components/ui/use-toast"
 
 interface DataTableProps {
   columns: ColumnDef<OptimisticTask>[]
   data: OptimisticTask[]
   initialTasks: OptimisticTask[]
   listId?: string
+  tableLayout?: "auto" | "fixed"
 }
 
 export function DataTable({
   columns,
   data = [],
   initialTasks = [],
-  listId
+  listId,
+  tableLayout = "auto"
 }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -52,14 +61,15 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
-  const [tasks, setTasks] = React.useState(initialTasks)
-  const [isPending, startTransition] = React.useTransition()
+  const [tasks, setTasks] = useState(initialTasks)
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks)
 
-  const [optimisticTasks, addOptimisticTask] = useOptimistic(
-    tasks,
-    (state: OptimisticTask[], newTask: OptimisticTask) => [...state, newTask]
-  )
+  useEffect(() => {
+    setTasks(initialTasks)
+  }, [initialTasks])
 
   const table = useReactTable({
     data: optimisticTasks,
@@ -80,36 +90,54 @@ export function DataTable({
     }
   })
 
-  async function formAction(formData: FormData) {
-    const newTaskTitle = formData.get("item") as string
-    if (!newTaskTitle.trim() || !listId) return
+  const selectedRowsCount = Object.keys(rowSelection).length
 
-    const newTask: OptimisticTask = {
-      id: Date.now().toString(),
-      title: newTaskTitle,
-      status: "notStarted",
-      sending: true
-    }
+  const formAction = useCallback(
+    async (formData: FormData) => {
+      const newTaskTitle = formData.get("item") as string
+      if (!newTaskTitle.trim() || !listId) return
 
-    addOptimisticTask(newTask)
-
-    startTransition(async () => {
-      try {
-        const addedTasks = await addTasks(listId, [newTaskTitle])
-        setTasks(currentTasks => [
-          ...currentTasks,
-          { ...newTask, id: addedTasks[0].id, sending: false }
-        ])
-      } catch (error) {
-        console.error("Failed to add task:", error)
-        setTasks(currentTasks =>
-          currentTasks.filter(task => task.id !== newTask.id)
-        )
+      const newTask: OptimisticTask = {
+        id: Date.now().toString(),
+        title: newTaskTitle,
+        status: "notStarted",
+        importance: "normal",
+        createdDateTime: new Date().toISOString(),
+        sending: true
       }
-    })
-  }
 
-  async function handleDeleteTasks() {
+      setOptimisticTasks(prevTasks => [...prevTasks, newTask])
+
+      startTransition(async () => {
+        try {
+          if (listId) {
+            const addedTasks = await addTasks(listId, [newTaskTitle])
+            setTasks(prevTasks => [
+              ...prevTasks,
+              { ...addedTasks[0], sending: false } as OptimisticTask
+            ])
+            toast({
+              title: "Task added",
+              description: "New task has been successfully added."
+            })
+          }
+        } catch (error) {
+          console.error("Failed to add task:", error)
+          setTasks(prevTasks =>
+            prevTasks.filter(task => task.id !== newTask.id)
+          )
+          toast({
+            title: "Error",
+            description: "Failed to add new task. Please try again.",
+            variant: "destructive"
+          })
+        }
+      })
+    },
+    [listId, setOptimisticTasks]
+  )
+
+  const handleDeleteTasks = useCallback(async () => {
     if (!listId) return
 
     const selectedRows = table.getFilteredSelectedRowModel().rows
@@ -117,18 +145,79 @@ export function DataTable({
       .map(row => row.original.id)
       .filter((id): id is string => typeof id === "string")
 
-    setTasks(currentTasks =>
-      currentTasks.filter(task => task.id && !tasksToDelete.includes(task.id))
+    setOptimisticTasks(prevTasks =>
+      prevTasks.filter(task => task.id && !tasksToDelete.includes(task.id))
     )
 
-    try {
-      await deleteTasks(listId, tasksToDelete)
-      table.toggleAllRowsSelected(false)
-    } catch (error) {
-      console.error("Failed to delete tasks:", error)
-      setTasks(initialTasks)
-    }
-  }
+    startTransition(async () => {
+      try {
+        const updatedTasks = await deleteTasks(listId, tasksToDelete)
+        setTasks(updatedTasks as OptimisticTask[])
+        setRowSelection({})
+        toast({
+          title: "Tasks deleted",
+          description: `Successfully deleted ${tasksToDelete.length} task(s).`
+        })
+      } catch (error) {
+        console.error("Failed to delete tasks:", error)
+        const tasks = await getTasks(listId)
+        setTasks(tasks as OptimisticTask[])
+        toast({
+          title: "Error",
+          description: "Failed to delete tasks. Please try again.",
+          variant: "destructive"
+        })
+      }
+    })
+  }, [listId, table, setOptimisticTasks, setRowSelection])
+
+  const handleBulkUpdate = useCallback(
+    async (status: TaskStatus) => {
+      if (!listId) return
+
+      const selectedRows = table.getFilteredSelectedRowModel().rows
+      const tasksToUpdate = selectedRows
+        .map(row => ({
+          id: row.original.id,
+          updates: { status } as Partial<TodoTask>
+        }))
+        .filter(
+          (task): task is { id: string; updates: Partial<TodoTask> } =>
+            typeof task.id === "string"
+        )
+
+      setOptimisticTasks(prevTasks =>
+        prevTasks.map(task =>
+          tasksToUpdate.some(update => update.id === task.id)
+            ? { ...task, status }
+            : task
+        )
+      )
+
+      startTransition(async () => {
+        try {
+          await bulkUpdateTasks(listId, tasksToUpdate)
+          setRowSelection({})
+          const updatedTasks = await getTasks(listId)
+          setTasks(updatedTasks as OptimisticTask[])
+          toast({
+            title: "Tasks updated",
+            description: `Successfully updated ${tasksToUpdate.length} task(s).`
+          })
+        } catch (error) {
+          console.error("Failed to update tasks:", error)
+          const tasks = await getTasks(listId)
+          setTasks(tasks as OptimisticTask[])
+          toast({
+            title: "Error",
+            description: "Failed to update tasks. Please try again.",
+            variant: "destructive"
+          })
+        }
+      })
+    },
+    [listId, table, setOptimisticTasks, setRowSelection]
+  )
 
   return (
     <div className="space-y-4">
@@ -155,13 +244,32 @@ export function DataTable({
               Add Task
             </Button>
           </form>
-          <Button
-            onClick={handleDeleteTasks}
-            size="sm"
-            disabled={isPending || !listId}
-          >
-            Delete
-          </Button>
+          {selectedRowsCount > 0 && (
+            <>
+              <Badge variant="secondary">{selectedRowsCount} selected</Badge>
+              <Button
+                onClick={handleDeleteTasks}
+                size="sm"
+                disabled={isPending || !listId}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => handleBulkUpdate("completed")}
+                size="sm"
+                disabled={isPending || !listId}
+              >
+                Mark as Completed
+              </Button>
+              <Button
+                onClick={() => handleBulkUpdate("notStarted")}
+                size="sm"
+                disabled={isPending || !listId}
+              >
+                Mark as Not Started
+              </Button>
+            </>
+          )}
         </div>
         <DataTableViewOptions table={table} />
       </div>
