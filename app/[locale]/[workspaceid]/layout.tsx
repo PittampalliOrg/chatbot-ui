@@ -18,6 +18,7 @@ import { supabase } from "@/lib/supabase/browser-client"
 import { LLMID } from "@/types"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { ReactNode, useContext, useEffect, useState } from "react"
+import MgtProvider from "../protected/actions/mgt-provider"
 import Loading from "../loading"
 
 interface WorkspaceLayoutProps {
@@ -179,5 +180,11 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     return <Loading />
   }
 
-  return <Dashboard>{children}</Dashboard>
+  return (
+    <>
+      <MgtProvider>
+        <Dashboard>{children}</Dashboard>
+      </MgtProvider>
+    </>
+  )
 }

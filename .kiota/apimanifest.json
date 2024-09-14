@@ -1,0 +1,259 @@
+{
+  "applicationName": "application",
+  "apiDependencies": {
+    "ApiClient": {
+      "apiDescriptionUrl": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml",
+      "apiDeploymentBaseUrl": "https://graph.microsoft.com/v1.0/",
+      "requests": [
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/todo/lists/{todoTaskList-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists/delta()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo/lists"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/todo/lists"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/todo"
+        }
+      ],
+      "extensions": {
+        "x-ms-kiota-hash": "A01820B262BADFC12E8927E3670D9D216D68D2DE1F55B303B53B2FC3993318AA"
+      }
+    },
+    "GraphClient": {
+      "apiDescriptionUrl": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/beta/openapi.yaml",
+      "apiDeploymentBaseUrl": "https://graph.microsoft.com/beta/",
+      "requests": [
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar/calendarView/{event-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar/calendarView/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar/calendarView"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar/events/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar/events"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/calendar/events"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/calendar/getSchedule"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/calendar"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/calendar"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/drive"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/drives/{drive-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/drives/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/drives"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/mailFolders/{mailFolder-id}"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/mailFolders/{mailFolder-id}"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/mailFolders/{mailFolder-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/mailFolders/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/mailFolders/delta()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/mailFolders"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/mailFolders"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/messages/{message-id}"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/messages/{message-id}"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/messages/{message-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/messages/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/messages/delta()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/messages"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/messages"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/sendMail"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/oauth2PermissionGrants/{oAuth2PermissionGrant-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/oauth2PermissionGrants/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/oauth2PermissionGrants"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/outlook/masterCategories"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/outlook/masterCategories"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/outlook/taskFolders"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/outlook/taskFolders"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/outlook/taskGroups"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/outlook/taskGroups"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/outlook/tasks"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "me/outlook/tasks"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/outlook"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "me/todo"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "users/{user-id}"
+        },
+        {
+          "method": "PATCH",
+          "uriTemplate": "users/{user-id}"
+        },
+        {
+          "method": "DELETE",
+          "uriTemplate": "users/{user-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "users/$count"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "users"
+        },
+        {
+          "method": "POST",
+          "uriTemplate": "users"
+        }
+      ],
+      "extensions": {
+        "x-ms-kiota-hash": "ED16F818D6BEB469C20439631D650B95D58C14EF1AAC035DA4030BD0C85543C6"
+      }
+    }
+  }
+}
