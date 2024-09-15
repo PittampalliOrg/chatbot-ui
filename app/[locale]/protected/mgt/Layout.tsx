@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     flexWrap: "nowrap",
-    height: "100%",
+    height: "auto",
     minWidth: "295px",
     boxSizing: "border-box",
     backgroundColor: tokens.colorNeutralBackground6
