@@ -9,13 +9,14 @@ import {
 } from "@fluentui/react-icons"
 import { HomePage } from "../pages/HomePage"
 import DashboardPage from "../Dashboard/page"
-import { OutlookPage } from "../Outlook/page"
-import { FilesPage } from "../Files/page"
-import { TaxonomyPage } from "../Taxonomy/page"
-import { SearchPage } from "../Search/page"
+import OutlookPage from "../Outlook/page"
+import FilesPage from "../Files/page"
+import TaxonomyPage from "../Taxonomy/page"
+import SearchPage from "../Search/page"
+import { NavigationItem } from "../models/NavigationItem"
 
-export const getNavigation = (isSignedIn: boolean) => {
-  let navItems = []
+export const getNavigation = (isSignedIn: boolean): NavigationItem[] => {
+  const navItems: NavigationItem[] = []
 
   navItems.push({
     name: "Home",

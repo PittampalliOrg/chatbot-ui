@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const SearchPage: React.FunctionComponent = () => {
+const SearchPage: React.FunctionComponent = () => {
   const styles = useStyles()
   const appContext = useAppContext()
   const [query] = React.useState(
@@ -81,3 +81,5 @@ export const SearchPage: React.FunctionComponent = () => {
     </>
   )
 }
+
+export default SearchPage

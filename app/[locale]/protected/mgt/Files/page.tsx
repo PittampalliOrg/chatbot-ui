@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const FilesPage: React.FunctionComponent = () => {
+const FilesPage: React.FunctionComponent = () => {
   const styles = useStyles()
   const [selectedTab, setSelectedTab] = React.useState<TabValue>("my")
 
@@ -61,3 +61,5 @@ export const FilesPage: React.FunctionComponent = () => {
     </>
   )
 }
+
+export default FilesPage

@@ -2,11 +2,11 @@
 "use client"
 
 import React from "react"
-import { Header } from "./components/Header"
-import { SideNavigation } from "./components/SideNavigation"
-import { useAppContext } from "./AppContext"
-import { useIsSignedIn } from "./hooks/useIsSignedIn"
-import { getNavigation } from "./services/Navigation"
+import { Header } from "../mgt/components/Header"
+import { SideNavigation } from "../mgt/components/SideNavigation"
+import { useAppContext } from "../mgt/AppContext"
+import { useIsSignedIn } from "../mgt/hooks/useIsSignedIn"
+import { getNavigation } from "../mgt/services/Navigation"
 import {
   makeStyles,
   mergeClasses,

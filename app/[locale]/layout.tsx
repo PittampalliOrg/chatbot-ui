@@ -92,20 +92,16 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers attribute="class" defaultTheme="dark">
-          <ClientAppProvider>
-            <ClientLayout>
-              <TranslationsProvider
-                namespaces={i18nNamespaces}
-                locale={locale}
-                resources={resources}
-              >
-                <Toaster richColors position="top-center" duration={3000} />
-                <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
-                  {session ? <GlobalState>{children}</GlobalState> : children}
-                </div>
-              </TranslationsProvider>
-            </ClientLayout>
-          </ClientAppProvider>
+          <TranslationsProvider
+            namespaces={i18nNamespaces}
+            locale={locale}
+            resources={resources}
+          >
+            <Toaster richColors position="top-center" duration={3000} />
+            <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
+              {session ? <GlobalState>{children}</GlobalState> : children}
+            </div>
+          </TranslationsProvider>
         </Providers>
       </body>
     </html>
