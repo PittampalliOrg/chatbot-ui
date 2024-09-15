@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "./components/data-table-pagination"
 import { DataTableViewOptions } from "./components/data-table-view-options"
-import { addTasks, deleteTask, updateTask, getTasks } from "./actions"
+import { addTasks, deleteTask, getTasks, updateTask } from "./actions"
 import {
   useOptimistic,
   useTransition,
@@ -49,10 +49,10 @@ interface DataTableProps {
 
 export function DataTable({
   columns,
-  data = [],
+  data,
   initialTasks = [],
   listId,
-  tableLayout = "auto"
+  tableLayout
 }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -62,7 +62,7 @@ export function DataTable({
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
+  // const router = useRouter()
 
   const [tasks, setTasks] = useState(initialTasks)
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks)
@@ -111,7 +111,7 @@ export function DataTable({
       startTransition(async () => {
         try {
           if (listId) {
-            const addedTasks = await addTasks(listId, [newTaskTitle])
+            const addedTasks: OptimisticTask[] = await addTasks()
             setTasks(prevTasks => [
               ...prevTasks,
               { ...addedTasks[0], sending: false } as OptimisticTask
@@ -151,8 +151,8 @@ export function DataTable({
 
     startTransition(async () => {
       try {
-        const updatedTasks = await deleteTasks(listId, tasksToDelete)
-        setTasks(updatedTasks as OptimisticTask[])
+        const updatedTasks = await deleteTask()
+        setTasks(updatedTasks as unknown as OptimisticTask[])
         setRowSelection({})
         toast({
           title: "Tasks deleted",
@@ -196,7 +196,7 @@ export function DataTable({
 
       startTransition(async () => {
         try {
-          await bulkUpdateTasks(listId, tasksToUpdate)
+          await updateTask(listId, tasksToUpdate)
           setRowSelection({})
           const updatedTasks = await getTasks(listId)
           setTasks(updatedTasks as OptimisticTask[])

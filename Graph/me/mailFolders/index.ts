@@ -6,42 +6,18 @@ import { createMailFolderCollectionResponseFromDiscriminatorValue, createMailFol
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../models/oDataErrors/index';
 // @ts-ignore
-import { CountRequestBuilderRequestsMetadata, type CountRequestBuilder } from './count/index';
-// @ts-ignore
-import { DeltaRequestBuilderRequestsMetadata, type DeltaRequestBuilder } from './delta/index';
-// @ts-ignore
-import { MailFolderItemRequestBuilderRequestsMetadata, type MailFolderItemRequestBuilder } from './item/index';
-// @ts-ignore
-import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
+import { type BaseRequestBuilder, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
 
 /**
  * Provides operations to manage the mailFolders property of the microsoft.graph.user entity.
  */
 export interface MailFoldersRequestBuilder extends BaseRequestBuilder<MailFoldersRequestBuilder> {
     /**
-     * Provides operations to count the resources in the collection.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-    get count(): CountRequestBuilder;
-    /**
-     * Provides operations to call the delta method.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-    get delta(): DeltaRequestBuilder;
-    /**
-     * Provides operations to manage the mailFolders property of the microsoft.graph.user entity.
-     * @param mailFolderId The unique identifier of mailFolder
-     * @returns {MailFolderItemRequestBuilder}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-     byMailFolderId(mailFolderId: string) : MailFolderItemRequestBuilder;
-    /**
      * Get the mail folder collection directly under the root folder of the signed-in user. The returned collection includes any mail search folders directly under the root. By default, this operation does not return hidden folders. Use a query parameter includeHiddenFolders to include them in the response. This operation does not return all mail folders in a mailbox, only the child folders of the root folder. To return all mail folders in a mailbox, each child folder must be traversed separately.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<MailFolderCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/user-list-mailfolders?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/user-list-mailfolders?view=graph-rest-1.0|Find more info here}
      */
      get(requestConfiguration?: RequestConfiguration<MailFoldersRequestBuilderGetQueryParameters> | undefined) : Promise<MailFolderCollectionResponse | undefined>;
     /**
@@ -50,15 +26,13 @@ export interface MailFoldersRequestBuilder extends BaseRequestBuilder<MailFolder
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<MailFolder>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/user-post-mailfolders?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/user-post-mailfolders?view=graph-rest-1.0|Find more info here}
      */
      post(body: MailFolder, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<MailFolder | undefined>;
     /**
      * Get the mail folder collection directly under the root folder of the signed-in user. The returned collection includes any mail search folders directly under the root. By default, this operation does not return hidden folders. Use a query parameter includeHiddenFolders to include them in the response. This operation does not return all mail folders in a mailbox, only the child folders of the root folder. To return all mail folders in a mailbox, each child folder must be traversed separately.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<MailFoldersRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -66,7 +40,6 @@ export interface MailFoldersRequestBuilder extends BaseRequestBuilder<MailFolder
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      toPostRequestInformation(body: MailFolder, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }
@@ -127,21 +100,6 @@ const MailFoldersRequestBuilderGetQueryParametersMapper: Record<string, string> 
     "select": "%24select",
     "skip": "%24skip",
     "top": "%24top",
-};
-/**
- * Metadata for all the navigation properties in the request builder.
- */
-export const MailFoldersRequestBuilderNavigationMetadata: Record<Exclude<keyof MailFoldersRequestBuilder, KeysToExcludeForNavigationMetadata>, NavigationMetadata> = {
-    byMailFolderId: {
-        requestsMetadata: MailFolderItemRequestBuilderRequestsMetadata,
-        pathParametersMappings: ["mailFolder%2Did"],
-    },
-    count: {
-        requestsMetadata: CountRequestBuilderRequestsMetadata,
-    },
-    delta: {
-        requestsMetadata: DeltaRequestBuilderRequestsMetadata,
-    },
 };
 /**
  * Metadata for all the requests in the request builder.

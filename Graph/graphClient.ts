@@ -4,8 +4,6 @@
 // @ts-ignore
 import { MeRequestBuilderNavigationMetadata, type MeRequestBuilder } from './me/index';
 // @ts-ignore
-import { type UsersRequestBuilder, UsersRequestBuilderNavigationMetadata, UsersRequestBuilderRequestsMetadata } from './users/index';
-// @ts-ignore
 import { apiClientProxifier, registerDefaultDeserializer, registerDefaultSerializer, type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type RequestAdapter } from '@microsoft/kiota-abstractions';
 
 /**
@@ -15,7 +13,7 @@ import { apiClientProxifier, registerDefaultDeserializer, registerDefaultSeriali
 // @ts-ignore
 export function createGraphClient(requestAdapter: RequestAdapter) {
     if (requestAdapter.baseUrl === undefined || requestAdapter.baseUrl === null || requestAdapter.baseUrl === "") {
-        requestAdapter.baseUrl = "https://graph.microsoft.com/beta";
+        requestAdapter.baseUrl = "https://graph.microsoft.com/v1.0";
     }
     const pathParameters: Record<string, unknown> = {
         "baseurl": requestAdapter.baseUrl,
@@ -30,10 +28,6 @@ export interface GraphClient extends BaseRequestBuilder<GraphClient> {
      * The me property
      */
     get me(): MeRequestBuilder;
-    /**
-     * Provides operations to manage the collection of user entities.
-     */
-    get users(): UsersRequestBuilder;
 }
 /**
  * Uri template for the request builder.
@@ -45,10 +39,6 @@ export const GraphClientUriTemplate = "{+baseurl}";
 export const GraphClientNavigationMetadata: Record<Exclude<keyof GraphClient, KeysToExcludeForNavigationMetadata>, NavigationMetadata> = {
     me: {
         navigationMetadata: MeRequestBuilderNavigationMetadata,
-    },
-    users: {
-        requestsMetadata: UsersRequestBuilderRequestsMetadata,
-        navigationMetadata: UsersRequestBuilderNavigationMetadata,
     },
 };
 /* tslint:enable */

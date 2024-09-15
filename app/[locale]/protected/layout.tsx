@@ -1,4 +1,5 @@
 import Navbar from "./components/NavBar"
+import MgtProvider from "@/app/[locale]/protected/actions/mgt-provider"
 
 export default function DashboardLayout({
   children
@@ -6,9 +7,11 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
-      <Navbar />
-      {children}
-    </div>
+    <>
+      <MgtProvider>
+        <Navbar />
+        {children}
+      </MgtProvider>
+    </>
   )
 }

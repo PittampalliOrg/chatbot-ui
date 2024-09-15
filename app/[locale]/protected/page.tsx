@@ -149,7 +149,29 @@ async function getTokenInfo() {
 
   const graphToken = await instance.acquireTokenSilent({
     account,
-    scopes: ["User.Read"]
+    scopes: [
+      "Bookmark.Read.All",
+      "Calendars.Read",
+      "ExternalItem.Read.All",
+      "Files.Read",
+      "Files.Read.All",
+      "Files.ReadWrite.All",
+      "Group.Read.All",
+      "Group.ReadWrite.All",
+      "Mail.Read",
+      "Mail.ReadBasic",
+      "People.Read",
+      "People.Read.All",
+      "Presence.Read.All",
+      "User.Read",
+      "Sites.Read.All",
+      "Sites.ReadWrite.All",
+      "Tasks.Read",
+      "Tasks.ReadWrite",
+      "Team.ReadBasic.All",
+      "User.ReadBasic.All",
+      "User.Read.All"
+    ]
   })
 
   return {

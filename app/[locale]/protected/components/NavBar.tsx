@@ -12,6 +12,8 @@ export default async function NavBar() {
   const account = await authProvider.getAccount()
 
   const navLinks = [
+    { name: "MGT", path: "/protected/mgt" },
+    { name: "Dashboard", path: "/protected/mgt/pages/DashboardPage" },
     { name: "Profile", path: "/protected/profile" },
     { name: "Graph Request", path: "/protected/graph-request" },
     { name: "Events", path: "/protected/event" },

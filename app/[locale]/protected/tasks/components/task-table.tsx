@@ -143,13 +143,5 @@ export default function TaskTable({ listId }: { listId: string }) {
     return <div>Loading tasks...</div>
   }
 
-  return (
-    <DataTable
-      columns={columns}
-      data={tasks}
-      onAddTask={handleAddTask}
-      onDeleteTask={handleDeleteTask}
-      onUpdateTask={handleUpdateTask}
-    />
-  )
+  return <DataTable columns={columns} data={tasks} initialTasks={[]} />
 }

@@ -113,3 +113,7 @@ export async function updateTask(
     throw error
   }
 }
+
+export async function addTasks() {}
+
+export async function deleteTasksAndGetUpdated() {}

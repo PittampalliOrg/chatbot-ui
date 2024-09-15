@@ -27,7 +27,29 @@ serializationWriterFactoryRegistry.contentTypeAssociatedFactories.set(
 )
 
 // Define the scopes required by your API
-const scopes = ["Mail.ReadWrite"] // Adjust the scopes as needed
+const scopes = [
+  "Bookmark.Read.All",
+  "Calendars.Read",
+  "ExternalItem.Read.All",
+  "Files.Read",
+  "Files.Read.All",
+  "Files.ReadWrite.All",
+  "Group.Read.All",
+  "Group.ReadWrite.All",
+  "Mail.Read",
+  "Mail.ReadBasic",
+  "People.Read",
+  "People.Read.All",
+  "Presence.Read.All",
+  "User.Read",
+  "Sites.Read.All",
+  "Sites.ReadWrite.All",
+  "Tasks.Read",
+  "Tasks.ReadWrite",
+  "Team.ReadBasic.All",
+  "User.ReadBasic.All",
+  "User.Read.All"
+]
 
 // Instantiate the custom Kiota AuthenticationProvider
 const authProvider = new CustomKiotaAuthenticationProvider(
@@ -43,7 +65,7 @@ const adapter = new FetchRequestAdapter(
 )
 
 // Create the API client
-const client = createGraphClient(adapter)
+export const client = createGraphClient(adapter)
 
 export async function getMessages(): Promise<Partial<Message>[]> {
   try {
