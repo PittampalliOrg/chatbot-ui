@@ -11,6 +11,7 @@ import {
 } from "@microsoft/kiota-abstractions"
 import { Message } from "@/Graph/models" // Adjust the import path
 import { authProvider as myAuthProvider } from "@/app/[locale]/protected/services/auth" // Adjust the import path
+import { PreviewPostRequestBody } from "@/Graph/drives/item/items/item/preview/index"
 
 // Create and register the JSON factories
 const parseNodeFactoryRegistry = new ParseNodeFactoryRegistry()
@@ -27,7 +28,29 @@ serializationWriterFactoryRegistry.contentTypeAssociatedFactories.set(
 )
 
 // Define the scopes required by your API
-const scopes = ["Mail.ReadWrite"] // Adjust the scopes as needed
+const scopes = [
+  "Bookmark.Read.All",
+  "Calendars.Read",
+  "ExternalItem.Read.All",
+  "Files.Read",
+  "Files.Read.All",
+  "Files.ReadWrite.All",
+  "Group.Read.All",
+  "Group.ReadWrite.All",
+  "Mail.Read",
+  "Mail.ReadBasic",
+  "People.Read",
+  "People.Read.All",
+  "Presence.Read.All",
+  "User.Read",
+  "Sites.Read.All",
+  "Sites.ReadWrite.All",
+  "Tasks.Read",
+  "Tasks.ReadWrite",
+  "Team.ReadBasic.All",
+  "User.ReadBasic.All",
+  "User.Read.All"
+]
 
 // Instantiate the custom Kiota AuthenticationProvider
 const authProvider = new CustomKiotaAuthenticationProvider(
@@ -43,7 +66,7 @@ const adapter = new FetchRequestAdapter(
 )
 
 // Create the API client
-const client = createGraphClient(adapter)
+export const client = createGraphClient(adapter)
 
 export async function getMessages(): Promise<Partial<Message>[]> {
   try {
@@ -74,5 +97,19 @@ export async function getMessages(): Promise<Partial<Message>[]> {
 
 export function sendMail(message: Message): void {
   // POST /me/sendMail
-  client.me.sendMail.post({ message, saveToSentItems: true })
+  // client.me.sendMail.post({ message, saveToSentItems: true })
+}
+
+export async function getEmbedLink(
+  driveId: string,
+  driveItemId: string
+): Promise<string> {
+  const client = createGraphClient(adapter)
+
+  const response = await client.drives
+    .byDriveId(driveId)
+    .items.byDriveItemId(driveItemId)
+    .preview.post({})
+
+  return response?.getUrl || ""
 }

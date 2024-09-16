@@ -6,12 +6,15 @@ import MgtProvider from "../../protected/actions/mgt-provider"
 import TabsComponent from "./tabs"
 
 interface FileItem {
+  driveId: string
+  driveItemId: string
   webUrl: string
   name: string
 }
 
-const FilesPage: React.FunctionComponent = () => {
+export default function FilesPage() {
   const [selectedFile, setSelectedFile] = React.useState<FileItem | null>(null)
+  const [embedLink, setEmbedLink] = React.useState<string>("")
   const fileListRef = React.useRef<HTMLElement | null>(null)
 
   React.useEffect(() => {
@@ -19,7 +22,13 @@ const FilesPage: React.FunctionComponent = () => {
     if (fileListElement) {
       const handleItemClick = (e: Event) => {
         const customEvent = e as CustomEvent
-        const file = customEvent.detail as FileItem
+        const driveItem = customEvent.detail
+        const file: FileItem = {
+          driveId: driveItem.parentReference.driveId,
+          driveItemId: driveItem.id,
+          name: driveItem.name,
+          webUrl: driveItem.webUrl
+        }
         setSelectedFile(file)
       }
 
@@ -31,29 +40,73 @@ const FilesPage: React.FunctionComponent = () => {
     }
   }, [])
 
+  React.useEffect(() => {
+    const fetchEmbedLink = async () => {
+      if (selectedFile) {
+        try {
+          const response = await fetch(`/api/protected/embed`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              driveId: selectedFile.driveId,
+              driveItemId: selectedFile.driveItemId
+            })
+          })
+
+          const data = await response.json()
+
+          if (response.ok) {
+            setEmbedLink(data.embedLink)
+          } else {
+            console.error("Error fetching embed link:", data.error)
+            setEmbedLink("")
+          }
+        } catch (error) {
+          console.error("Error fetching embed link:", error)
+          setEmbedLink("")
+        }
+      } else {
+        setEmbedLink("")
+      }
+    }
+
+    fetchEmbedLink()
+  }, [selectedFile])
+
   return (
     <MgtProvider>
-      <div className="p-4">
-        <ThemeToggle />
-        <TabsComponent />
-        <div className="mt-4 flex space-x-4">
-          <div className="w-1/2">
+      <div className="flex h-screen flex-col p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <ThemeToggle />
+          <TabsComponent />
+        </div>
+        <div className="flex grow flex-col space-y-4 overflow-hidden lg:flex-row lg:space-x-4 lg:space-y-0">
+          <div className="w-full overflow-auto lg:w-1/3 xl:w-1/4">
             <FileList
               ref={fileListRef}
               insightType="used"
               enableFileUpload={false}
               pageSize={25}
+              disableOpenOnClick={true}
             />
           </div>
-          <div className="w-1/2">
+          <div className="flex w-full flex-col lg:w-2/3 xl:w-3/4">
             {selectedFile ? (
-              <div className="rounded-lg border p-4">
+              <div className="flex h-full flex-col rounded-lg border p-4">
                 <h2 className="mb-2 text-xl font-bold">{selectedFile.name}</h2>
-                <iframe
-                  src={selectedFile.webUrl}
-                  title={selectedFile.name}
-                  className="h-[calc(100vh-200px)] w-full"
-                />
+                {embedLink ? (
+                  <iframe
+                    src={embedLink}
+                    title={selectedFile.name}
+                    className="w-full grow"
+                    style={{ minHeight: "500px" }}
+                    frameBorder="0"
+                  />
+                ) : (
+                  <p className="py-4 text-center">Loading embed link...</p>
+                )}
               </div>
             ) : (
               <div className="flex h-full items-center justify-center rounded-lg border p-4 text-gray-500">
@@ -66,5 +119,3 @@ const FilesPage: React.FunctionComponent = () => {
     </MgtProvider>
   )
 }
-
-export default FilesPage

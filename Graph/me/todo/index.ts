@@ -6,12 +6,19 @@ import { createTodoFromDiscriminatorValue, serializeTodo, type Todo } from '../.
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../models/oDataErrors/index';
 // @ts-ignore
-import { type BaseRequestBuilder, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
+import { ListsRequestBuilderNavigationMetadata, ListsRequestBuilderRequestsMetadata, type ListsRequestBuilder } from './lists/index';
+// @ts-ignore
+import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
 
 /**
  * Provides operations to manage the todo property of the microsoft.graph.user entity.
  */
 export interface TodoRequestBuilder extends BaseRequestBuilder<TodoRequestBuilder> {
+    /**
+     * Provides operations to manage the lists property of the microsoft.graph.todo entity.
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     */
+    get lists(): ListsRequestBuilder;
     /**
      * Delete navigation property todo for me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
@@ -82,6 +89,15 @@ export const TodoRequestBuilderUriTemplate = "{+baseurl}/me/todo{?%24expand,%24s
 const TodoRequestBuilderGetQueryParametersMapper: Record<string, string> = {
     "expand": "%24expand",
     "select": "%24select",
+};
+/**
+ * Metadata for all the navigation properties in the request builder.
+ */
+export const TodoRequestBuilderNavigationMetadata: Record<Exclude<keyof TodoRequestBuilder, KeysToExcludeForNavigationMetadata>, NavigationMetadata> = {
+    lists: {
+        requestsMetadata: ListsRequestBuilderRequestsMetadata,
+        navigationMetadata: ListsRequestBuilderNavigationMetadata,
+    },
 };
 /**
  * Metadata for all the requests in the request builder.

@@ -6,8 +6,6 @@ import { createDriveCollectionResponseFromDiscriminatorValue, type DriveCollecti
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../models/oDataErrors/index';
 // @ts-ignore
-import { CountRequestBuilderRequestsMetadata, type CountRequestBuilder } from './count/index';
-// @ts-ignore
 import { DriveItemRequestBuilderRequestsMetadata, type DriveItemRequestBuilder } from './item/index';
 // @ts-ignore
 import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
@@ -16,11 +14,6 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
  * Provides operations to manage the drives property of the microsoft.graph.user entity.
  */
 export interface DrivesRequestBuilder extends BaseRequestBuilder<DrivesRequestBuilder> {
-    /**
-     * Provides operations to count the resources in the collection.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-    get count(): CountRequestBuilder;
     /**
      * Provides operations to manage the drives property of the microsoft.graph.user entity.
      * @param driveId The unique identifier of drive
@@ -106,9 +99,6 @@ export const DrivesRequestBuilderNavigationMetadata: Record<Exclude<keyof Drives
     byDriveId: {
         requestsMetadata: DriveItemRequestBuilderRequestsMetadata,
         pathParametersMappings: ["drive%2Did"],
-    },
-    count: {
-        requestsMetadata: CountRequestBuilderRequestsMetadata,
     },
 };
 /**
