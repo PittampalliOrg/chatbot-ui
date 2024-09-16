@@ -10,6 +10,7 @@ interface FileItem {
   driveItemId: string
   webUrl: string
   name: string
+  mimeType: string
 }
 
 export default function FilesPage() {
@@ -23,11 +24,13 @@ export default function FilesPage() {
       const handleItemClick = (e: Event) => {
         const customEvent = e as CustomEvent
         const driveItem = customEvent.detail
+        console.log(driveItem)
         const file: FileItem = {
           driveId: driveItem.parentReference.driveId,
           driveItemId: driveItem.id,
           name: driveItem.name,
-          webUrl: driveItem.webUrl
+          webUrl: driveItem.webUrl,
+          mimeType: driveItem.file.mimeType
         }
         setSelectedFile(file)
       }
@@ -80,7 +83,6 @@ export default function FilesPage() {
       <div className="flex h-screen flex-col p-4">
         <div className="mb-4 flex items-center justify-between">
           <ThemeToggle />
-          <TabsComponent />
         </div>
         <div className="flex grow flex-col space-y-4 overflow-hidden lg:flex-row lg:space-x-4 lg:space-y-0">
           <div className="w-full overflow-auto lg:w-1/3 xl:w-1/4">
@@ -95,7 +97,6 @@ export default function FilesPage() {
           <div className="flex w-full flex-col lg:w-2/3 xl:w-3/4">
             {selectedFile ? (
               <div className="flex h-full flex-col rounded-lg border p-4">
-                <h2 className="mb-2 text-xl font-bold">{selectedFile.name}</h2>
                 {embedLink ? (
                   <iframe
                     src={embedLink}

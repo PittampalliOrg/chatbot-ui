@@ -72,7 +72,7 @@ const beta = createBeta(adapter)
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { driveId, driveItemId } = body
+  const { driveId, driveItemId, mimeType } = body
 
   if (!driveId || !driveItemId) {
     return NextResponse.json(
@@ -90,6 +90,14 @@ export async function POST(request: NextRequest) {
       .byDriveId(driveId)
       .items.byDriveItemId(driveItemId)
       .preview.post({ allowEdit: true, viewer: "office" })
+    const options = [
+      "application/msonenote",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ].includes(mimeType)
+      ? { allowEdit: true, viewer: "office" }
+      : null
     console.log(response)
     const embedLink = response?.getUrl || ""
 
