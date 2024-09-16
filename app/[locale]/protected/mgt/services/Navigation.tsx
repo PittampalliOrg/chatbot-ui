@@ -76,7 +76,13 @@ export const getNavigation = (isSignedIn: boolean): NavigationItem[] => {
       icon: <SearchRegular />,
       key: "search",
       requiresLogin: true,
-      component: <SearchPage />,
+      component: (
+        <SearchPage
+          searchParams={{
+            q: ""
+          }}
+        />
+      ),
       exact: false
     })
   }
