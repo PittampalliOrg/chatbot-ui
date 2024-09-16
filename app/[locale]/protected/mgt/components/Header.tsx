@@ -97,15 +97,15 @@ const HeaderComponent: React.FunctionComponent = () => {
       })
 
       if (e.detail === "") {
-        router.push("/search")
+        router.push("/protected/mgt/Search")
       } else {
-        router.push(`/search?q=${encodeURIComponent(e.detail)}`)
+        router.push(`/protected/mgt/Search?q=${encodeURIComponent(e.detail)}`)
       }
     }
   }
 
   React.useEffect(() => {
-    if (pathname === "/search") {
+    if (pathname === "/protected/mgt/Search") {
       const searchTerm = searchParams.get("q") || ""
       setAppContext(previous => {
         return { ...previous, searchTerm: searchTerm === "" ? "*" : searchTerm }
@@ -133,7 +133,14 @@ const HeaderComponent: React.FunctionComponent = () => {
           <InfoButton
             className={styles.infoIcon}
             size="medium"
-            info={<>Using the Graph Toolkit v{PACKAGE_VERSION}</>}
+            info={
+              <pre>
+                {JSON.stringify({
+                  searchTerm: appContext.state.searchTerm,
+                  sidebar: appContext.state.sidebar
+                })}
+              </pre>
+            }
           />
         </div>
       </div>

@@ -1,25 +1,28 @@
-// app/components/Layout.tsx
-"use client"
-
 import React from "react"
-import { Header } from "../mgt/components/Header"
-import { SideNavigation } from "../mgt/components/SideNavigation"
-import { useAppContext } from "../mgt/AppContext"
-import { useIsSignedIn } from "../mgt/hooks/useIsSignedIn"
-import { getNavigation } from "../mgt/services/Navigation"
+import { HashRouter, Route, Switch } from "react-router-dom"
+import { Header } from "./components/Header"
+import { SideNavigation } from "./components/SideNavigation"
+import { HomePage } from "./pages/HomePage"
+import { useIsSignedIn } from "./hooks/useIsSignedIn"
+import { NavigationItem } from "./models/NavigationItem"
+import { getNavigation } from "./services/Navigation"
 import {
+  FluentProvider,
   makeStyles,
   mergeClasses,
   shorthands
-} from "@fluentui/react-components" // Remove FluentProvider import
+} from "@fluentui/react-components"
 import { tokens } from "@fluentui/react-theme"
+import { applyTheme } from "@microsoft/mgt-react"
+import { useAppContext } from "./AppContext"
 
 const useStyles = makeStyles({
   sidebar: {
     display: "flex",
     flexDirection: "column",
     flexWrap: "nowrap",
-    height: "auto",
+    height: "100%",
+    minHeight: "295px",
     minWidth: "295px",
     boxSizing: "border-box",
     backgroundColor: tokens.colorNeutralBackground6
@@ -48,29 +51,61 @@ const useStyles = makeStyles({
     height: "auto",
     boxSizing: "border-box",
     ...shorthands.margin("10px"),
-    ...shorthands.overflow("auto")
+    overflow: "auto"
   }
 })
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const styles = useStyles()
-  const navigationItems = getNavigation(useIsSignedIn())
+  const [navigationItems, setNavigationItems] = React.useState<
+    NavigationItem[]
+  >([])
+  const isSignedIn = useIsSignedIn()
   const appContext = useAppContext()
 
+  React.useEffect(() => {
+    setNavigationItems(getNavigation(isSignedIn))
+  }, [isSignedIn])
+
+  React.useEffect(() => {
+    // Applies the theme to the MGT components
+    applyTheme(appContext.state.theme.key as any)
+  }, [appContext])
+
   return (
-    <div className={styles.page}>
-      <Header />
-      <div className={styles.main}>
-        <div
-          className={mergeClasses(
-            styles.sidebar,
-            appContext.state.sidebar.isMinimized ? styles.minimized : ""
-          )}
-        >
-          <SideNavigation items={navigationItems} />
-        </div>
-        <div className={styles.content}>{children}</div>
+    <FluentProvider theme={appContext.state.theme.fluentTheme}>
+      <div className={styles.page}>
+        <HashRouter>
+          <Header></Header>
+          <div className={styles.main}>
+            <div
+              className={mergeClasses(
+                styles.sidebar,
+                `${appContext.state.sidebar.isMinimized ? styles.minimized : ""}`
+              )}
+            >
+              <SideNavigation items={navigationItems}></SideNavigation>
+            </div>
+            <div className={styles.content}>
+              <Switch>
+                {navigationItems.map(
+                  item =>
+                    ((item.requiresLogin && isSignedIn) ||
+                      !item.requiresLogin) && (
+                      <Route
+                        exact={item.exact}
+                        path={item.url}
+                        key={item.key}
+                      />
+                    )
+                )}
+                <Route path="*" component={HomePage} />
+              </Switch>
+              {children}
+            </div>
+          </div>
+        </HashRouter>
       </div>
-    </div>
+    </FluentProvider>
   )
 }

@@ -4,8 +4,28 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NavigationItem } from "../models/NavigationItem"
+import {
+  Tab,
+  TabList,
+  makeStyles,
+  mergeClasses,
+  tokens
+} from "@fluentui/react-components"
 
-// Mock implementation of isUserSignedIn, replace with actual implementation
+export interface ISideNavigationProps {
+  items: any[]
+}
+
+const useStyles = makeStyles({
+  tab: {
+    paddingTop: "12px",
+    paddingBottom: "12px"
+  },
+  activeTab: {
+    backgroundColor: tokens.colorSubtleBackgroundHover
+  }
+})
+
 const isUserSignedIn = true
 
 export function SideNavigation({ items }: { items: NavigationItem[] }) {
