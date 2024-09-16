@@ -17,7 +17,9 @@ export default async function NavBar() {
     { name: "Events", path: "/protected/event" },
     { name: "Tasks", path: "/protected/tasks" },
     { name: "Token Information", path: "/protected/token-info" },
-    { name: "Kiota", path: "/protected/kiota" }
+    { name: "Kiota", path: "/protected/kiota" },
+    { name: "Files", path: "/protected/files" },
+    { name: "Search", path: "/protected/search" }
   ]
 
   return (

@@ -27,13 +27,28 @@ async function handleProxy(
   // Prepare the token request
   const tokenRequest = {
     scopes: [
+      "Bookmark.Read.All",
+      "Calendars.Read",
+      "ExternalItem.Read.All",
+      "Files.Read",
+      "Files.Read.All",
+      "Files.ReadWrite.All",
+      "Group.Read.All",
+      "Group.ReadWrite.All",
+      "Mail.Read",
+      "Mail.ReadBasic",
+      "People.Read",
+      "People.Read.All",
+      "Presence.Read.All",
       "User.Read",
-      "Calendars.ReadWrite",
+      "Sites.Read.All",
+      "Sites.ReadWrite.All",
+      "Tasks.Read",
       "Tasks.ReadWrite",
-      "Files.ReadWrite",
-      "Mail.ReadWrite",
-      "Mail.Send"
-    ], // Adjust scopes as needed
+      "Team.ReadBasic.All",
+      "User.ReadBasic.All",
+      "User.Read.All"
+    ],
     account: account
   }
 
