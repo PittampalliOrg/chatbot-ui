@@ -1,15 +1,9 @@
+// app/search/FilesResults.tsx
 "use client"
 
 import { SearchResults } from "@microsoft/mgt-react"
 import * as React from "react"
-import { IResultsProps } from "./IResultsProps"
-import {
-  MgtTemplateProps,
-  Person,
-  File,
-  PersonCardInteraction,
-  ViewType
-} from "@microsoft/mgt-react"
+import { MgtTemplateProps, Person, File } from "@microsoft/mgt-react"
 import {
   DataGrid,
   DataGridBody,
@@ -26,6 +20,7 @@ import {
   tokens
 } from "@fluentui/react-components"
 import { SlideSearchRegular } from "@fluentui/react-icons"
+import { IResultsProps } from "./IResultsProps"
 
 const useStyles = makeStyles({
   container: {
@@ -71,36 +66,6 @@ const useStyles = makeStyles({
 })
 
 const pageSize = 30
-
-export const FilesResults: React.FunctionComponent<IResultsProps> = (
-  props: IResultsProps
-) => {
-  return (
-    <>
-      {props.searchTerm && (
-        <SearchResults
-          entityTypes={["driveItem"]}
-          queryString={props.searchTerm}
-          fetchThumbnail={true}
-          queryTemplate="({searchTerms}) ContentTypeId:0x0101*"
-          version="beta"
-          fields={[
-            "createdBy",
-            "lastModifiedDateTime",
-            "Title",
-            "DefaultEncodingURL"
-          ]}
-          size={pageSize}
-          cacheEnabled={true}
-        >
-          <FileTemplate template="default"></FileTemplate>
-          <FileTemplate template="loading"></FileTemplate>
-          <FileNoDataTemplate template="no-data"></FileNoDataTemplate>
-        </SearchResults>
-      )}
-    </>
-  )
-}
 
 const getColumns = (
   shimmered: boolean,
@@ -197,10 +162,42 @@ const getColumns = (
   return columns
 }
 
-const FileTemplate = (props: MgtTemplateProps) => {
+export const FilesResults: React.FunctionComponent<IResultsProps> = ({
+  searchTerm
+}) => {
+  const styles = useStyles()
+
+  return (
+    <>
+      {searchTerm && (
+        <SearchResults
+          entityTypes={["driveItem"]}
+          queryString={searchTerm}
+          fetchThumbnail={true}
+          queryTemplate="({searchTerms}) ContentTypeId:0x0101*"
+          version="beta"
+          fields={[
+            "createdBy",
+            "lastModifiedDateTime",
+            "Title",
+            "DefaultEncodingURL"
+          ]}
+          size={pageSize}
+          cacheEnabled={true}
+        >
+          <FileTemplate template="default" />
+          <FileTemplate template="loading" />
+          <FileNoDataTemplate template="no-data" />
+        </SearchResults>
+      )}
+    </>
+  )
+}
+
+const FileTemplate: React.FC<MgtTemplateProps> = props => {
   const styles = useStyles()
   const [driveItems] = React.useState<any>(
-    props.dataContext.value?.[0]?.hitsContainers[0]?.hits
+    props.dataContext?.value?.[0]?.hitsContainers[0]?.hits
   )
 
   const onRowClick = (item: any) => {
