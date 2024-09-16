@@ -337,6 +337,79 @@
       "extensions": {
         "x-ms-kiota-hash": "648F45F3CD86C31FDF2ECCCD69C02B628153995DB9573CEA0B8CB567D7124BDC"
       }
+    },
+    "Beta": {
+      "apiDescriptionUrl": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/beta/openapi.yaml",
+      "apiDeploymentBaseUrl": "https://graph.microsoft.com/beta/",
+      "requests": [
+        {
+          "method": "POST",
+          "uriTemplate": "drives/{drive-id}/items/{driveItem-id}/preview"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "groups/{group-id}/onenote/notebooks/{notebook-id}/sectionGroups/{sectionGroup-id}/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/onenote/notebooks/{notebook-id}/sectionGroups/{sectionGroup-id}/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/onenote/notebooks/{notebook-id}/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/onenote/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/onenote/sectionGroups/{sectionGroup-id}/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "me/onenote/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/drive"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/drives/{drive-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/drives"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/items/{baseItem-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/items"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/onenote/notebooks/{notebook-id}/sectionGroups/{sectionGroup-id}/sections/{onenoteSection-id}/pages/{onenotePage-id}/preview()"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}/sites/{site-id1}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites/{site-id}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "sites"
+        }
+      ],
+      "extensions": {
+        "x-ms-kiota-hash": "6EAEC654E203E24F1951A3472624C9AB35FF4B8EB21B6677FB5D2E74C4D1063D"
+      }
     }
   }
 }

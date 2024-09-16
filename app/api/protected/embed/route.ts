@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { FetchRequestAdapter } from "@microsoft/kiota-http-fetchlibrary"
 import { createGraphClient } from "@/Graph/graphClient" // Adjust the import path
+import { createBeta } from "@/Beta/beta"
 import { CustomKiotaAuthenticationProvider } from "@/app/[locale]/protected/kiota/CustomKiotaAuthenticationProvider" // Adjust the import path
 import {
   JsonParseNodeFactory,
@@ -67,6 +68,7 @@ const adapter = new FetchRequestAdapter(
 
 // Create the API client
 const client = createGraphClient(adapter)
+const beta = createBeta(adapter)
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
@@ -80,10 +82,14 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const response = await client.drives
+    // const response = await client.drives
+    //   .byDriveId(driveId)
+    //   .items.byDriveItemId(driveItemId)
+    //   .preview.post({})
+    const response = await beta.drives
       .byDriveId(driveId)
       .items.byDriveItemId(driveItemId)
-      .preview.post({})
+      .preview.post({ allowEdit: true, viewer: "office" })
     console.log(response)
     const embedLink = response?.getUrl || ""
 
