@@ -3,6 +3,12 @@
 import { Configuration, LogLevel } from "@azure/msal-node"
 import "server-only"
 
+
+// Define the API URL based on the environment (production or local)
+const apiUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://chatbot-ui-livid-mu.vercel.app' 
+  : 'http://localhost:3000';
+
 export const graphConfig = {
   graphEndpoint: "https://graph.microsoft.com/v1.0",
   meEndpoint: "https://graph.microsoft.com/v1.0/me",
@@ -59,7 +65,7 @@ export const tasksRequest = {
 }
 
 export const authCallbackUri =
-  process.env.AUTH_CALLBACK_URI ?? "http://localhost:3000/protected"
+  process.env.AUTH_CALLBACK_URI ?? `${apiUrl}/api/protected/proxy`
 
 export const sessionSecret = process.env.SESSION_SECRET!
 
