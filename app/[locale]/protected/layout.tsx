@@ -6,9 +6,9 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
+    <div className="flex size-full flex-col">
       <Navbar />
-      {children}
+      <div className="grow overflow-auto">{children}</div>
     </div>
   )
 }

@@ -80,24 +80,31 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     )
   }
+  const options = [
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+    "text/csv",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.openxmlformats-officedocument.presentationml.template",
+    "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+    "application/msonenote",
+    "application/vnd.ms-visio.drawing"
+  ]
+
+  const previewOptions = options.includes(mimeType)
+    ? { allowEdit: true, viewer: "office" }
+    : {}
 
   try {
-    // const response = await client.drives
-    //   .byDriveId(driveId)
-    //   .items.byDriveItemId(driveItemId)
-    //   .preview.post({})
     const response = await beta.drives
       .byDriveId(driveId)
       .items.byDriveItemId(driveItemId)
-      .preview.post({ allowEdit: true, viewer: "office" })
-    const options = [
-      "application/msonenote",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ].includes(mimeType)
-      ? { allowEdit: true, viewer: "office" }
-      : null
+      .preview.post(previewOptions)
     console.log(response)
     const embedLink = response?.getUrl || ""
 

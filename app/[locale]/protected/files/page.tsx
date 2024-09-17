@@ -3,7 +3,7 @@
 import { FileList, ThemeToggle } from "@microsoft/mgt-react"
 import * as React from "react"
 import MgtProvider from "../../protected/actions/mgt-provider"
-import TabsComponent from "./tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface FileItem {
   driveId: string
@@ -13,9 +13,12 @@ interface FileItem {
   mimeType: string
 }
 
+type InsightType = "used" | "shared" | "trending"
+
 export default function FilesPage() {
   const [selectedFile, setSelectedFile] = React.useState<FileItem | null>(null)
   const [embedLink, setEmbedLink] = React.useState<string>("")
+  const [insightType, setInsightType] = React.useState<InsightType>("used")
   const fileListRef = React.useRef<HTMLElement | null>(null)
 
   React.useEffect(() => {
@@ -41,7 +44,7 @@ export default function FilesPage() {
         fileListElement.removeEventListener("itemClick", handleItemClick)
       }
     }
-  }, [])
+  }, [insightType]) // Add insightType as a dependency
 
   React.useEffect(() => {
     const fetchEmbedLink = async () => {
@@ -54,7 +57,8 @@ export default function FilesPage() {
             },
             body: JSON.stringify({
               driveId: selectedFile.driveId,
-              driveItemId: selectedFile.driveItemId
+              driveItemId: selectedFile.driveItemId,
+              mimeType: selectedFile.mimeType
             })
           })
 
@@ -78,17 +82,35 @@ export default function FilesPage() {
     fetchEmbedLink()
   }, [selectedFile])
 
+  const handleInsightTypeChange = (value: string) => {
+    setInsightType(value as InsightType)
+    setSelectedFile(null)
+    setEmbedLink("")
+  }
+
   return (
     <MgtProvider>
       <div className="flex h-screen flex-col p-4">
         <div className="mb-4 flex items-center justify-between">
           <ThemeToggle />
         </div>
+        <Tabs
+          value={insightType}
+          onValueChange={handleInsightTypeChange}
+          className="mb-4"
+        >
+          <TabsList>
+            <TabsTrigger value="used">Recently Used</TabsTrigger>
+            <TabsTrigger value="shared">Shared</TabsTrigger>
+            <TabsTrigger value="trending">Trending</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <div className="flex grow flex-col space-y-4 overflow-hidden lg:flex-row lg:space-x-4 lg:space-y-0">
           <div className="w-full overflow-auto lg:w-1/3 xl:w-1/4">
             <FileList
+              key={insightType}
               ref={fileListRef}
-              insightType="used"
+              insightType={insightType}
               enableFileUpload={false}
               pageSize={25}
               disableOpenOnClick={true}
