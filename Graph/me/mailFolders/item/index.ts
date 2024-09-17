@@ -17,15 +17,13 @@ export interface MailFolderItemRequestBuilder extends BaseRequestBuilder<MailFol
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<MailFolder>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/mailfolder-get?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/mailfolder-get?view=graph-rest-1.0|Find more info here}
      */
      get(requestConfiguration?: RequestConfiguration<MailFolderItemRequestBuilderGetQueryParameters> | undefined) : Promise<MailFolder | undefined>;
     /**
      * Retrieve the properties and relationships of a message folder object. The following list shows the two existing scenarios where an app can get another user's mail folder:
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<MailFolderItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }

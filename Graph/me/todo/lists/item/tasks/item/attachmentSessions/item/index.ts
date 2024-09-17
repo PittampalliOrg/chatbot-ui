@@ -16,20 +16,12 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface AttachmentSessionItemRequestBuilder extends BaseRequestBuilder<AttachmentSessionItemRequestBuilder> {
     /**
      * Provides operations to manage the media for the user entity.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get content(): ContentRequestBuilder;
     /**
      * Delete navigation property attachmentSessions for me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      delete(requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<void>;
     /**
@@ -37,10 +29,6 @@ export interface AttachmentSessionItemRequestBuilder extends BaseRequestBuilder<
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentSession>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<AttachmentSessionItemRequestBuilderGetQueryParameters> | undefined) : Promise<AttachmentSession | undefined>;
     /**
@@ -49,30 +37,18 @@ export interface AttachmentSessionItemRequestBuilder extends BaseRequestBuilder<
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentSession>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      patch(body: AttachmentSession, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<AttachmentSession | undefined>;
     /**
      * Delete navigation property attachmentSessions for me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toDeleteRequestInformation(requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
     /**
      * Get attachmentSessions from me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<AttachmentSessionItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -80,10 +56,6 @@ export interface AttachmentSessionItemRequestBuilder extends BaseRequestBuilder<
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toPatchRequestInformation(body: AttachmentSession, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

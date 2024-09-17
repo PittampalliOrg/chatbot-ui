@@ -24,10 +24,7 @@ export function createPreviewPostRequestBodyFromDiscriminatorValue(parseNode: Pa
 // @ts-ignore
 export function deserializeIntoPreviewPostRequestBody(previewPostRequestBody: Partial<PreviewPostRequestBody> | undefined = {}) : Record<string, (node: ParseNode) => void> {
     return {
-        "allowEdit": n => { previewPostRequestBody.allowEdit = n.getBooleanValue(); },
-        "chromeless": n => { previewPostRequestBody.chromeless = n.getBooleanValue(); },
         "page": n => { previewPostRequestBody.page = n.getStringValue(); },
-        "viewer": n => { previewPostRequestBody.viewer = n.getStringValue(); },
         "zoom": n => { previewPostRequestBody.zoom = n.getNumberValue(); },
     }
 }
@@ -37,21 +34,9 @@ export interface PreviewPostRequestBody extends AdditionalDataHolder, Parsable {
      */
     additionalData?: Record<string, unknown>;
     /**
-     * The allowEdit property
-     */
-    allowEdit?: boolean | null;
-    /**
-     * The chromeless property
-     */
-    chromeless?: boolean | null;
-    /**
      * The page property
      */
     page?: string | null;
-    /**
-     * The viewer property
-     */
-    viewer?: string | null;
     /**
      * The zoom property
      */
@@ -84,10 +69,7 @@ export interface PreviewRequestBuilder extends BaseRequestBuilder<PreviewRequest
 // @ts-ignore
 export function serializePreviewPostRequestBody(writer: SerializationWriter, previewPostRequestBody: Partial<PreviewPostRequestBody> | undefined | null = {}) : void {
     if (previewPostRequestBody) {
-        writer.writeBooleanValue("allowEdit", previewPostRequestBody.allowEdit);
-        writer.writeBooleanValue("chromeless", previewPostRequestBody.chromeless);
         writer.writeStringValue("page", previewPostRequestBody.page);
-        writer.writeStringValue("viewer", previewPostRequestBody.viewer);
         writer.writeNumberValue("zoom", previewPostRequestBody.zoom);
         writer.writeAdditionalData(previewPostRequestBody.additionalData);
     }

@@ -6,38 +6,28 @@ import { createMessageCollectionResponseFromDiscriminatorValue, type MessageColl
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../models/oDataErrors/index';
 // @ts-ignore
-<<<<<<< HEAD
-import { type BaseRequestBuilder, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
-=======
 import { DeltaRequestBuilderRequestsMetadata, type DeltaRequestBuilder } from './delta/index';
 // @ts-ignore
 import { MessageItemRequestBuilderNavigationMetadata, MessageItemRequestBuilderRequestsMetadata, type MessageItemRequestBuilder } from './item/index';
 // @ts-ignore
 import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
->>>>>>> mgt
 
 /**
  * Provides operations to manage the messages property of the microsoft.graph.user entity.
  */
 export interface MessagesRequestBuilder extends BaseRequestBuilder<MessagesRequestBuilder> {
     /**
-<<<<<<< HEAD
-     * Get an open extension (openTypeExtension object) identified by name or fully qualified name. The table in the Permissions section lists the resources that support open extensions. The following table lists the three scenarios where you can get an open extension from a supported resource instance.
-=======
      * Provides operations to call the delta method.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
     get delta(): DeltaRequestBuilder;
     /**
      * Provides operations to manage the messages property of the microsoft.graph.user entity.
      * @param messageId The unique identifier of message
      * @returns {MessageItemRequestBuilder}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      byMessageId(messageId: string) : MessageItemRequestBuilder;
     /**
-     * Get the messages in the signed-in user's mailbox (including the Deleted Items and Clutter folders). Depending on the page size and mailbox data, getting messages from a mailbox can incur multiple requests. The default page size is 10 messages. Use $top to customize the page size, within the range of 1 and 1000. To improve the operation response time, use $select to specify the exact properties you need; see example 1 below. Fine-tune the values for $select and $top, especially when you must use a larger page size, as returning a page with hundreds of messages each with a full response payload may trigger the gateway timeout (HTTP 504). To get the next page of messages, simply apply the entire URL returned in @odata.nextLink to the next get-messages request. This URL includes any query parameters you may have specified in the initial request. Do not try to extract the $skip value from the @odata.nextLink URL to manipulate responses. This API uses the $skip value to keep count of all the items it has gone through in the user's mailbox to return a page of message-type items. It's therefore possible that even in the initial response, the $skip value is larger than the page size. For more information, see Paging Microsoft Graph data in your app. You can filter on the messages and get only those that include a mention of the signed-in user. See an example below.By default, the GET /me/messages operation does not return the mentions property. Use the $expand query parameterto find details of each mention in a message. There are two scenarios where an app can get messages in another user's mail folder:
->>>>>>> mgt
+     * Get an open extension (openTypeExtension object) identified by name or fully qualified name. The table in the Permissions section lists the resources that support open extensions. The following table lists the three scenarios where you can get an open extension from a supported resource instance.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<MessageCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
@@ -45,34 +35,11 @@ export interface MessagesRequestBuilder extends BaseRequestBuilder<MessagesReque
      */
      get(requestConfiguration?: RequestConfiguration<MessagesRequestBuilderGetQueryParameters> | undefined) : Promise<MessageCollectionResponse | undefined>;
     /**
-<<<<<<< HEAD
-     * Create an open extension (openTypeExtension object) and add custom properties in a new or existing instance of a resource. You can create an open extension in a resource instance and store custom data to it all in the same operation, except for specific resources. The table in the Permissions section lists the resources that support open extensions.
-     * @param body The request body
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {Promise<Message>}
-     * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @see {@link https://learn.microsoft.com/graph/api/opentypeextension-post-opentypeextension?view=graph-rest-1.0|Find more info here}
-     */
-     post(body: Message, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<Message | undefined>;
-    /**
      * Get an open extension (openTypeExtension object) identified by name or fully qualified name. The table in the Permissions section lists the resources that support open extensions. The following table lists the three scenarios where you can get an open extension from a supported resource instance.
-=======
-     * Get the messages in the signed-in user's mailbox (including the Deleted Items and Clutter folders). Depending on the page size and mailbox data, getting messages from a mailbox can incur multiple requests. The default page size is 10 messages. Use $top to customize the page size, within the range of 1 and 1000. To improve the operation response time, use $select to specify the exact properties you need; see example 1 below. Fine-tune the values for $select and $top, especially when you must use a larger page size, as returning a page with hundreds of messages each with a full response payload may trigger the gateway timeout (HTTP 504). To get the next page of messages, simply apply the entire URL returned in @odata.nextLink to the next get-messages request. This URL includes any query parameters you may have specified in the initial request. Do not try to extract the $skip value from the @odata.nextLink URL to manipulate responses. This API uses the $skip value to keep count of all the items it has gone through in the user's mailbox to return a page of message-type items. It's therefore possible that even in the initial response, the $skip value is larger than the page size. For more information, see Paging Microsoft Graph data in your app. You can filter on the messages and get only those that include a mention of the signed-in user. See an example below.By default, the GET /me/messages operation does not return the mentions property. Use the $expand query parameterto find details of each mention in a message. There are two scenarios where an app can get messages in another user's mail folder:
->>>>>>> mgt
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<MessagesRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
-<<<<<<< HEAD
-    /**
-     * Create an open extension (openTypeExtension object) and add custom properties in a new or existing instance of a resource. You can create an open extension in a resource instance and store custom data to it all in the same operation, except for specific resources. The table in the Permissions section lists the resources that support open extensions.
-     * @param body The request body
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {RequestInformation}
-     */
-     toPostRequestInformation(body: Message, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
-=======
->>>>>>> mgt
 }
 /**
  * Get an open extension (openTypeExtension object) identified by name or fully qualified name. The table in the Permissions section lists the resources that support open extensions. The following table lists the three scenarios where you can get an open extension from a supported resource instance.
@@ -133,8 +100,6 @@ const MessagesRequestBuilderGetQueryParametersMapper: Record<string, string> = {
     "top": "%24top",
 };
 /**
-<<<<<<< HEAD
-=======
  * Metadata for all the navigation properties in the request builder.
  */
 export const MessagesRequestBuilderNavigationMetadata: Record<Exclude<keyof MessagesRequestBuilder, KeysToExcludeForNavigationMetadata>, NavigationMetadata> = {
@@ -148,7 +113,6 @@ export const MessagesRequestBuilderNavigationMetadata: Record<Exclude<keyof Mess
     },
 };
 /**
->>>>>>> mgt
  * Metadata for all the requests in the request builder.
  */
 export const MessagesRequestBuilderRequestsMetadata: RequestsMetadata = {

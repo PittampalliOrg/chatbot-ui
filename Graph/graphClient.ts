@@ -4,13 +4,10 @@
 // @ts-ignore
 import { DrivesRequestBuilderNavigationMetadata, DrivesRequestBuilderRequestsMetadata, type DrivesRequestBuilder } from './drives/index';
 // @ts-ignore
-<<<<<<< HEAD
-=======
 import { MeRequestBuilderNavigationMetadata, MeRequestBuilderRequestsMetadata, type MeRequestBuilder } from './me/index';
 // @ts-ignore
 import { SitesRequestBuilderNavigationMetadata, SitesRequestBuilderRequestsMetadata, type SitesRequestBuilder } from './sites/index';
 // @ts-ignore
->>>>>>> mgt
 import { apiClientProxifier, registerDefaultDeserializer, registerDefaultSerializer, type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type RequestAdapter } from '@microsoft/kiota-abstractions';
 
 /**
@@ -39,13 +36,10 @@ export interface GraphClient extends BaseRequestBuilder<GraphClient> {
      * Provides operations to manage the user singleton.
      */
     get me(): MeRequestBuilder;
-<<<<<<< HEAD
-=======
     /**
      * Provides operations to manage the collection of site entities.
      */
     get sites(): SitesRequestBuilder;
->>>>>>> mgt
 }
 /**
  * Uri template for the request builder.
@@ -63,13 +57,10 @@ export const GraphClientNavigationMetadata: Record<Exclude<keyof GraphClient, Ke
         requestsMetadata: MeRequestBuilderRequestsMetadata,
         navigationMetadata: MeRequestBuilderNavigationMetadata,
     },
-<<<<<<< HEAD
-=======
     sites: {
         requestsMetadata: SitesRequestBuilderRequestsMetadata,
         navigationMetadata: SitesRequestBuilderNavigationMetadata,
     },
->>>>>>> mgt
 };
 /* tslint:enable */
 /* eslint-enable */

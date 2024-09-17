@@ -37,12 +37,7 @@ export interface CreateUploadSessionRequestBuilder extends BaseRequestBuilder<Cr
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<UploadSession>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-createuploadsession?view=graph-rest-1.0|Find more info here}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-createuploadsession?view=graph-rest-beta|Find more info here}
->>>>>>> mgt
      */
      post(body: CreateUploadSessionPostRequestBody, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<UploadSession | undefined>;
     /**
@@ -50,10 +45,6 @@ export interface CreateUploadSessionRequestBuilder extends BaseRequestBuilder<Cr
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toPostRequestInformation(body: CreateUploadSessionPostRequestBody, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

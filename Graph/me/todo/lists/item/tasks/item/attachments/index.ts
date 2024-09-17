@@ -20,28 +20,16 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface AttachmentsRequestBuilder extends BaseRequestBuilder<AttachmentsRequestBuilder> {
     /**
      * Provides operations to count the resources in the collection.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get count(): CountRequestBuilder;
     /**
      * Provides operations to call the createUploadSession method.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get createUploadSession(): CreateUploadSessionRequestBuilder;
     /**
      * Provides operations to manage the attachments property of the microsoft.graph.todoTask entity.
      * @param attachmentBaseId The unique identifier of attachmentBase
      * @returns {AttachmentBaseItemRequestBuilder}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      byAttachmentBaseId(attachmentBaseId: string) : AttachmentBaseItemRequestBuilder;
     /**
@@ -49,12 +37,7 @@ export interface AttachmentsRequestBuilder extends BaseRequestBuilder<Attachment
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentBaseCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotask-list-attachments?view=graph-rest-1.0|Find more info here}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotask-list-attachments?view=graph-rest-beta|Find more info here}
->>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<AttachmentsRequestBuilderGetQueryParameters> | undefined) : Promise<AttachmentBaseCollectionResponse | undefined>;
     /**
@@ -63,22 +46,13 @@ export interface AttachmentsRequestBuilder extends BaseRequestBuilder<Attachment
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentBase>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotask-post-attachments?view=graph-rest-1.0|Find more info here}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotask-post-attachments?view=graph-rest-beta|Find more info here}
->>>>>>> mgt
      */
      post(body: AttachmentBase, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<AttachmentBase | undefined>;
     /**
      * Get a list of the taskFileAttachment objects and their properties. The contentBytes property will not be returned in the response. Use the Get attachment API to view the contentBytes.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<AttachmentsRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -86,10 +60,6 @@ export interface AttachmentsRequestBuilder extends BaseRequestBuilder<Attachment
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toPostRequestInformation(body: AttachmentBase, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

@@ -20,28 +20,16 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface TasksRequestBuilder extends BaseRequestBuilder<TasksRequestBuilder> {
     /**
      * Provides operations to count the resources in the collection.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get count(): CountRequestBuilder;
     /**
      * Provides operations to call the delta method.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get delta(): DeltaRequestBuilder;
     /**
      * Provides operations to manage the tasks property of the microsoft.graph.todoTaskList entity.
      * @param todoTaskId The unique identifier of todoTask
      * @returns {TodoTaskItemRequestBuilder}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      byTodoTaskId(todoTaskId: string) : TodoTaskItemRequestBuilder;
     /**
@@ -49,12 +37,7 @@ export interface TasksRequestBuilder extends BaseRequestBuilder<TasksRequestBuil
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<TodoTaskCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotasklist-list-tasks?view=graph-rest-1.0|Find more info here}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotasklist-list-tasks?view=graph-rest-beta|Find more info here}
->>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<TasksRequestBuilderGetQueryParameters> | undefined) : Promise<TodoTaskCollectionResponse | undefined>;
     /**
@@ -63,22 +46,13 @@ export interface TasksRequestBuilder extends BaseRequestBuilder<TasksRequestBuil
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<TodoTask>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotasklist-post-tasks?view=graph-rest-1.0|Find more info here}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotasklist-post-tasks?view=graph-rest-beta|Find more info here}
->>>>>>> mgt
      */
      post(body: TodoTask, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<TodoTask | undefined>;
     /**
      * Get the todoTask resources from the tasks navigation property of a specified todoTaskList.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<TasksRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -86,10 +60,6 @@ export interface TasksRequestBuilder extends BaseRequestBuilder<TasksRequestBuil
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toPostRequestInformation(body: TodoTask, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

@@ -16,28 +16,25 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface MessageItemRequestBuilder extends BaseRequestBuilder<MessageItemRequestBuilder> {
     /**
      * Provides operations to call the send method.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
     get send(): SendRequestBuilder;
     /**
-     * You can get a single resource instance expanded with a specific extended property, or a collection of resource instancesthat include extended properties matching a filter. Using the query parameter $expand allows you to get the specified resource instance expanded with a specific extendedproperty. Use a $filter and eq operator on the id property to specify the extended property. This is currently the only way to get the singleValueLegacyExtendedProperty object that represents an extended property. To get resource instances that have certain extended properties, use the $filter query parameter and apply an eq operatoron the id property. In addition, for numeric extended properties, apply one of the following operators on the value property:eq, ne,ge, gt, le, or lt. For string-typed extended properties, apply a contains, startswith, eq, or ne operator on value. Filtering the string name (Name) in the id of an extended property is case-sensitive. Filtering the value property of an extendedproperty is case-insensitive. The following user resources are supported: As well as the following group resources: See Extended properties overview for more information about when to useopen extensions or extended properties, and how to specify extended properties.
+     * Get the properties and relationships of the eventMessage object. Apply the $expand parameter on the event navigation property to get the associated event in an attendee's calendar. Currently, this operation returns event message bodies in only HTML format.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Message>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/singlevaluelegacyextendedproperty-get?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/eventmessage-get?view=graph-rest-1.0|Find more info here}
      */
      get(requestConfiguration?: RequestConfiguration<MessageItemRequestBuilderGetQueryParameters> | undefined) : Promise<Message | undefined>;
     /**
-     * You can get a single resource instance expanded with a specific extended property, or a collection of resource instancesthat include extended properties matching a filter. Using the query parameter $expand allows you to get the specified resource instance expanded with a specific extendedproperty. Use a $filter and eq operator on the id property to specify the extended property. This is currently the only way to get the singleValueLegacyExtendedProperty object that represents an extended property. To get resource instances that have certain extended properties, use the $filter query parameter and apply an eq operatoron the id property. In addition, for numeric extended properties, apply one of the following operators on the value property:eq, ne,ge, gt, le, or lt. For string-typed extended properties, apply a contains, startswith, eq, or ne operator on value. Filtering the string name (Name) in the id of an extended property is case-sensitive. Filtering the value property of an extendedproperty is case-insensitive. The following user resources are supported: As well as the following group resources: See Extended properties overview for more information about when to useopen extensions or extended properties, and how to specify extended properties.
+     * Get the properties and relationships of the eventMessage object. Apply the $expand parameter on the event navigation property to get the associated event in an attendee's calendar. Currently, this operation returns event message bodies in only HTML format.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<MessageItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }
 /**
- * You can get a single resource instance expanded with a specific extended property, or a collection of resource instancesthat include extended properties matching a filter. Using the query parameter $expand allows you to get the specified resource instance expanded with a specific extendedproperty. Use a $filter and eq operator on the id property to specify the extended property. This is currently the only way to get the singleValueLegacyExtendedProperty object that represents an extended property. To get resource instances that have certain extended properties, use the $filter query parameter and apply an eq operatoron the id property. In addition, for numeric extended properties, apply one of the following operators on the value property:eq, ne,ge, gt, le, or lt. For string-typed extended properties, apply a contains, startswith, eq, or ne operator on value. Filtering the string name (Name) in the id of an extended property is case-sensitive. Filtering the value property of an extendedproperty is case-insensitive. The following user resources are supported: As well as the following group resources: See Extended properties overview for more information about when to useopen extensions or extended properties, and how to specify extended properties.
+ * Get the properties and relationships of the eventMessage object. Apply the $expand parameter on the event navigation property to get the associated event in an attendee's calendar. Currently, this operation returns event message bodies in only HTML format.
  */
 export interface MessageItemRequestBuilderGetQueryParameters {
     /**

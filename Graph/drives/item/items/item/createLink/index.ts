@@ -60,16 +60,16 @@ export interface CreateLinkPostRequestBody extends AdditionalDataHolder, Parsabl
  */
 export interface CreateLinkRequestBuilder extends BaseRequestBuilder<CreateLinkRequestBuilder> {
     /**
-     * Create a link to share a driveItem driveItem.The createLink action creates a new sharing link if the specified link type doesn't already exist for the calling application.If a sharing link of the specified type already exists for the app, the existing sharing link is returned. DriveItem resources inherit sharing permissions from their ancestors.
+     * You can use createLink action to share a DriveItem via a sharing link. The createLink action will create a new sharing link if the specified link type doesn't already exist for the calling application.If a sharing link of the specified type already exists for the app, the existing sharing link will be returned. DriveItem resources inherit sharing permissions from their ancestors.
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Permission>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @see {@link https://learn.microsoft.com/graph/api/driveitem-createlink?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/driveitem-createlink?view=graph-rest-1.0|Find more info here}
      */
      post(body: CreateLinkPostRequestBody, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<Permission | undefined>;
     /**
-     * Create a link to share a driveItem driveItem.The createLink action creates a new sharing link if the specified link type doesn't already exist for the calling application.If a sharing link of the specified type already exists for the app, the existing sharing link is returned. DriveItem resources inherit sharing permissions from their ancestors.
+     * You can use createLink action to share a DriveItem via a sharing link. The createLink action will create a new sharing link if the specified link type doesn't already exist for the calling application.If a sharing link of the specified type already exists for the app, the existing sharing link will be returned. DriveItem resources inherit sharing permissions from their ancestors.
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}

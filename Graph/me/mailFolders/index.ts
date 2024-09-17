@@ -6,29 +6,21 @@ import { createMailFolderCollectionResponseFromDiscriminatorValue, type MailFold
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../models/oDataErrors/index';
 // @ts-ignore
-<<<<<<< HEAD
-import { type BaseRequestBuilder, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
-=======
 import { MailFolderItemRequestBuilderRequestsMetadata, type MailFolderItemRequestBuilder } from './item/index';
 // @ts-ignore
 import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
->>>>>>> mgt
 
 /**
  * Provides operations to manage the mailFolders property of the microsoft.graph.user entity.
  */
 export interface MailFoldersRequestBuilder extends BaseRequestBuilder<MailFoldersRequestBuilder> {
     /**
-<<<<<<< HEAD
-=======
      * Provides operations to manage the mailFolders property of the microsoft.graph.user entity.
      * @param mailFolderId The unique identifier of mailFolder
      * @returns {MailFolderItemRequestBuilder}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      byMailFolderId(mailFolderId: string) : MailFolderItemRequestBuilder;
     /**
->>>>>>> mgt
      * Get the mail folder collection directly under the root folder of the signed-in user. The returned collection includes any mail search folders directly under the root. By default, this operation does not return hidden folders. Use a query parameter includeHiddenFolders to include them in the response. This operation does not return all mail folders in a mailbox, only the child folders of the root folder. To return all mail folders in a mailbox, each child folder must be traversed separately.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<MailFolderCollectionResponse>}
@@ -37,33 +29,11 @@ export interface MailFoldersRequestBuilder extends BaseRequestBuilder<MailFolder
      */
      get(requestConfiguration?: RequestConfiguration<MailFoldersRequestBuilderGetQueryParameters> | undefined) : Promise<MailFolderCollectionResponse | undefined>;
     /**
-<<<<<<< HEAD
-     * Use this API to create a new mail folder in the root folder of the user's mailbox. If you intend a new folder to be hidden, you must set the isHidden property to true on creation.
-     * @param body The request body
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {Promise<MailFolder>}
-     * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @see {@link https://learn.microsoft.com/graph/api/user-post-mailfolders?view=graph-rest-1.0|Find more info here}
-     */
-     post(body: MailFolder, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<MailFolder | undefined>;
-    /**
-=======
->>>>>>> mgt
      * Get the mail folder collection directly under the root folder of the signed-in user. The returned collection includes any mail search folders directly under the root. By default, this operation does not return hidden folders. Use a query parameter includeHiddenFolders to include them in the response. This operation does not return all mail folders in a mailbox, only the child folders of the root folder. To return all mail folders in a mailbox, each child folder must be traversed separately.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<MailFoldersRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
-<<<<<<< HEAD
-    /**
-     * Use this API to create a new mail folder in the root folder of the user's mailbox. If you intend a new folder to be hidden, you must set the isHidden property to true on creation.
-     * @param body The request body
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {RequestInformation}
-     */
-     toPostRequestInformation(body: MailFolder, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
-=======
->>>>>>> mgt
 }
 /**
  * Get the mail folder collection directly under the root folder of the signed-in user. The returned collection includes any mail search folders directly under the root. By default, this operation does not return hidden folders. Use a query parameter includeHiddenFolders to include them in the response. This operation does not return all mail folders in a mailbox, only the child folders of the root folder. To return all mail folders in a mailbox, each child folder must be traversed separately.
@@ -124,8 +94,6 @@ const MailFoldersRequestBuilderGetQueryParametersMapper: Record<string, string> 
     "top": "%24top",
 };
 /**
-<<<<<<< HEAD
-=======
  * Metadata for all the navigation properties in the request builder.
  */
 export const MailFoldersRequestBuilderNavigationMetadata: Record<Exclude<keyof MailFoldersRequestBuilder, KeysToExcludeForNavigationMetadata>, NavigationMetadata> = {
@@ -135,7 +103,6 @@ export const MailFoldersRequestBuilderNavigationMetadata: Record<Exclude<keyof M
     },
 };
 /**
->>>>>>> mgt
  * Metadata for all the requests in the request builder.
  */
 export const MailFoldersRequestBuilderRequestsMetadata: RequestsMetadata = {

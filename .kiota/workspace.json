@@ -14,13 +14,6 @@
       "includeAdditionalData": true,
       "excludeBackwardCompatible": false,
       "disabledValidationRules": [],
-<<<<<<< HEAD
-      "descriptionLocation": "https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml",
-      "includePatterns": [
-        "/me/mailFolders",
-        "/me/messages",
-        "/me/sendMail",
-=======
       "descriptionLocation": "./.kiota/documents/GraphClient/openapi.yaml",
       "includePatterns": [
         "/drives#GET",
@@ -40,7 +33,6 @@
         "/me/messages/delta()#GET",
         "/me/messages/{message-id}#GET",
         "/me/messages/{message-id}/send#POST",
->>>>>>> mgt
         "/me/todo",
         "/me/todo/lists",
         "/me/todo/lists/$count",
@@ -70,9 +62,6 @@
         "/me/todo/lists/{todoTaskList-id}/tasks/{todoTask-id}/extensions/{extension-id}",
         "/me/todo/lists/{todoTaskList-id}/tasks/{todoTask-id}/linkedResources",
         "/me/todo/lists/{todoTaskList-id}/tasks/{todoTask-id}/linkedResources/$count",
-<<<<<<< HEAD
-        "/me/todo/lists/{todoTaskList-id}/tasks/{todoTask-id}/linkedResources/{linkedResource-id}"
-=======
         "/me/todo/lists/{todoTaskList-id}/tasks/{todoTask-id}/linkedResources/{linkedResource-id}",
         "/sites#GET",
         "/sites/{site-id}#GET",
@@ -81,7 +70,6 @@
         "/sites/{site-id}/drives/{drive-id}#GET",
         "/sites/{site-id}/items#GET",
         "/sites/{site-id}/items/{baseItem-id}#GET"
->>>>>>> mgt
       ],
       "excludePatterns": [],
       "outputPath": "./Graph"

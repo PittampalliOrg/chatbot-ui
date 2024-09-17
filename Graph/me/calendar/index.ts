@@ -16,7 +16,6 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface CalendarRequestBuilder extends BaseRequestBuilder<CalendarRequestBuilder> {
     /**
      * Provides operations to manage the events property of the microsoft.graph.calendar entity.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
     get events(): EventsRequestBuilder;
     /**
@@ -24,15 +23,13 @@ export interface CalendarRequestBuilder extends BaseRequestBuilder<CalendarReque
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Calendar>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/calendar-get?view=graph-rest-beta|Find more info here}
+     * @see {@link https://learn.microsoft.com/graph/api/calendar-get?view=graph-rest-1.0|Find more info here}
      */
      get(requestConfiguration?: RequestConfiguration<CalendarRequestBuilderGetQueryParameters> | undefined) : Promise<Calendar | undefined>;
     /**
      * Get the properties and relationships of a calendar object. The calendar can be one for a user,or the default calendar of a Microsoft 365 group. There are two scenarios where an app can get another user's calendar:
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<CalendarRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }

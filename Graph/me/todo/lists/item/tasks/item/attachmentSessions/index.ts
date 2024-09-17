@@ -6,19 +6,9 @@ import { createAttachmentSessionCollectionResponseFromDiscriminatorValue, type A
 // @ts-ignore
 import { createODataErrorFromDiscriminatorValue, type ODataError } from '../../../../../../../models/oDataErrors/index';
 // @ts-ignore
-<<<<<<< HEAD
-<<<<<<<< HEAD:Graph/me/todo/lists/item/tasks/item/attachmentSessions/index.ts
 import { CountRequestBuilderRequestsMetadata, type CountRequestBuilder } from './count/index';
 // @ts-ignore
 import { AttachmentSessionItemRequestBuilderNavigationMetadata, AttachmentSessionItemRequestBuilderRequestsMetadata, type AttachmentSessionItemRequestBuilder } from './item/index';
-========
-import { DriveItemRequestBuilderRequestsMetadata, type DriveItemRequestBuilder } from './item/index';
->>>>>>>> mgt:Graph/me/drives/index.ts
-=======
-import { CountRequestBuilderRequestsMetadata, type CountRequestBuilder } from './count/index';
-// @ts-ignore
-import { AttachmentSessionItemRequestBuilderNavigationMetadata, AttachmentSessionItemRequestBuilderRequestsMetadata, type AttachmentSessionItemRequestBuilder } from './item/index';
->>>>>>> mgt
 // @ts-ignore
 import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type NavigationMetadata, type Parsable, type ParsableFactory, type RequestConfiguration, type RequestInformation, type RequestsMetadata } from '@microsoft/kiota-abstractions';
 
@@ -27,29 +17,13 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
  */
 export interface AttachmentSessionsRequestBuilder extends BaseRequestBuilder<AttachmentSessionsRequestBuilder> {
     /**
-<<<<<<< HEAD
-<<<<<<<< HEAD:Graph/me/todo/lists/item/tasks/item/attachmentSessions/index.ts
      * Provides operations to count the resources in the collection.
-=======
-     * Provides operations to count the resources in the collection.
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get count(): CountRequestBuilder;
     /**
      * Provides operations to manage the attachmentSessions property of the microsoft.graph.todoTask entity.
      * @param attachmentSessionId The unique identifier of attachmentSession
      * @returns {AttachmentSessionItemRequestBuilder}
-<<<<<<< HEAD
-========
-     * Provides operations to manage the drives property of the microsoft.graph.user entity.
-     * @param driveId The unique identifier of drive
-     * @returns {DriveItemRequestBuilder}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>>> mgt:Graph/me/drives/index.ts
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      byAttachmentSessionId(attachmentSessionId: string) : AttachmentSessionItemRequestBuilder;
     /**
@@ -57,20 +31,12 @@ export interface AttachmentSessionsRequestBuilder extends BaseRequestBuilder<Att
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentSessionCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<AttachmentSessionsRequestBuilderGetQueryParameters> | undefined) : Promise<AttachmentSessionCollectionResponse | undefined>;
     /**
      * Get attachmentSessions from me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<AttachmentSessionsRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }
@@ -137,12 +103,9 @@ export const AttachmentSessionsRequestBuilderNavigationMetadata: Record<Exclude<
         navigationMetadata: AttachmentSessionItemRequestBuilderNavigationMetadata,
         pathParametersMappings: ["attachmentSession%2Did"],
     },
-<<<<<<< HEAD
-=======
     count: {
         requestsMetadata: CountRequestBuilderRequestsMetadata,
     },
->>>>>>> mgt
 };
 /**
  * Metadata for all the requests in the request builder.

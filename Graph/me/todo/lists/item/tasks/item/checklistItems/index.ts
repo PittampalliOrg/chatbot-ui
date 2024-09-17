@@ -18,17 +18,12 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface ChecklistItemsRequestBuilder extends BaseRequestBuilder<ChecklistItemsRequestBuilder> {
     /**
      * Provides operations to count the resources in the collection.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get count(): CountRequestBuilder;
     /**
      * Provides operations to manage the checklistItems property of the microsoft.graph.todoTask entity.
      * @param checklistItemId The unique identifier of checklistItem
      * @returns {ChecklistItemItemRequestBuilder}
-<<<<<<< HEAD
      */
      byChecklistItemId(checklistItemId: string) : ChecklistItemItemRequestBuilder;
     /**
@@ -41,27 +36,10 @@ export interface ChecklistItemsRequestBuilder extends BaseRequestBuilder<Checkli
      get(requestConfiguration?: RequestConfiguration<ChecklistItemsRequestBuilderGetQueryParameters> | undefined) : Promise<ChecklistItemCollectionResponse | undefined>;
     /**
      * Create a new checklistItem object.
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-     byChecklistItemId(checklistItemId: string) : ChecklistItemItemRequestBuilder;
-    /**
-     * Get the checklistItem resources associated to the checklistItems navigation property of a todoTask.
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {Promise<ChecklistItemCollectionResponse>}
-     * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotask-list-checklistitems?view=graph-rest-beta|Find more info here}
-     */
-     get(requestConfiguration?: RequestConfiguration<ChecklistItemsRequestBuilderGetQueryParameters> | undefined) : Promise<ChecklistItemCollectionResponse | undefined>;
-    /**
-     * Create a new checklistItem object as a subtask in a bigger todoTask.
->>>>>>> mgt
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<ChecklistItem>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
-<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotask-post-checklistitems?view=graph-rest-1.0|Find more info here}
      */
      post(body: ChecklistItem, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<ChecklistItem | undefined>;
@@ -76,34 +54,11 @@ export interface ChecklistItemsRequestBuilder extends BaseRequestBuilder<Checkli
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     * @see {@link https://learn.microsoft.com/graph/api/todotask-post-checklistitems?view=graph-rest-beta|Find more info here}
-     */
-     post(body: ChecklistItem, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<ChecklistItem | undefined>;
-    /**
-     * Get the checklistItem resources associated to the checklistItems navigation property of a todoTask.
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
-     */
-     toGetRequestInformation(requestConfiguration?: RequestConfiguration<ChecklistItemsRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
-    /**
-     * Create a new checklistItem object as a subtask in a bigger todoTask.
-     * @param body The request body
-     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
-     * @returns {RequestInformation}
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
      toPostRequestInformation(body: ChecklistItem, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }
 /**
-<<<<<<< HEAD
  * Get the checklistItem resources associated to a todoTask from the checklistItems navigation property.
-=======
- * Get the checklistItem resources associated to the checklistItems navigation property of a todoTask.
->>>>>>> mgt
  */
 export interface ChecklistItemsRequestBuilderGetQueryParameters {
     /**

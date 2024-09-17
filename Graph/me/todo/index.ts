@@ -16,10 +16,6 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface TodoRequestBuilder extends BaseRequestBuilder<TodoRequestBuilder> {
     /**
      * Provides operations to manage the lists property of the microsoft.graph.todo entity.
-<<<<<<< HEAD
-=======
-     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
->>>>>>> mgt
      */
     get lists(): ListsRequestBuilder;
     /**
