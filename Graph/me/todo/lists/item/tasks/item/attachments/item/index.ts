@@ -16,13 +16,22 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface AttachmentBaseItemRequestBuilder extends BaseRequestBuilder<AttachmentBaseItemRequestBuilder> {
     /**
      * Provides operations to manage the media for the user entity.
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
     get content(): ContentRequestBuilder;
     /**
      * Delete a taskFileAttachment object from a todoTask resource.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-delete?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-delete?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      delete(requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<void>;
     /**
@@ -30,19 +39,32 @@ export interface AttachmentBaseItemRequestBuilder extends BaseRequestBuilder<Att
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<AttachmentBase>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-get?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/taskfileattachment-get?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<AttachmentBaseItemRequestBuilderGetQueryParameters> | undefined) : Promise<AttachmentBase | undefined>;
     /**
      * Delete a taskFileAttachment object from a todoTask resource.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toDeleteRequestInformation(requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
     /**
      * Read the properties and relationships of a taskFileAttachment object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<AttachmentBaseItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }

@@ -28,6 +28,7 @@ export interface DeltaGetResponse extends BaseDeltaFunctionResponse, Parsable {
  */
 export interface DeltaRequestBuilder extends BaseRequestBuilder<DeltaRequestBuilder> {
     /**
+<<<<<<< HEAD
      * Get a set of todoTask resources that have been added, deleted, or updated in a specified todoTaskList. A delta function call for todoTask resources in a todoTaskList is similar to a GET request, except that by appropriately applying state tokens in one or more of these calls, you can query for incremental changes in the todoTask in that todoTaskList. This allows you to maintain and synchronize a local store of a user's todoTask resources without having to fetch the entire set from the server every time.  
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<DeltaGetResponse>}
@@ -39,11 +40,29 @@ export interface DeltaRequestBuilder extends BaseRequestBuilder<DeltaRequestBuil
      * Get a set of todoTask resources that have been added, deleted, or updated in a specified todoTaskList. A delta function call for todoTask resources in a todoTaskList is similar to a GET request, except that by appropriately applying state tokens in one or more of these calls, you can query for incremental changes in the todoTask in that todoTaskList. This allows you to maintain and synchronize a local store of a user's todoTask resources without having to fetch the entire set from the server every time.  
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+=======
+     * Invoke function delta
+     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
+     * @returns {Promise<DeltaGetResponse>}
+     * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     */
+     get(requestConfiguration?: RequestConfiguration<DeltaRequestBuilderGetQueryParameters> | undefined) : Promise<DeltaGetResponse | undefined>;
+    /**
+     * Invoke function delta
+     * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
+     * @returns {RequestInformation}
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<DeltaRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }
 /**
+<<<<<<< HEAD
  * Get a set of todoTask resources that have been added, deleted, or updated in a specified todoTaskList. A delta function call for todoTask resources in a todoTaskList is similar to a GET request, except that by appropriately applying state tokens in one or more of these calls, you can query for incremental changes in the todoTask in that todoTaskList. This allows you to maintain and synchronize a local store of a user's todoTask resources without having to fetch the entire set from the server every time.  
+=======
+ * Invoke function delta
+>>>>>>> mgt
  */
 export interface DeltaRequestBuilderGetQueryParameters {
     /**

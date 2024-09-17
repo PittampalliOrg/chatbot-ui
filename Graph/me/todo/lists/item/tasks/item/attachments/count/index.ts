@@ -15,12 +15,20 @@ export interface CountRequestBuilder extends BaseRequestBuilder<CountRequestBuil
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<number>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<CountRequestBuilderGetQueryParameters> | undefined) : Promise<number | undefined>;
     /**
      * Get the number of the resource
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<CountRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
 }

@@ -16,6 +16,10 @@ export interface ExtensionItemRequestBuilder extends BaseRequestBuilder<Extensio
      * Delete navigation property extensions for me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      delete(requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<void>;
     /**
@@ -23,6 +27,10 @@ export interface ExtensionItemRequestBuilder extends BaseRequestBuilder<Extensio
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Extension>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<ExtensionItemRequestBuilderGetQueryParameters> | undefined) : Promise<Extension | undefined>;
     /**
@@ -31,18 +39,30 @@ export interface ExtensionItemRequestBuilder extends BaseRequestBuilder<Extensio
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Extension>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      patch(body: Extension, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<Extension | undefined>;
     /**
      * Delete navigation property extensions for me
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toDeleteRequestInformation(requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
     /**
      * The collection of open extensions defined for the task list. Nullable.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<ExtensionItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -50,6 +70,10 @@ export interface ExtensionItemRequestBuilder extends BaseRequestBuilder<Extensio
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toPatchRequestInformation(body: Extension, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

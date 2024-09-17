@@ -18,14 +18,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <MgtProvider>
-          <ClientAppProvider>
-            <ClientLayout>{children}</ClientLayout>
-          </ClientAppProvider>
-        </MgtProvider>
-      </body>
-    </html>
+    <div className="flex size-full flex-col">
+      <Navbar />
+      <div className="grow overflow-auto">{children}</div>
+    </div>
   )
 }

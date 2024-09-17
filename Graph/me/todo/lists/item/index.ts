@@ -18,17 +18,30 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface TodoTaskListItemRequestBuilder extends BaseRequestBuilder<TodoTaskListItemRequestBuilder> {
     /**
      * Provides operations to manage the extensions property of the microsoft.graph.todoTaskList entity.
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
     get extensions(): ExtensionsRequestBuilder;
     /**
      * Provides operations to manage the tasks property of the microsoft.graph.todoTaskList entity.
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
     get tasks(): TasksRequestBuilder;
     /**
      * Deletes a todoTaskList object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotasklist-delete?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/todotasklist-delete?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      delete(requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<void>;
     /**
@@ -36,7 +49,12 @@ export interface TodoTaskListItemRequestBuilder extends BaseRequestBuilder<TodoT
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<TodoTaskList>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotasklist-get?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/todotasklist-get?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<TodoTaskListItemRequestBuilderGetQueryParameters> | undefined) : Promise<TodoTaskList | undefined>;
     /**
@@ -45,19 +63,32 @@ export interface TodoTaskListItemRequestBuilder extends BaseRequestBuilder<TodoT
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<TodoTaskList>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/todotasklist-update?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/todotasklist-update?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      patch(body: TodoTaskList, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<TodoTaskList | undefined>;
     /**
      * Deletes a todoTaskList object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toDeleteRequestInformation(requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
     /**
      * Read the properties and relationships of a todoTaskList object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<TodoTaskListItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -65,6 +96,10 @@ export interface TodoTaskListItemRequestBuilder extends BaseRequestBuilder<TodoT
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toPatchRequestInformation(body: TodoTaskList, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

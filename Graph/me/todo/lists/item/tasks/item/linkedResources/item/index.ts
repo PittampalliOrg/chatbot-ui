@@ -16,7 +16,12 @@ export interface LinkedResourceItemRequestBuilder extends BaseRequestBuilder<Lin
      * Delete a linkedResource object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/linkedresource-delete?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/linkedresource-delete?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      delete(requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<void>;
     /**
@@ -24,7 +29,12 @@ export interface LinkedResourceItemRequestBuilder extends BaseRequestBuilder<Lin
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<LinkedResource>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/linkedresource-get?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/linkedresource-get?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<LinkedResourceItemRequestBuilderGetQueryParameters> | undefined) : Promise<LinkedResource | undefined>;
     /**
@@ -33,19 +43,32 @@ export interface LinkedResourceItemRequestBuilder extends BaseRequestBuilder<Lin
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<LinkedResource>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
      * @see {@link https://learn.microsoft.com/graph/api/linkedresource-update?view=graph-rest-1.0|Find more info here}
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+     * @see {@link https://learn.microsoft.com/graph/api/linkedresource-update?view=graph-rest-beta|Find more info here}
+>>>>>>> mgt
      */
      patch(body: LinkedResource, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<LinkedResource | undefined>;
     /**
      * Delete a linkedResource object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toDeleteRequestInformation(requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
     /**
      * Read the properties and relationships of a linkedResource object.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<LinkedResourceItemRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -53,6 +76,10 @@ export interface LinkedResourceItemRequestBuilder extends BaseRequestBuilder<Lin
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toPatchRequestInformation(body: LinkedResource, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }

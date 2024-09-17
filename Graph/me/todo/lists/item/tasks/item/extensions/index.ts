@@ -18,12 +18,20 @@ import { type BaseRequestBuilder, type KeysToExcludeForNavigationMetadata, type 
 export interface ExtensionsRequestBuilder extends BaseRequestBuilder<ExtensionsRequestBuilder> {
     /**
      * Provides operations to count the resources in the collection.
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
     get count(): CountRequestBuilder;
     /**
      * Provides operations to manage the extensions property of the microsoft.graph.todoTask entity.
      * @param extensionId The unique identifier of extension
      * @returns {ExtensionItemRequestBuilder}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      byExtensionId(extensionId: string) : ExtensionItemRequestBuilder;
     /**
@@ -31,6 +39,10 @@ export interface ExtensionsRequestBuilder extends BaseRequestBuilder<ExtensionsR
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<ExtensionCollectionResponse>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      get(requestConfiguration?: RequestConfiguration<ExtensionsRequestBuilderGetQueryParameters> | undefined) : Promise<ExtensionCollectionResponse | undefined>;
     /**
@@ -39,12 +51,20 @@ export interface ExtensionsRequestBuilder extends BaseRequestBuilder<ExtensionsR
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {Promise<Extension>}
      * @throws {ODataError} error when the service returns a 4XX or 5XX status code
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      post(body: Extension, requestConfiguration?: RequestConfiguration<object> | undefined) : Promise<Extension | undefined>;
     /**
      * The collection of open extensions defined for the task. Nullable.
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toGetRequestInformation(requestConfiguration?: RequestConfiguration<ExtensionsRequestBuilderGetQueryParameters> | undefined) : RequestInformation;
     /**
@@ -52,6 +72,10 @@ export interface ExtensionsRequestBuilder extends BaseRequestBuilder<ExtensionsR
      * @param body The request body
      * @param requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @returns {RequestInformation}
+<<<<<<< HEAD
+=======
+     * @deprecated  as of 2024-07/PrivatePreview:copilotExportAPI
+>>>>>>> mgt
      */
      toPostRequestInformation(body: Extension, requestConfiguration?: RequestConfiguration<object> | undefined) : RequestInformation;
 }
