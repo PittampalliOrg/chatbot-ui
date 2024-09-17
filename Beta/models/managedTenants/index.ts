@@ -1835,7 +1835,7 @@ export function deserializeIntoRoleDefinition(roleDefinition: Partial<RoleDefini
 export function deserializeIntoSetting(setting: Partial<Setting> | undefined = {}) : Record<string, (node: ParseNode) => void> {
     return {
         "displayName": n => { setting.displayName = n.getStringValue(); },
-        "jsonValue": n => { settingonValue = n.getStringValue(); },
+        "jsonValue": n => { const settingonValue = n.getStringValue(); },
         "@odata.type": n => { setting.odataType = n.getStringValue(); },
         "overwriteAllowed": n => { setting.overwriteAllowed = n.getBooleanValue(); },
         "settingId": n => { setting.settingId = n.getStringValue(); },
@@ -1851,8 +1851,8 @@ export function deserializeIntoTemplateParameter(templateParameter: Partial<Temp
     return {
         "description": n => { templateParameter.description = n.getStringValue(); },
         "displayName": n => { templateParameter.displayName = n.getStringValue(); },
-        "jsonAllowedValues": n => { templateParameteronAllowedValues = n.getStringValue(); },
-        "jsonDefaultValue": n => { templateParameteronDefaultValue = n.getStringValue(); },
+        "jsonAllowedValues": n => { const templateParameteronAllowedValues = n.getStringValue(); },
+        "jsonDefaultValue": n => { const templateParameteronDefaultValue = n.getStringValue(); },
         "@odata.type": n => { templateParameter.odataType = n.getStringValue(); },
         "valueType": n => { templateParameter.valueType = n.getEnumValue<ManagementParameterValueType>(ManagementParameterValueTypeObject); },
     }
@@ -4345,7 +4345,7 @@ export function serializeRoleDefinition(writer: SerializationWriter, roleDefinit
 export function serializeSetting(writer: SerializationWriter, setting: Partial<Setting> | undefined | null = {}) : void {
     if (setting) {
         writer.writeStringValue("displayName", setting.displayName);
-        writer.writeStringValue("jsonValue", settingonValue);
+        writer.writeStringValue("jsonValue", setting.jsonValue);
         writer.writeStringValue("@odata.type", setting.odataType);
         writer.writeBooleanValue("overwriteAllowed", setting.overwriteAllowed);
         writer.writeStringValue("settingId", setting.settingId);
@@ -4362,8 +4362,8 @@ export function serializeTemplateParameter(writer: SerializationWriter, template
     if (templateParameter) {
         writer.writeStringValue("description", templateParameter.description);
         writer.writeStringValue("displayName", templateParameter.displayName);
-        writer.writeStringValue("jsonAllowedValues", templateParameteronAllowedValues);
-        writer.writeStringValue("jsonDefaultValue", templateParameteronDefaultValue);
+        writer.writeStringValue("jsonAllowedValues", templateParameter.jsonAllowedValues);
+        writer.writeStringValue("jsonDefaultValue", templateParameter.jsonDefaultValue);
         writer.writeStringValue("@odata.type", templateParameter.odataType);
         writer.writeEnumValue<ManagementParameterValueType>("valueType", templateParameter.valueType);
         writer.writeAdditionalData(templateParameter.additionalData);
