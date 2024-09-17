@@ -10,9 +10,6 @@ import { Inter } from "next/font/google"
 import { cookies } from "next/headers"
 import { ReactNode } from "react"
 import "./globals.css"
-import MgtProvider from "@/app/[locale]/protected/actions/mgt-provider"
-import ClientAppProvider from "@/app/[locale]/protected/mgt/components/ClientAppProvider"
-import ClientLayout from "@/app/[locale]/protected/mgt/components/ClientLayout"
 
 const inter = Inter({ subsets: ["latin"] })
 const APP_NAME = "Chatbot UI"

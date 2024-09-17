@@ -1,7 +1,6 @@
 // app/api/getEmbedLink/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import { FetchRequestAdapter } from "@microsoft/kiota-http-fetchlibrary"
-import { createGraphClient } from "@/Graph/graphClient" // Adjust the import path
 import { createBeta } from "@/Beta/beta"
 import { CustomKiotaAuthenticationProvider } from "@/app/[locale]/protected/kiota/CustomKiotaAuthenticationProvider" // Adjust the import path
 import {
@@ -67,7 +66,6 @@ const adapter = new FetchRequestAdapter(
 )
 
 // Create the API client
-const client = createGraphClient(adapter)
 const beta = createBeta(adapter)
 
 export async function POST(request: NextRequest) {
