@@ -1,9 +1,8 @@
 // app/layout.tsx
 import "../globals.css"
 import { Inter } from "next/font/google"
-import ClientAppProvider from "./mgt/components/ClientAppProvider"
-import ClientLayout from "./mgt/components/ClientLayout"
 import MgtProvider from "./actions/mgt-provider"
+import Navbar from "../protected/components/NavBar"
 
 const inter = Inter({ subsets: ["latin"] })
 
