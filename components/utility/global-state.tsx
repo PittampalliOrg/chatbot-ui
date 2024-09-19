@@ -198,6 +198,9 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   return (
     <ChatbotUIContext.Provider
       value={{
+        isGenerating,
+        setIsGenerating,
+
         // PROFILE STORE
         profile,
         setProfile,
@@ -265,8 +268,6 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
         setChatFileItems,
 
         // ACTIVE CHAT STORE
-        isGenerating,
-        setIsGenerating,
         firstTokenReceived,
         setFirstTokenReceived,
         abortController,

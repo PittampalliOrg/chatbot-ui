@@ -19,12 +19,18 @@ import { LLMID } from "@/types"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { ReactNode, useContext, useEffect, useState } from "react"
 import Loading from "../loading"
+import { useAIState, useUIState } from "ai/rsc"
 
 interface WorkspaceLayoutProps {
   children: ReactNode
 }
 
 export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
+  const aiState = useAIState()
+  const uiState = useUIState()
+
+  console.log("aiState:", aiState)
+  console.log("uiState:", uiState)
   const router = useRouter()
 
   const params = useParams()
@@ -179,9 +185,5 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     return <Loading />
   }
 
-  return (
-    <>
-      <Dashboard>{children}</Dashboard>
-    </>
-  )
+  return <Dashboard>{children}</Dashboard>
 }
