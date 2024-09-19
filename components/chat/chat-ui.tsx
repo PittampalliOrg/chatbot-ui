@@ -58,7 +58,7 @@ export const ChatUI: React.FC = () => {
       role: message.role as "user" | "assistant",
       content: message.content
     }))
-    console.log("aiMessages from chat-ui.tsx:", aiMessages)
+
     setAIMessages(aiMessages)
 
     // In the fetchMessages function or wherever you map messages:
