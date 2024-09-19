@@ -179,9 +179,5 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     return <Loading />
   }
 
-  return (
-    <>
-      <Dashboard>{children}</Dashboard>
-    </>
-  )
+  return <Dashboard>{children}</Dashboard>
 }
