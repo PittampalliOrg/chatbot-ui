@@ -26,6 +26,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.60",
     "@anthropic-ai/sdk": "^0.18.0",
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@azure/identity": "^4.4.1",
@@ -87,6 +88,7 @@
     "@tanstack/react-table": "^8.20.5",
     "@vercel/analytics": "^1.1.1",
     "@vercel/edge-config": "^0.4.1",
+    "@vercel/kv": "^0.2.4",
     "@xenova/transformers": "^2.13.4",
     "ai": "^3.3.21",
     "class-variance-authority": "^0.7.0",

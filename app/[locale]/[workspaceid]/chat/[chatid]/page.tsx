@@ -1,7 +1,10 @@
-"use client"
-
 import { ChatUI } from "@/components/chat/chat-ui"
+import { AI } from "@/components/stocks/actions"
 
 export default function ChatIDPage() {
-  return <ChatUI />
+  return (
+    <AI>
+      <ChatUI />
+    </AI>
+  )
 }

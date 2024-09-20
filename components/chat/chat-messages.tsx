@@ -1,38 +1,51 @@
-import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler"
-import { ChatbotUIContext } from "@/context/context"
-import { Tables } from "@/supabase/types"
-import { FC, useContext, useState } from "react"
-import { Message } from "../messages/message"
+import { Separator } from "@/components/ui/separator"
+import { UIState } from "@/components/stocks/actions"
+import { Session } from "@/lib/types"
+import Link from "next/link"
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 
-interface ChatMessagesProps {}
+export interface ChatList {
+  messages: UIState
+  isShared: boolean
+}
 
-export const ChatMessages: FC<ChatMessagesProps> = ({}) => {
-  const { chatMessages, chatFileItems } = useContext(ChatbotUIContext)
+export function ChatMessages({ messages, isShared }: ChatList) {
+  if (!messages.length) {
+    return null
+  }
 
-  const { handleSendEdit } = useChatHandler()
+  return (
+    <div className="relative mx-auto max-w-2xl px-4">
+      {!isShared ? (
+        <>
+          <div className="group relative mb-4 flex items-start md:-ml-12">
+            <div className="bg-background flex size-[25px] shrink-0 select-none items-center justify-center rounded-md border shadow-sm">
+              <ExclamationTriangleIcon />
+            </div>
+            <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
+              <p className="text-muted-foreground leading-normal">
+                Please{" "}
+                <Link href="/login" className="underline">
+                  log in
+                </Link>{" "}
+                or{" "}
+                <Link href="/signup" className="underline">
+                  sign up
+                </Link>{" "}
+                to save and revisit your chat history!
+              </p>
+            </div>
+          </div>
+          <Separator className="my-4" />
+        </>
+      ) : null}
 
-  const [editingMessage, setEditingMessage] = useState<Tables<"messages">>()
-
-  return chatMessages
-    .sort((a, b) => a.message.sequence_number - b.message.sequence_number)
-    .map((chatMessage, index, array) => {
-      const messageFileItems = chatFileItems.filter(
-        (chatFileItem, _, self) =>
-          chatMessage.fileItems.includes(chatFileItem.id) &&
-          self.findIndex(item => item.id === chatFileItem.id) === _
-      )
-
-      return (
-        <Message
-          key={chatMessage.message.sequence_number}
-          message={chatMessage.message}
-          fileItems={messageFileItems}
-          isEditing={editingMessage?.id === chatMessage.message.id}
-          isLast={index === array.length - 1}
-          onStartEdit={setEditingMessage}
-          onCancelEdit={() => setEditingMessage(undefined)}
-          onSubmitEdit={handleSendEdit}
-        />
-      )
-    })
+      {messages.map((message, index) => (
+        <div key={message.id}>
+          {message.display}
+          {index < messages.length - 1 && <Separator className="my-4" />}
+        </div>
+      ))}
+    </div>
+  )
 }

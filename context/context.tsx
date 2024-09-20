@@ -1,3 +1,5 @@
+"use client"
+
 import { Tables } from "@/supabase/types"
 import {
   ChatFile,

@@ -1,3 +1,5 @@
+"use client"
+
 import { ChatbotUIContext } from "@/context/context"
 import { getAssistantCollectionsByAssistantId } from "@/db/assistant-collections"
 import { getAssistantFilesByAssistantId } from "@/db/assistant-files"
@@ -21,6 +23,8 @@ import {
   processResponse,
   validateChatSettings
 } from "../chat-helpers"
+import { sub } from "date-fns"
+import { useActions } from "ai/rsc"
 
 export const useChatHandler = () => {
   const router = useRouter()
@@ -69,6 +73,7 @@ export const useChatHandler = () => {
     isToolPickerOpen
   } = useContext(ChatbotUIContext)
 
+  const { submitUserMessage } = useActions()
   const chatInputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -281,17 +286,18 @@ export const useChatHandler = () => {
           chatImages
         )
 
-        const response = await fetch("/api/chat/tools", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            chatSettings: payload.chatSettings,
-            messages: formattedMessages,
-            selectedTools
-          })
-        })
+        const response = await submitUserMessage(messageContent)
+        // const response = await fetch("/api/chat/tools", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify({
+        //     chatSettings: payload.chatSettings,
+        //     messages: formattedMessages,
+        //     selectedTools
+        //   })
+        // })
 
         setToolInUse("none")
 
