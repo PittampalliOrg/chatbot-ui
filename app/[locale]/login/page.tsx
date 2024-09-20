@@ -19,6 +19,35 @@ export default async function Login({
 }: {
   searchParams: { message: string }
 }) {
+  const cookieStore = cookies()
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        }
+      }
+    }
+  )
+  const session = (await supabase.auth.getSession()).data.session
+
+  if (session) {
+    const { data: homeWorkspace, error } = await supabase
+      .from("workspaces")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .eq("is_home", true)
+      .single()
+
+    if (!homeWorkspace) {
+      throw new Error(error.message)
+    }
+
+    return redirect(`/${homeWorkspace.id}/chat`)
+  }
+
   const signIn = async (formData: FormData) => {
     "use server"
 
@@ -79,6 +108,7 @@ export default async function Login({
       ? emailWhitelistPatternsString?.split(",")
       : []
 
+    // If there are whitelist patterns, check if the email is allowed to sign up
     if (emailDomainWhitelist.length > 0 || emailWhitelist.length > 0) {
       const domainMatch = emailDomainWhitelist?.includes(email.split("@")[1])
       const emailMatch = emailWhitelist?.includes(email)
@@ -96,6 +126,7 @@ export default async function Login({
       email,
       password,
       options: {
+        // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
         // emailRedirectTo: `${origin}/auth/callback`
       }
     })
@@ -107,6 +138,7 @@ export default async function Login({
 
     return redirect("/setup")
 
+    // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
     // return redirect("/login?message=Check email to continue sign in process")
   }
 

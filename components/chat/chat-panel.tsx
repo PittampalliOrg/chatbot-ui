@@ -2,8 +2,11 @@ import * as React from "react"
 
 import { shareChat } from "@/app/actions"
 import { Button } from "@/components/ui/button"
-import { PromptForm } from "./prompt-form"
+import { PromptForm } from "@/components/chat/prompt-form"
+import { ButtonScrollToBottom } from "@/components/chat/button-scroll-to-bottom"
 import { IconShare } from "@/components/ui/icons"
+import { FooterText } from "./footer"
+import { ChatShareDialog } from "@/components/chat/chat-share-dialog"
 import { useAIState, useActions, useUIState } from "ai/rsc"
 import type { AI } from "@/components/stocks/actions"
 import { nanoid } from "nanoid"
@@ -56,6 +59,11 @@ export function ChatPanel({
 
   return (
     <div className="from-muted/30 to-muted/30 animate-in dark:from-background/10 dark:to-background/80 fixed inset-x-0 bottom-0 w-full bg-gradient-to-b from-0% to-50% duration-300 ease-in-out peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px] dark:from-10%">
+      <ButtonScrollToBottom
+        isAtBottom={isAtBottom}
+        scrollToBottom={scrollToBottom}
+      />
+
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="mb-4 grid grid-cols-2 gap-2 px-4 sm:px-0">
           {messages.length === 0 &&
@@ -104,13 +112,27 @@ export function ChatPanel({
                     <IconShare className="mr-2" />
                     Share
                   </Button>
+                  <ChatShareDialog
+                    open={shareDialogOpen}
+                    onOpenChange={setShareDialogOpen}
+                    onCopy={() => setShareDialogOpen(false)}
+                    shareChat={shareChat}
+                    chat={{
+                      id,
+                      title,
+                      messages: aiState.messages
+                    }}
+                  />
                 </>
               ) : null}
             </div>
           </div>
         ) : null}
 
-        <div className="bg-background space-y-4 border-t px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4"></div>
+        <div className="bg-background space-y-4 border-t px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+          <PromptForm input={input} setInput={setInput} />
+          <FooterText className="hidden sm:block" />
+        </div>
       </div>
     </div>
   )
