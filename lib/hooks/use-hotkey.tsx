@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect } from "react"
 
 const useHotkey = (key: string, callback: () => void): void => {

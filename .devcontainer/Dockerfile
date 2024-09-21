@@ -1,10 +1,4 @@
-ARG VARIANT=18-bookworm
-FROM mcr.microsoft.com/devcontainers/javascript-node:1-${VARIANT}
-
-# Install tslint, typescript. eslint is installed by javascript image
-# ARG NODE_MODULES="tslint-to-eslint-config typescript"
-# RUN su node -c "umask 0002 && npm install -g ${NODE_MODULES}" \
-#     && npm cache clean --force > /dev/null 2>&1
+FROM mcr.microsoft.com/devcontainers/javascript-node:1-18-bookworm
 
 # Install necessary tools
 RUN apt-get update && apt-get install -y curl gnupg lsb-release
@@ -21,14 +15,26 @@ RUN curl -L -o supabase.deb "https://github.com/supabase/cli/releases/download/v
     && dpkg -i supabase.deb \
     && rm supabase.deb
 
-    # Install deno
-# ENV DENO_INSTALL=/deno
-# RUN mkdir -p /deno \
-#     && curl -fsSL https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | sh \
-#     && chown -R vscode /deno
+# Install Deno
+ENV DENO_INSTALL=/deno
+RUN mkdir -p /deno \
+    && curl -fsSL https://deno.land/x/install/install.sh | sh \
+    && chown -R node:node /deno
 
-# ENV PATH=${DENO_INSTALL}/bin:${PATH} \
-#     DENO_DIR=${DENO_INSTALL}/.cache/deno
+ENV PATH=${DENO_INSTALL}/bin:${PATH} \
+    DENO_DIR=${DENO_INSTALL}/.cache/deno
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Switch to non-root user
+USER node
+
+# Set up workspace directory
+WORKDIR /workspace/supabase-project
+
+# Expose ports for Next.js and Supabase
+EXPOSE 3000 54321
+
+# The command will be overridden by docker-compose
+CMD ["sleep", "infinity"]

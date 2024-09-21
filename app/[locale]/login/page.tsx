@@ -20,6 +20,11 @@ export default async function Login({
   searchParams: { message: string }
 }) {
   const cookieStore = cookies()
+  const options = {
+    realtime: {
+      log_level: "info"
+    }
+  }
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -28,6 +33,9 @@ export default async function Login({
         get(name: string) {
           return cookieStore.get(name)?.value
         }
+      },
+      realtime: {
+        log_level: "info"
       }
     }
   )

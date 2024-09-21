@@ -1,32 +1,37 @@
 {
-  "name": "Supabase Backend",
-  // "image": "mcr.microsoft.com/devcontainers/base:bullseye",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "name": "Next.js and Supabase Development Environment",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "../dev/docker-compose.dev.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/workspace/supabase-project",
   "customizations": {
     "vscode": {
       "settings": {
         "editor.tabSize": 2
       },
       "extensions": [
-          "vscode.typescript-language-features",
-          "GitHub.copilot",
-          "denoland.vscode-deno",
-          "Supabase.vscode-supabase-extension",
-          "ms-azuretools.vscode-docker",
-          "dbaeumer.vscode-eslint",
-          "Postman.postman-for-vscode",
-          "ms-edgedevtools.vscode-edge-devtools",
-          "tamasfe.even-better-toml",
-          "eamodio.gitlens"
+        "vscode.typescript-language-features",
+        "GitHub.copilot",
+        "denoland.vscode-deno",
+        "Supabase.vscode-supabase-extension",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "Postman.postman-for-vscode",
+        "ms-edgedevtools.vscode-edge-devtools",
+        "tamasfe.even-better-toml",
+        "eamodio.gitlens",
+        "ms-playwright.playwright"
       ]
     }
   },
+  "forwardPorts": [3000, 54321],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:latest": {}, // Install Docker CLI
-    "ghcr.io/devcontainers-contrib/features/deno:latest": {}, // Install Deno
+    "ghcr.io/devcontainers/features/docker-outside-of-docker": {},
+    "ghcr.io/devcontainers-contrib/features/deno:latest": {},
     "ghcr.io/itsmechlark/features/redis-server:1": {}
-  },
-  "forwardPorts": [3000]
-} 
+  }
+}

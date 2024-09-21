@@ -45,3 +45,8 @@ sw.js
 sw.js.map
 workbox-*.js
 workbox-*.js.map
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

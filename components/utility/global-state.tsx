@@ -1,3 +1,5 @@
+// TODO: Separate into multiple contexts, keeping simple for now
+
 "use client"
 
 import { ChatbotUIContext } from "@/context/context"

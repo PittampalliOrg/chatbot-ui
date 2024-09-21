@@ -90,20 +90,20 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AI>
-          <Providers attribute="class" defaultTheme="dark">
+        <Providers attribute="class" defaultTheme="dark">
+          <AI>
             <TranslationsProvider
               namespaces={i18nNamespaces}
               locale={locale}
               resources={resources}
             >
               <Toaster richColors position="top-center" duration={3000} />
-              <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
+              <div className="bg-background text-foreground flex h-dvh w-full flex-col items-center overflow-x-auto">
                 {session ? <GlobalState>{children}</GlobalState> : children}
               </div>
             </TranslationsProvider>
-          </Providers>
-        </AI>
+          </AI>
+        </Providers>
       </body>
     </html>
   )
