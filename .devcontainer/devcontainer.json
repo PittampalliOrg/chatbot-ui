@@ -1,16 +1,12 @@
 {
   "name": "Next.js and Supabase Development Environment",
   "dockerComposeFile": [
-    "../docker-compose.yml",
-    "../dev/docker-compose.dev.yml"
+    "../docker/docker-compose.yml"
   ],
   "service": "app",
-  "workspaceFolder": "/workspace/supabase-project",
+  "workspaceFolder": "/workspace/supabase",
   "customizations": {
     "vscode": {
-      "settings": {
-        "editor.tabSize": 2
-      },
       "extensions": [
         "vscode.typescript-language-features",
         "GitHub.copilot",
@@ -26,7 +22,6 @@
       ]
     }
   },
-  "forwardPorts": [3000, 54321],
   "postCreateCommand": "npm install",
   "remoteUser": "node",
   "features": {

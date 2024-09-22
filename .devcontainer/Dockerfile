@@ -1,5 +1,25 @@
 FROM mcr.microsoft.com/devcontainers/javascript-node:1-18-bookworm
 
+WORKDIR /workspace/supabase
+
+# # Copy package manager files first to leverage Docker's caching for dependency installation
+# COPY next-app/package.json next-app/yarn.lock* next-app/package-lock.json* next-app/pnpm-lock.yaml* ./
+# WORKDIR /workspace/supabase/next-app
+
+# # Install dependencies based on the preferred package manager
+# RUN \
+#   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+#   elif [ -f package-lock.json ]; then npm ci; \
+#   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i; \
+#   else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && yarn install; \
+#   fi
+
+# # Copy the rest of the application files
+# WORKDIR /workspace/supabase
+# COPY next-app ./next-app
+# COPY supabase ./supabase
+# COPY docker ./docker
+
 # Install necessary tools
 RUN apt-get update && apt-get install -y curl gnupg lsb-release
 
@@ -24,17 +44,11 @@ RUN mkdir -p /deno \
 ENV PATH=${DENO_INSTALL}/bin:${PATH} \
     DENO_DIR=${DENO_INSTALL}/.cache/deno
 
-# Clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Clean up unnecessary files
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Switch to non-root user
 USER node
-
-# Set up workspace directory
-WORKDIR /workspace/supabase-project
-
-# Expose ports for Next.js and Supabase
-EXPOSE 3000 54321
 
 # The command will be overridden by docker-compose
 CMD ["sleep", "infinity"]

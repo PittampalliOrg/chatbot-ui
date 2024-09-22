@@ -32,6 +32,31 @@ export type Database = {
       [_ in never]: never
     }
   }
+  pgbouncer: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      get_auth: {
+        Args: {
+          p_usename: string
+        }
+        Returns: {
+          username: string
+          password: string
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       assistant_collections: {
@@ -60,21 +85,18 @@ export type Database = {
           {
             foreignKeyName: "assistant_collections_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_collections_collection_id_fkey"
             columns: ["collection_id"]
-            isOneToOne: false
             referencedRelation: "collections"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_collections_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -106,21 +128,18 @@ export type Database = {
           {
             foreignKeyName: "assistant_files_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_files_file_id_fkey"
             columns: ["file_id"]
-            isOneToOne: false
             referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_files_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -152,21 +171,18 @@ export type Database = {
           {
             foreignKeyName: "assistant_tools_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_tools_tool_id_fkey"
             columns: ["tool_id"]
-            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_tools_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -198,21 +214,18 @@ export type Database = {
           {
             foreignKeyName: "assistant_workspaces_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistant_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -277,14 +290,12 @@ export type Database = {
           {
             foreignKeyName: "assistants_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "assistants_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -316,21 +327,18 @@ export type Database = {
           {
             foreignKeyName: "chat_files_chat_id_fkey"
             columns: ["chat_id"]
-            isOneToOne: false
             referencedRelation: "chats"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "chat_files_file_id_fkey"
             columns: ["file_id"]
-            isOneToOne: false
             referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "chat_files_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -395,28 +403,24 @@ export type Database = {
           {
             foreignKeyName: "chats_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "chats_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "chats_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "chats_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -448,21 +452,18 @@ export type Database = {
           {
             foreignKeyName: "collection_files_collection_id_fkey"
             columns: ["collection_id"]
-            isOneToOne: false
             referencedRelation: "collections"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "collection_files_file_id_fkey"
             columns: ["file_id"]
-            isOneToOne: false
             referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "collection_files_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -494,21 +495,18 @@ export type Database = {
           {
             foreignKeyName: "collection_workspaces_collection_id_fkey"
             columns: ["collection_id"]
-            isOneToOne: false
             referencedRelation: "collections"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "collection_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "collection_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -549,14 +547,12 @@ export type Database = {
           {
             foreignKeyName: "collections_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "collections_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -603,14 +599,12 @@ export type Database = {
           {
             foreignKeyName: "file_items_file_id_fkey"
             columns: ["file_id"]
-            isOneToOne: false
             referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "file_items_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -642,21 +636,18 @@ export type Database = {
           {
             foreignKeyName: "file_workspaces_file_id_fkey"
             columns: ["file_id"]
-            isOneToOne: false
             referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "file_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "file_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -709,14 +700,12 @@ export type Database = {
           {
             foreignKeyName: "files_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "files_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -757,14 +746,12 @@ export type Database = {
           {
             foreignKeyName: "folders_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "folders_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -796,21 +783,18 @@ export type Database = {
           {
             foreignKeyName: "message_file_items_file_item_id_fkey"
             columns: ["file_item_id"]
-            isOneToOne: false
             referencedRelation: "file_items"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "message_file_items_message_id_fkey"
             columns: ["message_id"]
-            isOneToOne: false
             referencedRelation: "messages"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "message_file_items_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -860,21 +844,18 @@ export type Database = {
           {
             foreignKeyName: "messages_assistant_id_fkey"
             columns: ["assistant_id"]
-            isOneToOne: false
             referencedRelation: "assistants"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "messages_chat_id_fkey"
             columns: ["chat_id"]
-            isOneToOne: false
             referencedRelation: "chats"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "messages_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -906,21 +887,18 @@ export type Database = {
           {
             foreignKeyName: "model_workspaces_model_id_fkey"
             columns: ["model_id"]
-            isOneToOne: false
             referencedRelation: "models"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "model_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "model_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -973,14 +951,12 @@ export type Database = {
           {
             foreignKeyName: "models_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "models_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1012,21 +988,18 @@ export type Database = {
           {
             foreignKeyName: "preset_workspaces_preset_id_fkey"
             columns: ["preset_id"]
-            isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "preset_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "preset_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -1088,14 +1061,12 @@ export type Database = {
           {
             foreignKeyName: "presets_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "presets_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1190,7 +1161,6 @@ export type Database = {
           {
             foreignKeyName: "profiles_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1222,21 +1192,18 @@ export type Database = {
           {
             foreignKeyName: "prompt_workspaces_prompt_id_fkey"
             columns: ["prompt_id"]
-            isOneToOne: false
             referencedRelation: "prompts"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "prompt_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "prompt_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -1277,14 +1244,12 @@ export type Database = {
           {
             foreignKeyName: "prompts_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "prompts_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1316,21 +1281,18 @@ export type Database = {
           {
             foreignKeyName: "tool_workspaces_tool_id_fkey"
             columns: ["tool_id"]
-            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tool_workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tool_workspaces_workspace_id_fkey"
             columns: ["workspace_id"]
-            isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
@@ -1380,14 +1342,12 @@ export type Database = {
           {
             foreignKeyName: "tools_folder_id_fkey"
             columns: ["folder_id"]
-            isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tools_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1455,7 +1415,6 @@ export type Database = {
           {
             foreignKeyName: "workspaces_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1667,7 +1626,6 @@ export type Database = {
           {
             foreignKeyName: "objects_bucketId_fkey"
             columns: ["bucket_id"]
-            isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
           },
@@ -1711,7 +1669,6 @@ export type Database = {
           {
             foreignKeyName: "s3_multipart_uploads_bucket_id_fkey"
             columns: ["bucket_id"]
-            isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
           },
@@ -1758,14 +1715,12 @@ export type Database = {
           {
             foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey"
             columns: ["bucket_id"]
-            isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey"
             columns: ["upload_id"]
-            isOneToOne: false
             referencedRelation: "s3_multipart_uploads"
             referencedColumns: ["id"]
           },
@@ -1956,4 +1911,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
-

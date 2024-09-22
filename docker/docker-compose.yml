@@ -7,15 +7,31 @@
 name: supabase
 version: "3.8"
 
+
 services:
   app:
-    build: 
-      context: .
-      dockerfile: .devcontainer/Dockerfile
+    container_name: app
+    build:
+      context: ..
+      dockerfile: ../.devcontainer/Dockerfile
     volumes:
-      - .:/workspace/supabase-project:cached
+      - ..:/workspace/supabase:cached
+            # Mount SSH keys and known_hosts into the container
+      - ~/.ssh/id_ed25519:/home/node/.ssh/id_ed25519:ro
+      - ~/.ssh/id_ed25519.pub:/home/node/.ssh/id_ed25519.pub:ro
+      - ~/.ssh/known_hosts:/home/node/.ssh/known_hosts:ro
+    environment:
+      # Optional: Prevent SSH from prompting about new host keys
+      - GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no
+
+    restart: always
+    ports:
+      - 3000:3000
     command: /bin/sh -c "while sleep 1000; do :; done"
-    
+
+    networks:
+      - my_network
+
   studio:
     container_name: supabase-studio
     image: supabase/studio:20240729-ce42139
@@ -54,6 +70,8 @@ services:
       NEXT_ANALYTICS_BACKEND_PROVIDER: postgres
       # Uncomment to use Big Query backend for analytics
       # NEXT_ANALYTICS_BACKEND_PROVIDER: bigquery
+    networks:
+      - my_network
 
   kong:
     container_name: supabase-kong
@@ -82,6 +100,8 @@ services:
     volumes:
       # https://github.com/supabase/supabase/issues/12661
       - ./volumes/api/kong.yml:/home/kong/temp.yml:ro
+    networks:
+      - my_network
 
   auth:
     container_name: supabase-auth
@@ -161,7 +181,8 @@ services:
       # GOTRUE_HOOK_SEND_EMAIL_ENABLED: "false"
       # GOTRUE_HOOK_SEND_EMAIL_URI: "http://host.docker.internal:54321/functions/v1/email_sender"
       # GOTRUE_HOOK_SEND_EMAIL_SECRETS: "v1,whsec_VGhpcyBpcyBhbiBleGFtcGxlIG9mIGEgc2hvcnRlciBCYXNlNjQgc3RyaW5n"
-
+    networks:
+      - my_network
 
 
 
@@ -185,6 +206,8 @@ services:
       PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
       PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
     command: "postgrest"
+    networks:
+      - my_network
 
   realtime:
     # This container name looks inconsistent but is correct because realtime constructs tenant id by parsing the subdomain
@@ -229,6 +252,8 @@ services:
       RLIMIT_NOFILE: "10000"
       APP_NAME: realtime
       SEED_SELF_HOST: true
+    networks:
+      - my_network
 
   # To use S3 backed storage: docker compose -f docker-compose.yml -f docker-compose.s3.yml up
   storage:
@@ -273,7 +298,9 @@ services:
       IMGPROXY_URL: http://imgproxy:5001
     volumes:
       - ./volumes/storage:/var/lib/storage:z
-
+    networks:
+      - my_network
+      
   imgproxy:
     container_name: supabase-imgproxy
     image: darthsim/imgproxy:v3.8.0
@@ -289,6 +316,8 @@ services:
       IMGPROXY_ENABLE_WEBP_DETECTION: ${IMGPROXY_ENABLE_WEBP_DETECTION}
     volumes:
       - ./volumes/storage:/var/lib/storage:z
+    networks:
+      - my_network
 
   meta:
     container_name: supabase-meta
@@ -307,6 +336,8 @@ services:
       PG_META_DB_NAME: ${POSTGRES_DB}
       PG_META_DB_USER: supabase_admin
       PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - my_network
 
   functions:
     container_name: supabase-edge-functions
@@ -329,6 +360,8 @@ services:
       - start
       - --main-service
       - /home/deno/functions/main
+    networks:
+      - my_network
 
   analytics:
     container_name: supabase-analytics
@@ -371,6 +404,8 @@ services:
       # GOOGLE_PROJECT_NUMBER: ${GOOGLE_PROJECT_NUMBER}
     ports:
       - 4000:4000
+    networks:
+      - my_network
 
   # Comment out everything below this point if you are using an external Postgres database
   db:
@@ -418,6 +453,8 @@ services:
       - ./volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
       # Use named volume to persist pgsodium decryption key between restarts
       - db-config:/etc/postgresql-custom
+    networks:
+      - my_network
 
   vector:
     container_name: supabase-vector
@@ -442,6 +479,12 @@ services:
     environment:
       LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
     command: [ "--config", "etc/vector/vector.yml" ]
-
+    networks:
+      - my_network
+      
 volumes:
   db-config:
+
+networks:
+  my_network:
+    external: true
