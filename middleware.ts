@@ -4,10 +4,9 @@ import { NextResponse, type NextRequest } from "next/server"
 import i18nConfig from "./i18nConfig"
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.match("{/:locale}/protected")) {
+  if (request.nextUrl.pathname.match(/^\/[^/]+\/protected/)) {
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-url", request.url);
-    console.log(`Protected: ${request.nextUrl.pathname.match("{/:locale}/protected")}`);
 
     return NextResponse.next({
       request: {
