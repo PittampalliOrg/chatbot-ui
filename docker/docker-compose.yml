@@ -16,6 +16,7 @@ services:
       dockerfile: ../.devcontainer/Dockerfile
     volumes:
       - ..:/workspace/supabase:cached
+            # Mount SSH keys and known_hosts into the container
       - ~/.ssh/id_ed25519:/home/node/.ssh/id_ed25519:ro
       - ~/.ssh/id_ed25519.pub:/home/node/.ssh/id_ed25519.pub:ro
       - ~/.ssh/known_hosts:/home/node/.ssh/known_hosts:ro
@@ -34,7 +35,7 @@ services:
       - ../.env.local
 
   studio:
-    container_name: supabase_studio_${PROJECT_DIR}
+    container_name: supabase-studio
     image: supabase/studio:20240729-ce42139
     restart: unless-stopped
     healthcheck:
@@ -75,7 +76,7 @@ services:
       - my_network
 
   kong:
-    container_name: supabase_kong_${PROJECT_DIR}
+    container_name: supabase-kong
     image: kong:2.8.1
     restart: unless-stopped
     # https://unix.stackexchange.com/a/294837
@@ -105,7 +106,7 @@ services:
       - my_network
 
   auth:
-    container_name: supabase_auth_${PROJECT_DIR}
+    container_name: supabase-auth
     image: supabase/gotrue:v2.158.1
     depends_on:
       db:
@@ -188,8 +189,9 @@ services:
 
 
 
+
   rest:
-    container_name: supabase_rest_${PROJECT_DIR}
+    container_name: supabase-rest
     image: postgrest/postgrest:v12.2.0
     depends_on:
       db:
@@ -212,7 +214,7 @@ services:
 
   realtime:
     # This container name looks inconsistent but is correct because realtime constructs tenant id by parsing the subdomain
-    container_name: realtime_dev.supabase-realtime_${PROJECT_DIR}
+    container_name: realtime-dev.supabase-realtime
     image: supabase/realtime:v2.30.34
     depends_on:
       db:
@@ -258,7 +260,7 @@ services:
 
   # To use S3 backed storage: docker compose -f docker-compose.yml -f docker-compose.s3.yml up
   storage:
-    container_name: supabase_storage_${PROJECT_DIR}
+    container_name: supabase-storage
     image: supabase/storage-api:v1.10.1
     depends_on:
       db:
@@ -301,9 +303,9 @@ services:
       - ./volumes/storage:/var/lib/storage:z
     networks:
       - my_network
-      
+
   imgproxy:
-    container_name: supabase_imgproxy_${PROJECT_DIR}
+    container_name: supabase-imgproxy
     image: darthsim/imgproxy:v3.8.0
     healthcheck:
       test: [ "CMD", "imgproxy", "health" ]
@@ -321,7 +323,7 @@ services:
       - my_network
 
   meta:
-    container_name: supabase_meta_${PROJECT_DIR}
+    container_name: supabase-meta
     image: supabase/postgres-meta:v0.83.2
     depends_on:
       db:
@@ -341,7 +343,7 @@ services:
       - my_network
 
   functions:
-    container_name: supabase_edge-functions_${PROJECT_DIR}
+    container_name: supabase-edge-functions
     image: supabase/edge-runtime:v1.58.2
     restart: unless-stopped
     depends_on:
@@ -365,7 +367,7 @@ services:
       - my_network
 
   analytics:
-    container_name: supabase_analytics_${PROJECT_DIR}
+    container_name: supabase-analytics
     image: supabase/logflare:1.4.0
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:4000/health" ]
@@ -410,7 +412,7 @@ services:
 
   # Comment out everything below this point if you are using an external Postgres database
   db:
-    container_name: supabase_db_${PROJECT_DIR}
+    container_name: supabase-db
     image: supabase/postgres:15.1.1.78
     healthcheck:
       test: pg_isready -U postgres -h localhost
@@ -458,7 +460,7 @@ services:
       - my_network
 
   vector:
-    container_name: supabase_vector_${PROJECT_DIR}
+    container_name: supabase-vector
     image: timberio/vector:0.28.1-alpine
     healthcheck:
       test:
@@ -482,7 +484,7 @@ services:
     command: [ "--config", "etc/vector/vector.yml" ]
     networks:
       - my_network
-      
+
 volumes:
   db-config:
 
