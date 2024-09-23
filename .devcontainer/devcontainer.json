@@ -22,7 +22,7 @@
       ]
     }
   },
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install && npm install --save-dev dbmate",
   "remoteUser": "node",
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker": {},

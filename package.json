@@ -20,9 +20,9 @@
     "format:check": "prettier --check \"{app,lib,db,components,context,types}**/*.{ts,tsx}\" --cache",
     "db-reset": "supabase db reset && npm run db-types",
     "db-migrate": "supabase migration up && npm run db-types",
-    "db-types": "supabase gen types typescript --local > supabase/types.ts",
+    "db-types": "supabase gen types --lang typescript --db-url=\"$DATABASE_URL\"",
     "db-pull": "supabase db remote commit",
-    "db-push": "supabase db push",
+    "db-push": "supabase db push --db-url=\"$DATABASE_URL\"",
     "test": "jest"
   },
   "dependencies": {
@@ -150,6 +150,7 @@
     "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.4.16",
     "clsx": "^2.0.0",
+    "dbmate": "^2.21.0",
     "eslint": "^8",
     "eslint-config-next": "^14.0.2",
     "eslint-config-prettier": "^9.1.0",
